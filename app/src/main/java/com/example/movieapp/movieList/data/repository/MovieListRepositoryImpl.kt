@@ -18,9 +18,10 @@ class MovieListRepositoryImpl @Inject constructor(
     override suspend fun getMovieList(
         forceFetchFromRemote: Boolean,
         page: Int
-    ): Flow<List<Resource<List<Movie>>>> {
+    ): Flow<Resource<List<Movie>>> {
         return flow {
             emit(Resource.Loading(true))
+
         }
     }
 
