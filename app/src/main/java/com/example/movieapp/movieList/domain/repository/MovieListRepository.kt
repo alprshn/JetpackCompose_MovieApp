@@ -1,4 +1,8 @@
 package com.example.movieapp.movieList.domain.repository
 
-class MovieListRepository {
+interface MovieListRepository {
+    suspend fun getMovieList(
+        forceFetchFromRemote: Boolean,
+        page: Int
+    ): Flow<List<Movie>>
 }
