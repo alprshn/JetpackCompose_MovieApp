@@ -62,7 +62,8 @@ dependencies {
     implementation(libs.androidx.material3)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.name)
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.junit)
