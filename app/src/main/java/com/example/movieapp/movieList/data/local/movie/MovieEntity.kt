@@ -2,10 +2,10 @@ package com.example.movieapp.movieList.data.local.movie
 
 import androidx.room.PrimaryKey
 
-data class MovieEntity (
+data class MovieEntity(
         val adult: Boolean,
         val backdrop_path: String,
-        val genre_ids: List<Int>,
+        val genre_ids: String,
         val original_language: String,
         val original_title: String,
         val overview: String,

@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.Flow
 interface MovieListRepository {
     suspend fun getMovieList(
         forceFetchFromRemote: Boolean,
-        page: Int
+        page: Int,
+        includeAdult: Boolean
     ): Flow<Resource<List<Movie>>>
 
     suspend fun getMovie(id: Int): Flow<Resource<Movie>>
