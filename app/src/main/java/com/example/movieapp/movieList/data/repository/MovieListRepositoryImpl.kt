@@ -1,6 +1,8 @@
 package com.example.movieapp.movieList.data.repository
 
 import com.example.movieapp.movieList.data.local.movie.MovieDatabase
+import com.example.movieapp.movieList.data.mappers.toMovie
+import com.example.movieapp.movieList.data.mappers.toMovieEntity
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.domain.model.Movie
 import com.example.movieapp.movieList.domain.repository.MovieListRepository
@@ -10,6 +12,8 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
+import com.example.movieapp.movieList.data.mappers.toMovieEntity
+
 
 class MovieListRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi,
@@ -23,32 +27,56 @@ class MovieListRepositoryImpl @Inject constructor(
     ): Flow<Resource<List<Movie>>> {
         return flow {
             emit(Resource.Loading(true))
-            val shouldFetchFromRemote =
-                forceFetchFromRemote && movieDatabase.movieDao.getMovieById(page) == null
-            if (shouldFetchFromRemote) {
-                emit(Resource.Loading(false))
-                return@flow
-            }
-            val movieListFromApi = try {
+            try {
                 val authorization = "Bearer YOUR_API_KEY"
-                movieApi.searchMovie(false, page, authorization)
+                val movieListFromApi = movieApi.searchMovie(includeAdult, page, authorization).results
+                val movies = movieListFromApi.map { it.toMovieEntity().toMovie() }
+                emit(Resource.Success(movies))
             } catch (e: IOException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = "Couldn't load data"))
+                emit(Resource.Error("Couldn't load data due to network failure"))
             } catch (e: HttpException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = "Couldn't load data"))
+                emit(Resource.Error("Couldn't load data due to server response error"))
             } catch (e: Exception) {
-                e.printStackTrace()
-                emit(Resource.Error(message = "Couldn't load data"))
+                emit(Resource.Error("An unexpected error occurred"))
             }
-
-            val movieEntities = movieListFromApi.results.map { it.toMovieEntity() }
-
+            emit(Resource.Loading(false))
         }
     }
 
-    override suspend fun getMovie(id: Int): Flow<Resource<Movie>> {
-        TODO("Not yet implemented")
+
+    override fun getFavoriteMovies(): Flow<Resource<List<Movie>>> = flow {
+        emit(Resource.Loading(true))
+        try {
+            val movies = movieDatabase.movieDao.getFavoriteMovies().map { it.toMovie() }
+            emit(Resource.Success(movies))
+        } catch (e: Exception) {
+            emit(Resource.Error("Failed to fetch favorites"))
+        }
+        emit(Resource.Loading(false))
+    }
+
+    override suspend fun getMovie(id: Int): Flow<Resource<Movie>> = flow {
+        emit(Resource.Loading(true))
+        try {
+            val movie = movieDatabase.movieDao.getMovieById(id)?.toMovie()
+            if (movie != null) {
+                emit(Resource.Success(movie))
+            } else {
+                emit(Resource.Error("Movie not found"))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error("Failed to fetch movie"))
+        }
+        emit(Resource.Loading(false))
+    }
+
+    override suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean) {
+        val movieEntity = movieDatabase.movieDao.getMovieById(id)
+        val updatedMovieEntity = movieEntity?.copy(isFavorite = isFavorite) ?: return // Eğer film bulunamazsa fonksiyon sonlanır.
+        if (isFavorite) {
+            movieDatabase.movieDao.upsertMovie(updatedMovieEntity)
+        } else {
+            movieDatabase.movieDao.deleteMovie(updatedMovieEntity)
+        }
     }
 }

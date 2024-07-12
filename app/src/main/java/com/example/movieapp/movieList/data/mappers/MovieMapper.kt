@@ -4,7 +4,7 @@ import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.domain.model.Movie
 
-fun Result.toMovieEntity(): MovieEntity {
+fun Result.toMovieEntity(isFavorite: Boolean = false): MovieEntity {
     return MovieEntity(
         adult = adult ?: false,
         backdrop_path = backdrop_path ?: "",
@@ -19,7 +19,7 @@ fun Result.toMovieEntity(): MovieEntity {
         video = video ?: false,
         vote_average = vote_average ?: 0.0,
         vote_count = vote_count ?: 0,
-
+        isFavorite = isFavorite,
         genre_ids = try {
             genre_ids?.joinToString(",") ?: "-1,-2"
         } catch (e: Exception) {
