@@ -5,7 +5,7 @@ import com.android.build.gradle.internal.dsl.decorator.SupportedPropertyType.Col
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
-    id("com.google.dagger.hilt.android") version "2.48" apply false
+    id("com.google.dagger.hilt.android") version "2.49" apply false
 }
 
 buildscript {
@@ -13,7 +13,8 @@ buildscript {
         classpath(libs.gradle)
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.google.services)
-        classpath (libs.dagger.hilt.android.gradle.plugin)
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.49")
+
 
     }
 }

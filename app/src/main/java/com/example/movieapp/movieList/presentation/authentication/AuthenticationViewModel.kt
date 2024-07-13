@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.movieList.domain.use_cases.AuthenticationUseCases
 import com.example.movieapp.movieList.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class AuthenticationViewModel @Inject constructor(private val authUseCases: AuthenticationUseCases) :
     ViewModel() {
     val isUserAuthenticated get() = authUseCases.isUserAuthenticated()
