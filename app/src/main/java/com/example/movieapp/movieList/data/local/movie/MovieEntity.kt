@@ -1,8 +1,10 @@
 package com.example.movieapp.movieList.data.local.movie
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+@Entity(tableName = "movies")
 data class MovieEntity(
     val adult: Boolean,
     val backdrop_path: String,

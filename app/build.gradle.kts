@@ -1,10 +1,10 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android") version "2.44" apply false
-
-
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.9.0"
     }
     packaging {
         resources {
@@ -67,14 +67,15 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.navigation.compose)
     //noinspection KaptUsageInsteadOfKsp
+
+    implementation(libs.androidx.fragment.ktx)
     kapt(libs.androidx.room.compiler)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+
     implementation(libs.androidx.room.ktx)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
     //implementation(libs.converter.name)
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
@@ -85,4 +86,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation(libs.androidx.hilt.lifecycle.viewmodel)
+    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+}
+kapt {
+    correctErrorTypes = true
 }
