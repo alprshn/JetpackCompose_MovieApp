@@ -1,4 +1,7 @@
 package com.example.movieapp.movieList.domain.use_cases
 
-class FirebaseSignOut {
+import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
+import javax.inject.Inject
+
+class FirebaseSignOut @Inject constructor(private val repository: AuthenticationRepository) {
 }
