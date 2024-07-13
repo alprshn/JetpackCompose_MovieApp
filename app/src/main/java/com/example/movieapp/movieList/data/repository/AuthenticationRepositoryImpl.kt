@@ -1,11 +1,11 @@
 package com.example.movieapp.movieList.data.repository
 
+import com.example.movieapp.movieList.domain.model.User
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.util.Constants
 import com.example.movieapp.movieList.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
