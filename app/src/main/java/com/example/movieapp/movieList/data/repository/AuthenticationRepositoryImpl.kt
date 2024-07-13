@@ -1,6 +1,7 @@
 package com.example.movieapp.movieList.data.repository
 
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
+import com.example.movieapp.movieList.util.Constants
 import com.example.movieapp.movieList.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,7 +11,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.internal.NopCollector.emit
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
