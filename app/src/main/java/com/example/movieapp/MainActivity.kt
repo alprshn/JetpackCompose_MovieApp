@@ -67,11 +67,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MovieApp(navController: NavHostController, authenticationViewModel: AuthenticationViewModel) {
     NavHost(navController = navController , startDestination = Screens.LoginScreen.route){
-        composable(Screens.LoginScreen.route){
-            LoginScreen(navController, authenticationViewModel)
+        composable(route = Screens.LoginScreen.route){
+            LoginScreen(navController = navController, authenticationViewModel)
         }
-        composable(Screens.SignUpScreen.route){
-            SignUpScreen()
+        composable(route = Screens.SignUpScreen.route){
+            SignUpScreen(navController, authenticationViewModel)
         }
     }
 }
