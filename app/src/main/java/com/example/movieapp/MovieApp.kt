@@ -6,9 +6,5 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MovieApp: Application(){
-    override fun onCreate() {
-        super.onCreate()
-        // Firebase'i başlat
-        FirebaseApp.initializeApp(this)
-    }
+
 }
