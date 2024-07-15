@@ -95,6 +95,12 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.google.firebase.auth)
+    implementation (libs.firebase.firestore.ktx)
+    implementation (libs.firebase.auth.ktx)
+    implementation (libs.coil.compose)
+    implementation(libs.firebase.analytics)
 
 }
 kapt {

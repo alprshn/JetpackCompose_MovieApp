@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "782314509628",
-    "project_id": "chat-app-674a1",
-    "storage_bucket": "chat-app-674a1.appspot.com"
+    "project_number": "182964847286",
+    "project_id": "movieapp-a7369",
+    "storage_bucket": "movieapp-a7369.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:782314509628:android:de01ce4d96ae8ea72bba39",
+        "mobilesdk_app_id": "1:182964847286:android:809471c07d0218604a5c17",
         "android_client_info": {
           "package_name": "com.example.movieapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA_RR748bfjZ7oSKG2W3JAPUMrLOmHPFvw"
+          "current_key": "AIzaSyAVZsSy_zOP6rVX_GCVj_zzHuQF86-3l_E"
         }
       ],
       "services": {

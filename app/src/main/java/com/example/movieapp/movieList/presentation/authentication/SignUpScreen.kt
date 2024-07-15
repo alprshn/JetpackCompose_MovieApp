@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.presentation.authentication
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,6 +88,7 @@ fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationView
 
                     is Resource.Error -> {
                         Toast(message = response.message.toString())
+                        Log.e("SignUP Error", response.message.toString())
                     }
                 }
             }
