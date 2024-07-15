@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +31,8 @@ import com.example.movieapp.movieList.util.Screens
 
 @Composable
 fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationViewModel) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -45,13 +47,13 @@ fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationView
                 fontSize = 30.sp,
                 fontFamily = FontFamily.SansSerif)
 
-            OutlinedTextField(
+            TextField(
                 value = emailState.value,
                 onValueChange = { emailState.value = it },
                 label = { Text("Email") },
                 modifier = Modifier.padding(10.dp)
             )
-            OutlinedTextField(
+            TextField(
                 value = passwordState.value,
                 onValueChange = { passwordState.value = it },
                 label = { Text("Password") },
@@ -64,14 +66,13 @@ fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationView
                 },
                 modifier = Modifier.padding(10.dp)
             ) {
-                Text(text = "Sign In")
+                Text(text = "Sign Up")
                 when (val response = viewModel.signUpState.value) {
                     is Resource.Loading -> {
                         CircularProgressIndicator(
                             modifier = Modifier.fillMaxSize()
                         )
                     }
-
                     is Resource.Success -> {
                         if (response.data == true) {
                             navController.navigate(Screens.SearchScreen.route) {

@@ -87,6 +87,7 @@ fun GreetingPreview() {
 
         val navController = rememberNavController()
         val authViewModel: AuthenticationViewModel = hiltViewModel()
-        MovieApp(navController, authViewModel)
+        LoginScreen(navController = navController, authViewModel)
+
     }
 }
