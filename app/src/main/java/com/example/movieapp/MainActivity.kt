@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.movieList.presentation.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
 import com.example.movieapp.movieList.presentation.authentication.AuthenticationViewModel
 import com.example.movieapp.movieList.presentation.authentication.LoginScreen
@@ -76,6 +77,9 @@ fun MovieApp(navController: NavHostController, authenticationViewModel: Authenti
         }
         composable(route = Screens.SplashScreen.route){
             SplashScreen(navController = navController,authenticationViewModel )
+        }
+        composable(route = Screens.SearchScreen.route){
+            SearchScreen(navController)
         }
     }
 }
