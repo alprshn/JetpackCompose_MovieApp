@@ -24,17 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.movieList.presentation.Toast
 import com.example.movieapp.movieList.util.Resource
 import com.example.movieapp.movieList.util.Screens
+import com.example.movieapp.ui.theme.MovieAppTheme
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewModel) {
-    Box(modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center) {
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,7 +73,7 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
             )
             Button(
                 onClick = {
-                    viewModel.signIn(emailState.value, passwordState.value)
+                    viewModel.signIn(email = emailState.value, password = passwordState.value)
                 },
                 modifier = Modifier.padding(10.dp)
             ) {
@@ -76,9 +84,10 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                             modifier = Modifier.fillMaxSize()
                         )
                     }
+
                     is Resource.Success -> {
                         Log.e("TAG", "LoginScreen: ${response.data}")
-                        if (response.data == true) {
+                        if (response.data!!) {
                             navController.navigate(Screens.SearchScreen.route) {
                                 popUpTo(Screens.LoginScreen.route) {
                                     inclusive = true
@@ -88,19 +97,29 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                             Toast(message = "Sign In Failed")
                         }
                     }
+
                     is Resource.Error -> {
                         Toast(message = response.message.toString())
                     }
                 }
             }
-            Text(text = "New User? Sign Up", color = Color.Blue, modifier = Modifier.padding(8.dp)
+            Text(text = "New User? Sign Up", color = Color.Blue, modifier = Modifier
+                .padding(8.dp)
                 .clickable {
                     navController.navigate(Screens.SignUpScreen.route) {
-                       launchSingleTop = true
+                        launchSingleTop = true
                     }
                 })
         }
 
     }
 
+}
+
+@Preview
+@Composable
+fun LoginScreenPreview() {
+    val navController = rememberNavController()
+    val authViewModel: AuthenticationViewModel = hiltViewModel()
+    LoginScreen(navController = navController, viewModel = authViewModel)
 }

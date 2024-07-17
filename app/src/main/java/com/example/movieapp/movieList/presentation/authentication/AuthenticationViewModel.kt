@@ -11,8 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(private val authUseCases: AuthenticationUseCases) :
-    ViewModel() {
+class AuthenticationViewModel @Inject constructor(private var authUseCases: AuthenticationUseCases) : ViewModel() {
     val isUserAuthenticated get() = authUseCases.isUserAuthenticated()
 
     private val _signInState = mutableStateOf<Resource<Boolean>>(Resource.Success(false))

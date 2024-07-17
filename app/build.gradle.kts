@@ -1,12 +1,11 @@
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    id("dagger.hilt.android.plugin")
+    //id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
+    id("androidx.room")
 
 }
 
@@ -37,11 +36,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility =JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
     buildFeatures {
         compose = true
@@ -67,40 +69,52 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    testImplementation(libs.junit)
+///Other
+
+    //Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.3")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.8.3")
+
+    //Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
+    //Dagger-Hilt
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-android-compiler:2.49")
+    //noinspection GradleDependency
+    implementation(libs.kotlinx.coroutines.play.services)
+
+// Diğer Kütüphaneler
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+// implementation(libs.converter.name)
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+
+    // Firebase Kütüphaneleri
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)
-    implementation(libs.androidx.navigation.compose)
-    //noinspection KaptUsageInsteadOfKsp
+    implementation(libs.google.firebase.auth)
+    implementation("com.google.firebase:firebase-analytics")
 
-    implementation(libs.androidx.fragment.ktx)
-    kapt(libs.androidx.room.compiler)
 
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    //implementation(libs.converter.name)
-    implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
-    testImplementation(libs.junit)
+    //Test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("com.google.dagger:hilt-android:2.49")
-    kapt("com.google.dagger:hilt-android-compiler:2.49")
-
-    kapt(libs.androidx.hilt.compiler)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.google.firebase.auth)
-    implementation (libs.firebase.firestore.ktx)
-    implementation (libs.firebase.auth.ktx)
-    implementation (libs.coil.compose)
-    implementation(libs.firebase.analytics)
 
 }
 kapt {
