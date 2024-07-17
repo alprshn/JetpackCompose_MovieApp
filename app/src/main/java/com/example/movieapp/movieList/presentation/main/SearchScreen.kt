@@ -19,40 +19,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.movieapp.movieList.presentation.BottomNavigationItem
+import com.example.movieapp.movieList.presentation.BottomNavigationMenu
 
 @Composable
 
-fun SearchScreen(navController: NavHostController) {
-    Box(modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val emailState = remember { mutableStateOf("") }
-            val passwordState = remember { mutableStateOf("") }
-            Text(text = "Sign Up",
-                modifier = Modifier.padding(10.dp),
-                fontSize = 30.sp,
-                fontFamily = FontFamily.SansSerif)
-
-            TextField(
-                value = emailState.value,
-                onValueChange = { emailState.value = it },
-                label = { Text("Email") },
-                modifier = Modifier.padding(10.dp)
-            )
-            TextField(
-                value = passwordState.value,
-                onValueChange = { passwordState.value = it },
-                label = { Text("Password") },
-                modifier = Modifier.padding(10.dp),
-                visualTransformation = PasswordVisualTransformation()
-            )
+fun SearchScreen(navController: NavController) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = "Search")
         }
+        BottomNavigationMenu(selectedItem = BottomNavigationItem.SEARCH, navController = navController)
     }
 }
