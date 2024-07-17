@@ -3,23 +3,24 @@ package com.example.movieapp.movieList.data.local.movie
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
 
-@Entity(tableName = "users")
+@Entity(tableName = "favorite_movies")
 data class MovieEntity(
-    val adult: Boolean,
-    val backdrop_path: String,
-    val genre_ids: String,
-    val original_language: String,
-    val original_title: String,
-    val overview: String,
-    val popularity: Double,
-    val poster_path: String,
-    val release_date: String,
-    val title: String,
-    val video: Boolean,
-    val vote_average: Double,
-    val vote_count: Int,
-    @PrimaryKey val id: Int,
-    @ColumnInfo(defaultValue = "false") val isFavorite: Boolean
-
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") @NotNull val id: Int,
+    @ColumnInfo(name = "userId") @NotNull val userId: Int,
+    @ColumnInfo(name = "adult") @NotNull val adult: Boolean,
+    @ColumnInfo(name = "backdrop_path") @NotNull val backdrop_path: String,
+    @ColumnInfo(name = "genre_ids") @NotNull val genre_ids: String,
+    @ColumnInfo(name = "original_language") @NotNull val original_language: String,
+    @ColumnInfo(name = "original_title") @NotNull val original_title: String,
+    @ColumnInfo(name = "overview") @NotNull val overview: String,
+    @ColumnInfo(name = "popularity") @NotNull val popularity: Double,
+    @ColumnInfo(name = "poster_path") @NotNull val poster_path: String,
+    @ColumnInfo(name = "release_date") @NotNull val release_date: String,
+    @ColumnInfo(name = "title") @NotNull val title: String,
+    @ColumnInfo(name = "video") @NotNull val video: Boolean,
+    @ColumnInfo(name = "vote_average") @NotNull val vote_average: Double,
+    @ColumnInfo(name = "vote_count") @NotNull val vote_count: Int,
+    @ColumnInfo(name = "isFavorite", defaultValue = "0") var isFavorite: Boolean
 )
