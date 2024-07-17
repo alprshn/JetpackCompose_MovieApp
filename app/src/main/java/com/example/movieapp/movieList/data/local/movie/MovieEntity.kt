@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "movies")
+@Entity(tableName = "users")
 data class MovieEntity(
     val adult: Boolean,
     val backdrop_path: String,

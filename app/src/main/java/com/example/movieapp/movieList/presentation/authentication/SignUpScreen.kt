@@ -63,7 +63,7 @@ fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationView
             )
             Button(
                 onClick = {
-                    viewModel.signUp(emailState.value, passwordState.value)
+                    viewModel.signUp(email = emailState.value, password =  passwordState.value)
                 },
                 modifier = Modifier.padding(10.dp)
             ) {

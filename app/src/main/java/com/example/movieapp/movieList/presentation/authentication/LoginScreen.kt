@@ -52,6 +52,7 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
         ) {
             val emailState = remember { mutableStateOf("") }
             val passwordState = remember { mutableStateOf("") }
+
             Text(
                 text = "Sıgn In",
                 modifier = Modifier.padding(10.dp),
