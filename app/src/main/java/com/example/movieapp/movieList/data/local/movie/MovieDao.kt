@@ -16,12 +16,12 @@ interface MovieDao {
     @Delete
     suspend fun deleteMovie(movie: MovieEntity)
 
-    @Query("SELECT * FROM movies WHERE id = :id")
+    @Query("SELECT * FROM favorite_movies WHERE id = :id")
     suspend fun getMovieById(id: Int): MovieEntity?
 
-    @Query("SELECT * FROM movies WHERE isFavorite = 1")
+    @Query("SELECT * FROM favorite_movies")
     suspend fun getFavoriteMovies(): List<MovieEntity>
 
-    @Query("UPDATE movies SET isFavorite = :isFavorite WHERE id = :id")
+    @Query("UPDATE favorite_movies SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean)
 }
