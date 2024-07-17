@@ -1,4 +1,18 @@
 package com.example.movieapp.movieList.presentation
 
-class BottomNavigationMenu {
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.movieapp.movieList.util.Screens
+
+enum class BottomNavigationMenu(val icon: ImageVector, val route: Screens) {
+    FAVORITES(Icons.Default.FavoriteBorder, Screens.FavoritesScreen)
 }
+
+@Composable
+fun BottomNavigationMenu(
+    items: List<BottomNavigationMenu>,
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavigationMenu) -> Unit
+) {

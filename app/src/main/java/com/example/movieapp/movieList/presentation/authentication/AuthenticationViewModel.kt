@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.presentation.authentication
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -14,13 +15,13 @@ class AuthenticationViewModel @Inject constructor(private val authUseCases: Auth
     ViewModel() {
     val isUserAuthenticated get() = authUseCases.isUserAuthenticated()
 
-    private val _signInState = mutableStateOf<Resource<Boolean>>(Resource.Loading(false))
+    private val _signInState = mutableStateOf<Resource<Boolean>>(Resource.Success(false))
     val signInState: State<Resource<Boolean>> = _signInState
 
-    private val _signUpState = mutableStateOf<Resource<Boolean>>(Resource.Loading(false))
+    private val _signUpState = mutableStateOf<Resource<Boolean>>(Resource.Success(false))
     val signUpState: State<Resource<Boolean>> = _signUpState
 
-    private val _signOutState = mutableStateOf<Resource<Boolean>>(Resource.Loading(false))
+    private val _signOutState = mutableStateOf<Resource<Boolean>>(Resource.Success(false))
     val signOutState: State<Resource<Boolean>> = _signOutState
 
     private val _firebaseAuthState = mutableStateOf<Boolean>(false)
@@ -28,15 +29,16 @@ class AuthenticationViewModel @Inject constructor(private val authUseCases: Auth
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
-            authUseCases.firebaseSignIn(email, password).collect {
+            authUseCases.firebaseSignIn(email = email,password = password).collect {
                 _signInState.value = it
+                Log.e("TAG", "signIn: ${_signInState.value.data}")
             }
         }
     }
 
     fun signUp(email: String, password: String) {
         viewModelScope.launch {
-            authUseCases.firebaseSignUp(email, password).collect {
+            authUseCases.firebaseSignUp(email = email, password = password).collect {
                 _signUpState.value = it
             }
         }

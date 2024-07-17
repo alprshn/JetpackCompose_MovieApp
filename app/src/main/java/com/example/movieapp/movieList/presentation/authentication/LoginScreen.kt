@@ -76,8 +76,8 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                             modifier = Modifier.fillMaxSize()
                         )
                     }
-
                     is Resource.Success -> {
+                        Log.e("TAG", "LoginScreen: ${response.data}")
                         if (response.data == true) {
                             navController.navigate(Screens.SearchScreen.route) {
                                 popUpTo(Screens.LoginScreen.route) {
@@ -88,7 +88,6 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                             Toast(message = "Sign In Failed")
                         }
                     }
-
                     is Resource.Error -> {
                         Toast(message = response.message.toString())
                     }

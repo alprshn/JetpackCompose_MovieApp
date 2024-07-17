@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.data.repository
 
+import android.util.Log
 import com.example.movieapp.movieList.domain.model.User
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.util.Constants
@@ -40,9 +41,12 @@ class AuthenticationRepositoryImpl @Inject constructor(
             emit(Resource.Loading())
             auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
                 operationSuccessful = true
+            }.addOnFailureListener { exception ->
+                Log.e("FirebaseSignIn", "Sign-in failed: ${exception.message}")
             }.await()
             emit(Resource.Success(operationSuccessful))
         } catch (e: Exception) {
+            Log.e("FirebaseSignIn", "Exception during sign-in: ${e.message}")
             emit(Resource.Error(e.message.toString()))
         }
     }
