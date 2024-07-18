@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
 import com.example.movieapp.ui.theme.backgroundColor
 
 
@@ -21,4 +24,11 @@ fun SearchScreen() {
             Text(text = "Search")
         }
     }
+}
+
+
+@Preview
+@Composable
+fun SearchScreenPreview() {
+    SearchScreen()
 }

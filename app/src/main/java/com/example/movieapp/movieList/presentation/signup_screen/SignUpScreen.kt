@@ -32,9 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.movieapp.movieList.presentation.Toast
-import com.example.movieapp.movieList.presentation.login_screen.SignInViewModel
-import com.example.movieapp.movieList.util.Resource
 import com.example.movieapp.movieList.util.Screens
 import kotlinx.coroutines.launch
 
