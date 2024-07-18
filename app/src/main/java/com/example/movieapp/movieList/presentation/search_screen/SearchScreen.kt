@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.movieapp.movieList.presentation.main
+package com.example.movieapp.movieList.presentation.search_screen
 
 
 import androidx.compose.foundation.background
@@ -23,12 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.movieList.data.remote.respond.SearchMovie
-import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
 import com.example.movieapp.movieList.util.Resource
-import com.example.movieapp.ui.theme.backgroundColor
-
 
 
 @Composable

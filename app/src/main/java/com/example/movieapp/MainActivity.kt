@@ -24,7 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.movieList.presentation.BottomNavigation
-import com.example.movieapp.movieList.presentation.main.SearchScreen
+import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
 import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
 import com.example.movieapp.movieList.presentation.signup_screen.SignUpScreen
