@@ -102,9 +102,7 @@ fun NavigationHost(navController: NavHostController) {
             SplashScreen(navController = navController)
         }
         composable(route = Screens.SearchScreen.route) {
-            val searchQuery = remember { mutableStateOf("") }
-            SearchScreen(searchQuery = searchQuery.value,
-                onSearchQueryChange = { newQuery -> searchQuery.value = newQuery })
+            SearchScreen()
         }
         composable(route = Screens.FavoritesScreen.route) {
             FavoritesScreen()

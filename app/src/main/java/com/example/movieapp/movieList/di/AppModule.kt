@@ -39,17 +39,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesApiService(): MovieApi =
-        Retrofit.Builder()
+    fun providesApiService(): MovieApi {
+        return Retrofit.Builder()
             .baseUrl(MovieApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MovieApi::class.java)
+    }
 
     @Provides
     @Singleton
     fun providesSearchRepository(movieApi: MovieApi): SearchRepository {
-        return SearchRepositoryImpl(movieApi=movieApi)
+        return SearchRepositoryImpl(movieApi = movieApi)
     }
 
 }
