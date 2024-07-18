@@ -36,7 +36,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility =JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
 ///Other
+    implementation(libs.androidx.navigation.compose)
 
     //Lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")

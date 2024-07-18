@@ -4,15 +4,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.movieList.presentation.BottomNavigation
 import com.example.movieapp.movieList.presentation.main.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
 
@@ -33,18 +44,44 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieAppTheme {
-                Surface(color = MaterialTheme.colorScheme.background) {
-                    val navController = rememberNavController()
-                    MovieApp(navController)
 
+                val bottomBarHeight = 56.dp
+                val bottomBarOffsetHeightPx = remember { mutableStateOf(0f) }
+                var buttonsVisible = remember { mutableStateOf(true) }
+
+                val navController = rememberNavController()
+                Scaffold(
+                    bottomBar = {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentRoute = navBackStackEntry?.destination?.route
+                        if (currentRoute in listOf(
+                                Screens.FavoritesScreen.route,
+                                Screens.SearchScreen.route,
+                                Screens.WatchListScreen.route
+                            )
+                        ) {
+                            BottomNavigation(
+                                navController = navController,
+                                state = remember { mutableStateOf(true) },
+                                modifier = Modifier
+                            )
+                        }
+                    }
+                ) { paddingValues ->
+                    Box(
+                        modifier = Modifier.padding(paddingValues)
+                    ) {
+                        NavigationHost(navController = navController)
+                    }
                 }
+
             }
         }
     }
 }
 
 @Composable
-fun MovieApp(navController: NavHostController) {
+fun NavigationHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screens.LoginScreen.route) {
         composable(route = Screens.LoginScreen.route) {
             LoginScreen(navController = navController)
@@ -56,14 +93,13 @@ fun MovieApp(navController: NavHostController) {
             SplashScreen(navController = navController)
         }
         composable(route = Screens.SearchScreen.route) {
-            SearchScreen(navController = navController)
+            SearchScreen()
         }
         composable(route = Screens.FavoritesScreen.route) {
-            FavoritesScreen(navController = navController)
+            FavoritesScreen()
         }
         composable(route = Screens.WatchListScreen.route) {
-            WatchListScreen(navController = navController)
+            WatchListScreen()
         }
     }
 }
-
