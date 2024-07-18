@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.di
 
+import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.repository.AuthenticationRepositoryImpl
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.use_cases.FirebaseAuthState
@@ -14,6 +15,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -32,5 +35,13 @@ object AppModule {
         return AuthenticationRepositoryImpl(firebaseAuth = firebaseAuth)
     }
 
+    @Provides
+    @Singleton
+    fun providesApiService(): MovieApi =
+        Retrofit.Builder()
+            .baseUrl(MovieApi.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MovieApi::class.java)
 
 }
