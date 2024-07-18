@@ -46,7 +46,8 @@ class MainActivity : ComponentActivity() {
                 val window = window
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-                window.statusBarColor = backgroundColor.toArgb() // Status bar rengini burada değiştirebilirsiniz
+                window.statusBarColor =
+                    backgroundColor.toArgb() // Status bar rengini burada değiştirebilirsiniz
                 insetsController.isAppearanceLightStatusBars = false
 
                 Surface {
@@ -74,7 +75,9 @@ class MainActivity : ComponentActivity() {
                         }
                     ) { paddingValues ->
                         Box(
-                            modifier = Modifier.padding(paddingValues).background(backgroundColor)
+                            modifier = Modifier
+                                .padding(paddingValues)
+                                .background(backgroundColor)
                         ) {
                             NavigationHost(navController = navController)
                         }
@@ -99,7 +102,9 @@ fun NavigationHost(navController: NavHostController) {
             SplashScreen(navController = navController)
         }
         composable(route = Screens.SearchScreen.route) {
-            SearchScreen()
+            val searchQuery = remember { mutableStateOf("") }
+            SearchScreen(searchQuery = searchQuery.value,
+                onSearchQueryChange = { newQuery -> searchQuery.value = newQuery })
         }
         composable(route = Screens.FavoritesScreen.route) {
             FavoritesScreen()

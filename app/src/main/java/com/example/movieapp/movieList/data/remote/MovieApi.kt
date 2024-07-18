@@ -9,8 +9,7 @@ interface MovieApi {
 
     @GET("search/movie")
     suspend fun searchMovie(
-        @Query("include_adult") includeAdult: Boolean = false,
-        @Query("page") page: Int = 1,
+        @Query("query") query: String ,
         @Header("Authorization") authorization: String
     ): SearchMovie
 

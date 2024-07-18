@@ -30,9 +30,9 @@ class MovieListRepositoryImpl @Inject constructor(
             emit(Resource.Loading(true))
             try {
                 val authorization = "Bearer YOUR_API_KEY"
-                val movieListFromApi = movieApi.searchMovie(includeAdult, page, authorization).results
-                val movies = movieListFromApi.map { it.toMovieEntity().toMovie() }
-                emit(Resource.Success(movies))
+              //  val movieListFromApi = movieApi.searchMovie(includeAdult, page, authorization).results
+               // val movies = movieListFromApi.map { it.toMovieEntity().toMovie() }
+               // emit(Resource.Success(movies))
             } catch (e: IOException) {
                 emit(Resource.Error("Couldn't load data due to network failure"))
             } catch (e: HttpException) {

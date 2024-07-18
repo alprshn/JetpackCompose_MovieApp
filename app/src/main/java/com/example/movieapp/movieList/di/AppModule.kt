@@ -2,7 +2,9 @@ package com.example.movieapp.movieList.di
 
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.repository.AuthenticationRepositoryImpl
+import com.example.movieapp.movieList.data.repository.SearchRepositoryImpl
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
+import com.example.movieapp.movieList.domain.repository.SearchRepository
 import com.example.movieapp.movieList.domain.use_cases.FirebaseAuthState
 import com.example.movieapp.movieList.domain.use_cases.FirebaseSignIn
 import com.example.movieapp.movieList.domain.use_cases.FirebaseSignOut
@@ -43,5 +45,11 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MovieApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providesSearchRepository(movieApi: MovieApi): SearchRepository {
+        return SearchRepositoryImpl(movieApi)
+    }
 
 }
