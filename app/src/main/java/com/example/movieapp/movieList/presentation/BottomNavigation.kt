@@ -16,6 +16,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.movieapp.movieList.util.Screens
+import com.example.movieapp.ui.theme.bottomBarColor
+import com.example.movieapp.ui.theme.bottomBarIndicatorColor
+import com.example.movieapp.ui.theme.bottomBarSelectedItemColor
+import com.example.movieapp.ui.theme.bottomBarUnSelectedItemColor
 
 
 @Composable
@@ -23,12 +27,12 @@ fun BottomNavigation(
     navController: NavHostController, state: MutableState<Boolean>, modifier: Modifier = Modifier
 ) {
     val screens = listOf(
-        Screens.FavoritesScreen,Screens.SearchScreen, Screens.WatchListScreen
+        Screens.FavoritesScreen, Screens.SearchScreen, Screens.WatchListScreen
     )
 
     NavigationBar(
         modifier = modifier,
-        containerColor = Color.LightGray,
+        containerColor = bottomBarColor,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -53,7 +57,11 @@ fun BottomNavigation(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedTextColor = Color.Gray, selectedTextColor = Color.White
+                    unselectedTextColor = bottomBarUnSelectedItemColor,
+                    selectedTextColor = bottomBarSelectedItemColor,
+                    unselectedIconColor = bottomBarUnSelectedItemColor,
+                    selectedIconColor = bottomBarSelectedItemColor,
+                    indicatorColor = bottomBarIndicatorColor
                 ),
             )
         }

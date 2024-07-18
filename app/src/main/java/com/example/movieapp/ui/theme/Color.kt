@@ -14,4 +14,5 @@ val bottomBarColor = Color(0xFF242A32)
 val bottomBarSelectedItemColor= Color(0xFF0296E5)
 val bottomBarUnSelectedItemColor= Color(0xFF67686D)
 val backgroundColor= Color(0xFF383950)
+val bottomBarIndicatorColor = Color.Transparent
 
