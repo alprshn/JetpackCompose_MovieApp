@@ -18,8 +18,8 @@ import javax.inject.Inject
 class SearchRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi,
 ) : SearchRepository {
-    override suspend fun searchQueries(query: String): Flow<Resource<SearchMovie>> { 
-        try {
+    override suspend fun searchQueries(query: String): Resource<SearchMovie> {
+        return try {
             val result = movieApi.searchMovie(query = query, authorization = Constants.API_KEY)
             Resource.Success(data = result)
         } catch (e:Exception){

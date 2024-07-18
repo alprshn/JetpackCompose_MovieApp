@@ -6,5 +6,5 @@ import com.example.movieapp.movieList.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    suspend fun searchQueries(query: String): Flow<Resource<SearchMovie>>
+    suspend fun searchQueries(query: String): Resource<SearchMovie>
 }
