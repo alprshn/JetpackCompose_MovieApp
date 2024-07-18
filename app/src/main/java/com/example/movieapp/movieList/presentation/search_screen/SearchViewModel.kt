@@ -25,7 +25,6 @@ class SearchViewModel @Inject constructor(private val repository: SearchReposito
             is Resource.Loading -> {
                 searchList.value = SearchState(isLoading = true)
             }
-
             is Resource.Error ->{
                 searchList.value = SearchState(error = result.message.toString())
             }

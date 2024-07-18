@@ -138,8 +138,11 @@ fun SearchMoviewContentItem(result: Result) {
             .fillMaxWidth()
             .height(200.dp)
     ) {
+        Log.e("Search Image",result.poster_path)
+        Log.e("Search Name",result.title)
+
         Image(
-            painter = rememberImagePainter(data = result.poster_path),
+            painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${result.poster_path}"),
             contentScale = ContentScale.Crop,
             contentDescription = null,
             modifier = Modifier
