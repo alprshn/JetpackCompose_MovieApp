@@ -49,7 +49,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providesSearchRepository(movieApi: MovieApi): SearchRepository {
-        return SearchRepositoryImpl(movieApi)
+        return SearchRepositoryImpl(movieApi=movieApi)
     }
 
 }
