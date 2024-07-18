@@ -6,9 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface MovieDao {
+    interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertMovie(movie: MovieEntity)
@@ -20,7 +21,7 @@ interface MovieDao {
     suspend fun getMovieById(id: Int): MovieEntity?
 
     @Query("SELECT * FROM favorite_movies")
-    suspend fun getFavoriteMovies(): List<MovieEntity>
+    fun getFavoriteMovies():  Flow<List<MovieEntity>>
 
     @Query("UPDATE favorite_movies SET isFavorite = :isFavorite WHERE id = :id")
     suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean)

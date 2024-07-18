@@ -9,14 +9,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.navigation.NavController
-import com.example.movieapp.movieList.presentation.authentication.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController, authViewModel: AuthenticationViewModel) {
+fun SplashScreen(navController: NavController) {
 
-    val authValue = authViewModel.isUserAuthenticated
+    //val authValue = authViewModel.isUserAuthenticated
 
     val scale = remember { androidx.compose.animation.core.Animatable(0f) }
 
@@ -31,18 +30,18 @@ fun SplashScreen(navController: NavController, authViewModel: AuthenticationView
         )
         delay(3000)
 
-        if (authValue) {
-            navController.navigate(Screens.SearchScreen.route) {
-                popUpTo(Screens.SplashScreen.route) {
-                    inclusive = true
-                }
-            }
-        } else {
+//        if (authValue) {
+//            navController.navigate(Screens.SearchScreen.route) {
+//                popUpTo(Screens.SplashScreen.route) {
+//                    inclusive = true
+//                }
+//            }
+//        } else {
             navController.navigate(Screens.LoginScreen.route) {
                 popUpTo(Screens.SplashScreen.route) {
                     inclusive = true
                 }
             }
-        }
+
     }
 }

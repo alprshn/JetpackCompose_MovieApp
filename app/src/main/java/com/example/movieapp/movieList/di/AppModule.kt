@@ -2,7 +2,6 @@ package com.example.movieapp.movieList.di
 
 import com.example.movieapp.movieList.data.repository.AuthenticationRepositoryImpl
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
-import com.example.movieapp.movieList.domain.use_cases.AuthenticationUseCases
 import com.example.movieapp.movieList.domain.use_cases.FirebaseAuthState
 import com.example.movieapp.movieList.domain.use_cases.FirebaseSignIn
 import com.example.movieapp.movieList.domain.use_cases.FirebaseSignOut
@@ -21,39 +20,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Singleton
+
     @Provides
-    fun provideFirebaseAuthentication():FirebaseAuth {
-        return FirebaseAuth.getInstance()
+    @Singleton
+    fun providesFirebaseAuth() = FirebaseAuth.getInstance()
+
+
+    @Provides
+    @Singleton
+    fun providesAuthRepositoryImpl(firebaseAuth: FirebaseAuth): AuthenticationRepository {
+        return AuthenticationRepositoryImpl(firebaseAuth = firebaseAuth)
     }
 
-    @Singleton
-    @Provides
-    fun provideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
-    }
 
-    @Singleton
-    @Provides
-    fun provideFirebaseStograge(): FirebaseStorage {
-        return FirebaseStorage.getInstance()
-    }
-
-    @Singleton
-    @Provides
-    fun provideAuthenticationRepository(auth: FirebaseAuth, firestore: FirebaseFirestore): AuthenticationRepository {
-        return AuthenticationRepositoryImpl(auth = auth, firestore = firestore)
-    }
-
-    @Singleton
-    @Provides
-    fun provideAuthUseCases(repository: AuthenticationRepository)= AuthenticationUseCases(
-        isUserAuthenticated = IsUserAuthenticated(repository = repository),
-        firebaseAuthState = FirebaseAuthState(repository = repository),
-        firebaseSignOut = FirebaseSignOut(repository = repository),
-        firebaseSignIn = FirebaseSignIn(repository = repository),
-        firebaseSignUp = FirebaseSignUp(repository = repository)
-
-
-    )
 }

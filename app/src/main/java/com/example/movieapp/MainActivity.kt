@@ -15,9 +15,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.movieList.presentation.main.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
-import com.example.movieapp.movieList.presentation.authentication.AuthenticationViewModel
-import com.example.movieapp.movieList.presentation.authentication.LoginScreen
-import com.example.movieapp.movieList.presentation.authentication.SignUpScreen
+
+import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
+import com.example.movieapp.movieList.presentation.login_screen.SignInViewModel
+import com.example.movieapp.movieList.presentation.signup_screen.SignUpScreen
 import com.example.movieapp.movieList.presentation.main.FavoritesScreen
 import com.example.movieapp.movieList.presentation.main.WatchListScreen
 import com.example.movieapp.movieList.util.Screens
@@ -34,8 +35,7 @@ class MainActivity : ComponentActivity() {
             MovieAppTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
-                    val authViewModel: AuthenticationViewModel = hiltViewModel()
-                    MovieApp(navController, authenticationViewModel = authViewModel)
+                    MovieApp(navController)
 
                 }
             }
@@ -44,16 +44,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MovieApp(navController: NavHostController, authenticationViewModel: AuthenticationViewModel) {
+fun MovieApp(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screens.LoginScreen.route) {
         composable(route = Screens.LoginScreen.route) {
-            LoginScreen(navController = navController, authenticationViewModel)
+            LoginScreen(navController = navController)
         }
         composable(route = Screens.SignUpScreen.route) {
-            SignUpScreen(navController, authenticationViewModel)
+            SignUpScreen(navController)
         }
         composable(route = Screens.SplashScreen.route) {
-            SplashScreen(navController = navController, authViewModel = authenticationViewModel)
+            SplashScreen(navController = navController)
         }
         composable(route = Screens.SearchScreen.route) {
             SearchScreen(navController = navController)
@@ -67,14 +67,3 @@ fun MovieApp(navController: NavHostController, authenticationViewModel: Authenti
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MovieAppTheme {
-
-        val navController = rememberNavController()
-        val authViewModel: AuthenticationViewModel = hiltViewModel()
-        LoginScreen(navController = navController, authViewModel)
-
-    }
-}

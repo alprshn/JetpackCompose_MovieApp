@@ -13,6 +13,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 import com.example.movieapp.movieList.data.mappers.toMovieEntity
+import kotlinx.coroutines.flow.map
 
 
 class MovieListRepositoryImpl @Inject constructor(
@@ -47,8 +48,7 @@ class MovieListRepositoryImpl @Inject constructor(
     override fun getFavoriteMovies(): Flow<Resource<List<Movie>>> = flow {
         emit(Resource.Loading(true))
         try {
-            val movies = movieDatabase.movieDao.getFavoriteMovies().map { it.toMovie() }
-            emit(Resource.Success(movies))
+
         } catch (e: Exception) {
             emit(Resource.Error("Failed to fetch favorites"))
         }

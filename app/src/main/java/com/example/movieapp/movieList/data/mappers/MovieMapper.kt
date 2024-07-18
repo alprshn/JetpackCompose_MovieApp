@@ -24,7 +24,8 @@ fun Result.toMovieEntity(isFavorite: Boolean = false): MovieEntity {
             genre_ids?.joinToString(",") ?: "-1,-2"
         } catch (e: Exception) {
             "-1,-2"
-        }
+        },
+        userId = id ?: -1,
     )
 }
 

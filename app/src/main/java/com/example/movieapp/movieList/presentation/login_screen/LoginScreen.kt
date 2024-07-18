@@ -1,6 +1,7 @@
-package com.example.movieapp.movieList.presentation.authentication
+package com.example.movieapp.movieList.presentation.login_screen
 
 import android.util.Log
+import android.widget.Toast.makeText
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,33 +13,34 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.movieapp.movieList.presentation.Toast
-import com.example.movieapp.movieList.util.Resource
 import com.example.movieapp.movieList.util.Screens
-import com.example.movieapp.ui.theme.MovieAppTheme
+import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewModel) {
-
+fun LoginScreen(navController: NavHostController, viewModel: SignInViewModel = hiltViewModel()) {
+    val scope = rememberCoroutineScope()
+    val state = viewModel.signInState.collectAsState(initial = null)
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -50,8 +52,8 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val emailState = remember { mutableStateOf("") }
-            val passwordState = remember { mutableStateOf("") }
+            val email = remember { mutableStateOf("") }
+            val password = remember { mutableStateOf("") }
 
             Text(
                 text = "Sıgn In",
@@ -60,67 +62,67 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                 fontFamily = FontFamily.SansSerif
             )
             TextField(
-                value = emailState.value,
-                onValueChange = { emailState.value = it },
+                value = email.value,
+                onValueChange = { email.value = it },
                 label = { Text("Email") },
                 modifier = Modifier.padding(10.dp)
             )
             TextField(
-                value = passwordState.value,
-                onValueChange = { passwordState.value = it },
+                value = password.value,
+                onValueChange = { password.value = it },
                 label = { Text("Password") },
                 modifier = Modifier.padding(10.dp),
                 visualTransformation = PasswordVisualTransformation()
             )
             Button(
                 onClick = {
-                    viewModel.signIn(email = emailState.value, password = passwordState.value)
+                    viewModel.loginUser(email = email.value, password = password.value)
                 },
                 modifier = Modifier.padding(10.dp)
             ) {
                 Text(text = "Sign In")
-                when (val response = viewModel.signInState.value) {
-                    is Resource.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
+            }
 
-                    is Resource.Success -> {
-                        Log.e("TAG", "LoginScreen: ${response.data}")
-                        if (response.data!!) {
-                            navController.navigate(Screens.SearchScreen.route) {
-                                popUpTo(Screens.LoginScreen.route) {
-                                    inclusive = true
-                                }
-                            }
-                        } else {
-                            Toast(message = "Sign In Failed")
+        }
+        Text(text = "New User? Sign Up", color = Color.Blue, modifier = Modifier
+            .padding(8.dp)
+            .clickable {
+                navController.navigate(Screens.SignUpScreen.route) {
+                    launchSingleTop = true
+                }
+            }
+        )
+
+        LaunchedEffect(key1 = state.value?.isSuccess) {
+            scope.launch {
+                if (state.value?.isSuccess!!.isNotEmpty() == true) {
+                    val success = state.value?.isSuccess
+                    makeText(context, success.toString(), android.widget.Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screens.SearchScreen.route) {
+                        popUpTo(Screens.LoginScreen.route) {
+                            inclusive = true
                         }
-                    }
-
-                    is Resource.Error -> {
-                        Toast(message = response.message.toString())
                     }
                 }
             }
-            Text(text = "New User? Sign Up", color = Color.Blue, modifier = Modifier
-                .padding(8.dp)
-                .clickable {
-                    navController.navigate(Screens.SignUpScreen.route) {
-                        launchSingleTop = true
-                    }
-                })
         }
 
+        LaunchedEffect(key1 = state.value?.isError) {
+            scope.launch {
+                if (state.value?.isError!!.isNotEmpty() == true) {
+                    val error = state.value?.isError
+                    makeText(context, error.toString(), android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
 }
+
 
 @Preview
 @Composable
 fun LoginScreenPreview() {
     val navController = rememberNavController()
-    val authViewModel: AuthenticationViewModel = hiltViewModel()
-    LoginScreen(navController = navController, viewModel = authViewModel)
+    LoginScreen(navController = navController)
 }
