@@ -78,10 +78,11 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
                     Icon(
                         tint = Color.White,
                         imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon"
+                        contentDescription = "Search Icon",
+                        modifier = Modifier.padding(start = 10.dp)
                     )
                 },
-                placeholder  = { Text(text = "Search Movie", color = searchTextColor) },
+                placeholder  = { Text(text = "Search Movie", color = searchTextColor,) },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = bottomBarColor,  // Odaklanmış durumda çerçeve rengi
                     unfocusedBorderColor = bottomBarColor,  // Odaklanmamış durumda çerçeve rengi
@@ -90,7 +91,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
                     disabledTextColor = searchTextColor,
                     containerColor = bottomBarColor,
                 ),
-                shape = RoundedCornerShape(15.dp),
+                shape = RoundedCornerShape(30.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 10.dp)
