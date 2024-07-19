@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.presentation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
@@ -34,6 +35,7 @@ import com.example.movieapp.movieList.presentation.main.WatchListScreen
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.backgroundColor
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -103,7 +105,7 @@ fun NavigationHost(navController: NavHostController) {
             SplashScreen(navController = navController)
         }
         composable(route = Screens.SearchScreen.route) {
-            SearchScreen()
+            SearchScreen(navController = navController)
         }
         composable(route = Screens.FavoritesScreen.route) {
             FavoritesScreen()

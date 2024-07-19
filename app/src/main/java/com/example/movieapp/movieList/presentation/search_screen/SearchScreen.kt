@@ -3,6 +3,7 @@
 package com.example.movieapp.movieList.presentation.search_screen
 
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -53,17 +54,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.data.remote.respond.Result
+import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.searchTextColor
+import com.google.gson.Gson
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
+fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(),navController: NavHostController) {
     val query: MutableState<String> = remember { mutableStateOf("") }
     val result = viewModel.searchList.value
     Surface(
@@ -128,7 +132,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
                     Log.d("TAG", "MainContent: Your Token")
                     viewModel.searchList.value.data?.let {
                         items(it) {
-                            SearchMoviewContentItem(it)
+                            SearchMovieContentItem(it,navController)
                         }
                     }
                 }
@@ -140,13 +144,13 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun SearchMoviewContentItem(result: Result) {
+fun SearchMovieContentItem(movie: Result,navController: NavHostController) {
     Card(
         modifier = Modifier
             .padding(12.dp)
             .fillMaxWidth()
             .clickable {
-
+                navController.navigate(Screens.DetailScreen.route)
             },
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
 
@@ -156,8 +160,8 @@ fun SearchMoviewContentItem(result: Result) {
                 .fillMaxSize()
                 .background(backgroundColor)
         ) {
-            Log.e("Search Image", result.poster_path)
-            Log.e("Search Name", result.title)
+            Log.e("Search Image", movie.poster_path)
+            Log.e("Search Name", movie.title)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -165,7 +169,7 @@ fun SearchMoviewContentItem(result: Result) {
                     .height(300.dp)
             ) {
                 Image(
-                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${result.poster_path}"),
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
                     contentScale = ContentScale.FillHeight,
                     contentDescription = null,
                     modifier = Modifier
@@ -173,7 +177,7 @@ fun SearchMoviewContentItem(result: Result) {
                 )
             }
             Text(
-                text = "${result.title} (${result.release_date.substring(0, 4)})",
+                text = "${movie.title} (${movie.release_date.substring(0, 4)})",
                 modifier = Modifier
                     .padding(4.dp),
                 color = Color.White
