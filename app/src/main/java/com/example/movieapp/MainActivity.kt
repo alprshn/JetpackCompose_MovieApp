@@ -27,6 +27,7 @@ import com.example.movieapp.movieList.presentation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
 import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
+import com.example.movieapp.movieList.presentation.main.DetailScreen
 import com.example.movieapp.movieList.presentation.signup_screen.SignUpScreen
 import com.example.movieapp.movieList.presentation.main.FavoritesScreen
 import com.example.movieapp.movieList.presentation.main.WatchListScreen
@@ -109,6 +110,9 @@ fun NavigationHost(navController: NavHostController) {
         }
         composable(route = Screens.WatchListScreen.route) {
             WatchListScreen()
+        }
+        composable(route = Screens.DetailScreen.route) {
+            DetailScreen()
         }
     }
 }

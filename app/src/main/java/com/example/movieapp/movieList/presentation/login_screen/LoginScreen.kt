@@ -82,16 +82,16 @@ fun LoginScreen(navController: NavHostController, viewModel: SignInViewModel = h
             ) {
                 Text(text = "Sign In")
             }
-
-        }
-        Text(text = "New User? Sign Up", color = Color.Blue, modifier = Modifier
-            .padding(8.dp)
-            .clickable {
-                navController.navigate(Screens.SignUpScreen.route) {
-                    launchSingleTop = true
+            Text(text = "New User? Sign Up", color = Color.Blue, modifier = Modifier
+                .padding(8.dp)
+                .clickable {
+                    navController.navigate(Screens.SignUpScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
-            }
-        )
+            )
+        }
+
 
         LaunchedEffect(key1 = state.value?.isSuccess) {
             scope.launch {
