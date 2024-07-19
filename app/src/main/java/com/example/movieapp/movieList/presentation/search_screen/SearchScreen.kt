@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,10 +18,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -82,7 +88,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
                         modifier = Modifier.padding(start = 10.dp)
                     )
                 },
-                placeholder  = { Text(text = "Search Movie", color = searchTextColor,) },
+                placeholder = { Text(text = "Search Movie", color = searchTextColor) },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = bottomBarColor,  // Odaklanmış durumda çerçeve rengi
                     unfocusedBorderColor = bottomBarColor,  // Odaklanmamış durumda çerçeve rengi
@@ -115,7 +121,10 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
                 }
             }
             if (result.data.isNotEmpty()) {
-                LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     Log.d("TAG", "MainContent: Your Token")
                     viewModel.searchList.value.data?.let {
                         items(it) {
@@ -134,21 +143,42 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel()) {
 fun SearchMoviewContentItem(result: Result) {
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(12.dp)
             .fillMaxWidth()
-            .height(200.dp)
-    ) {
-        Log.e("Search Image",result.poster_path)
-        Log.e("Search Name",result.title)
+            .clickable {
 
-        Image(
-            painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${result.poster_path}"),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
+            },
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+
+    ) {
+        Column(
             modifier = Modifier
-                .padding(4.dp)
-                .fillMaxWidth()
-                .fillMaxHeight()
-        )
+                .fillMaxSize()
+                .background(backgroundColor)
+        ) {
+            Log.e("Search Image", result.poster_path)
+            Log.e("Search Name", result.title)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(15.dp))
+                    .height(300.dp)
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${result.poster_path}"),
+                    contentScale = ContentScale.FillHeight,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
+            Text(
+                text = "${result.title} (${result.release_date.substring(0, 4)})",
+                modifier = Modifier
+                    .padding(4.dp),
+                color = Color.White
+            )
+        }
+
     }
 }
