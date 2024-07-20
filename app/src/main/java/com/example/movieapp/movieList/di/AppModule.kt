@@ -6,8 +6,10 @@ import androidx.room.Room
 import com.example.movieapp.movieList.data.local.movie.MovieDatabase
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.repository.AuthenticationRepositoryImpl
+import com.example.movieapp.movieList.data.repository.RoomDataBaseRepositoryImpl
 import com.example.movieapp.movieList.data.repository.SearchRepositoryImpl
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
+import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
 import com.example.movieapp.movieList.domain.use_cases.FirebaseAuthState
 import com.example.movieapp.movieList.domain.use_cases.FirebaseSignIn
@@ -67,6 +69,12 @@ object AppModule {
         )
 //            .addMigrations() later add migrations if u change the table
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabaseRepository(roomdb:MovieDatabase) :RoomDataBaseRepository {
+        return RoomDataBaseRepositoryImpl(roomdb.movieDao)
     }
 
 
