@@ -58,12 +58,12 @@ class MovieListRepositoryImpl @Inject constructor(
     override suspend fun getMovie(id: Int): Flow<Resource<Movie>> = flow {
         emit(Resource.Loading(true))
         try {
-            val movie = movieDatabase.movieDao.getMovieById(id)?.toMovie()
-            if (movie != null) {
-                emit(Resource.Success(movie))
-            } else {
-                emit(Resource.Error("Movie not found"))
-            }
+           // val movie = movieDatabase.movieDao.getMovieById(id)?.toMovie()
+            ///if (movie != null) {
+                //emit(Resource.Success(movie))
+           // } else {
+            //    emit(Resource.Error("Movie not found"))
+           // }
         } catch (e: Exception) {
             emit(Resource.Error("Failed to fetch movie"))
         }
@@ -71,12 +71,12 @@ class MovieListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean) {
-        val movieEntity = movieDatabase.movieDao.getMovieById(id)
-        val updatedMovieEntity = movieEntity?.copy(isFavorite = isFavorite) ?: return // Eğer film bulunamazsa fonksiyon sonlanır.
+       // val movieEntity = movieDatabase.movieDao.getMovieById(id)
+        //val updatedMovieEntity = movieEntity?.copy(isFavorite = isFavorite) ?: return // Eğer film bulunamazsa fonksiyon sonlanır.
         if (isFavorite) {
-            movieDatabase.movieDao.upsertMovie(updatedMovieEntity)
+          //  movieDatabase.movieDao.insertMovie(updatedMovieEntity)
         } else {
-            movieDatabase.movieDao.deleteMovie(updatedMovieEntity)
+           // movieDatabase.movieDao.deleteMovie(updatedMovieEntity)
         }
     }
 }

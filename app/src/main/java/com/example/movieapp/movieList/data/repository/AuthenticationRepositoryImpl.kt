@@ -7,6 +7,7 @@ import com.example.movieapp.movieList.util.Constants
 import com.example.movieapp.movieList.util.Resource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -38,6 +39,11 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }.catch {
             emit(value = Resource.Error(it.message.toString()))
         }
+    }
+
+
+    override fun getCurrentUser(): FirebaseUser? {
+        return firebaseAuth.currentUser
     }
 
 }

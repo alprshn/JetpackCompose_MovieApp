@@ -56,6 +56,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.util.Screens
@@ -67,9 +69,9 @@ import com.google.gson.Gson
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(),navController: NavHostController) {
+fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: NavHostController) {
     val query: MutableState<String> = remember { mutableStateOf("") }
-    val result = viewModel.searchList.value
+    val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -107,82 +109,90 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(),navController: Nav
                     .padding(start = 10.dp, end = 10.dp, top = 10.dp)
 
             )
-
-            if (result.isLoading) {
-                Log.d("TAG", "MainContent: in the loading")
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-            }
-
-            if (result.error.isNotBlank()) {
-                Log.d("TAG", "MainContent: ${result.error}")
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Text(
-                        text = viewModel.searchList.value.error,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-            if (result.data.isNotEmpty()) {
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(2),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Log.d("TAG", "MainContent: Your Token")
-                    viewModel.searchList.value.data?.let {
-                        items(it) {
-                            SearchMovieContentItem(it,navController)
-                        }
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(searchResults.itemCount) { index ->
+                    searchResults[index]?.let {
+                        SearchMovieContentItem(it, navController)
                     }
                 }
+
+                searchResults.apply {
+                    when {
+                        loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                                }
+                            }
+                        }
+
+                        loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
+                            item {
+                                Text(text = "Error")
+                            }
+                        }
+
+                        loadState.refresh is LoadState.NotLoading -> {
+                        }
+                    }
+
+                }
+
+
             }
-
-
         }
     }
 }
+    @Composable
+    fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
+        if (movie == null){
+            Log.e("Search Movie", "Movie is null")
+            return
+        }
 
-@Composable
-fun SearchMovieContentItem(movie: Result,navController: NavHostController) {
-    Card(
-        modifier = Modifier
-            .padding(12.dp)
-            .fillMaxWidth()
-            .clickable {
-                navController.navigate(Screens.DetailScreen.route)
-            },
-        colors = CardDefaults.cardColors(containerColor = backgroundColor)
-
-    ) {
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
+                .padding(12.dp)
+                .fillMaxWidth()
+                .clickable {
+                    val movieJson = Uri.encode(Gson().toJson(movie))
+                    navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+                },
+            colors = CardDefaults.cardColors(containerColor = backgroundColor)
+
         ) {
-            Log.e("Search Image", movie.poster_path)
-            Log.e("Search Name", movie.title)
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(15.dp))
-                    .height(300.dp)
+                    .fillMaxSize()
+                    .background(backgroundColor)
             ) {
-                Image(
-                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
-                    contentScale = ContentScale.FillHeight,
-                    contentDescription = null,
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(15.dp))
+                        .height(300.dp)
+                ) {
+                    Image(
+                        painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
+                        contentScale = ContentScale.FillHeight,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+                }
+                Text(
+                    text = "${movie.title} (${movie.release_date.substring(0, 4)})",
+                    modifier = Modifier
+                        .padding(4.dp),
+                    color = Color.White
                 )
             }
-            Text(
-                text = "${movie.title} (${movie.release_date.substring(0, 4)})",
-                modifier = Modifier
-                    .padding(4.dp),
-                color = Color.White
-            )
-        }
 
+        }
     }
-}

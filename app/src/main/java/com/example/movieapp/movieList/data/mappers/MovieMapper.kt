@@ -25,7 +25,7 @@ fun Result.toMovieEntity(isFavorite: Boolean = false): MovieEntity {
         } catch (e: Exception) {
             "-1,-2"
         },
-        userId = id ?: -1,
+        userId = original_language ?: "",
     )
 }
 

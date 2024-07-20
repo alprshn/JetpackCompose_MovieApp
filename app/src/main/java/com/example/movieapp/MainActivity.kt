@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.presentation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
@@ -113,8 +114,10 @@ fun NavigationHost(navController: NavHostController) {
         composable(route = Screens.WatchListScreen.route) {
             WatchListScreen()
         }
-        composable(route = Screens.DetailScreen.route) {
-            DetailScreen()
+        composable(route = Screens.DetailScreen.route + "/{movie}") { backStackEntry ->
+            val movieJson = backStackEntry.arguments?.getString("movie")
+            val movie = Gson().fromJson(movieJson, Result::class.java)
+            DetailScreen(movie = movie)
         }
     }
 }

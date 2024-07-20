@@ -2,6 +2,7 @@
 
 package com.example.movieapp.movieList.presentation.main
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,15 +37,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.data.remote.respond.Result
+import com.example.movieapp.movieList.presentation.FavoritesViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 
 
 @Composable
-fun DetailScreen() {
-    var selectedButtonIndex by remember { mutableStateOf(0) }
-    var isFavorite by remember { mutableStateOf(false) }
+fun DetailScreen(
+    viewModel: FavoritesViewModel = hiltViewModel(),
+    movie: Result,
+) {
+
+    val isFavorite by viewModel.isFavorite(movie.id).observeAsState(initial = false)
 
     Surface(
         modifier = Modifier
@@ -68,7 +76,50 @@ fun DetailScreen() {
             ) {
                 IconButton(
                     onClick = {
-                        isFavorite = !isFavorite
+                        Log.e("mEHABA",movie.title)
+                        if (isFavorite) {
+                            viewModel.removeFavorite(
+                                MovieEntity(
+                                    id = movie.id,
+                                    userId = "", // Kullanıcı kimliğini burada belirtmeyin
+                                    adult = movie.adult,
+                                    backdrop_path = movie.backdrop_path,
+                                    genre_ids = movie.genre_ids.toString(),
+                                    original_language = movie.original_language,
+                                    original_title = movie.original_title,
+                                    overview = movie.overview,
+                                    popularity = movie.popularity,
+                                    poster_path = movie.poster_path,
+                                    release_date = movie.release_date,
+                                    title = movie.title,
+                                    video = movie.video,
+                                    vote_average = movie.vote_average,
+                                    vote_count = movie.vote_count,
+                                    isFavorite = false
+                                )
+                            )
+                        } else {
+                            viewModel.addFavorite(
+                                MovieEntity(
+                                    id = movie.id,
+                                    userId = "", // Kullanıcı kimliğini burada belirtmeyin
+                                    adult = movie.adult,
+                                    backdrop_path = movie.backdrop_path,
+                                    genre_ids = movie.genre_ids.toString(),
+                                    original_language = movie.original_language,
+                                    original_title = movie.original_title,
+                                    overview = movie.overview,
+                                    popularity = movie.popularity,
+                                    poster_path = movie.poster_path,
+                                    release_date = movie.release_date,
+                                    title = movie.title,
+                                    video = movie.video,
+                                    vote_average = movie.vote_average,
+                                    vote_count = movie.vote_count,
+                                    isFavorite = true
+                                )
+                            )
+                        }
                     }
                 ) {
                     Row(
@@ -114,8 +165,3 @@ fun DetailScreen() {
     }
 }
 
-@Preview
-@Composable
-fun DetailScreenPreview() {
-    DetailScreen()
-}

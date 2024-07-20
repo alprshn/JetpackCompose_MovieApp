@@ -66,14 +66,13 @@ object AppModule {
             app,
             MovieDatabase::class.java,
             "movies.sqlite"
-        )
-//            .addMigrations() later add migrations if u change the table
+        ).fallbackToDestructiveMigration()
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideRoomDatabaseRepository(roomdb:MovieDatabase) :RoomDataBaseRepository {
+    fun provideRoomDatabaseRepository(roomdb: MovieDatabase): RoomDataBaseRepository {
         return RoomDataBaseRepositoryImpl(roomdb.movieDao)
     }
 

@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
 ///Other
     implementation(libs.androidx.navigation.compose)
@@ -107,7 +108,9 @@ dependencies {
     implementation(libs.firebase.storage.ktx)
     implementation(libs.google.firebase.auth)
     implementation("com.google.firebase:firebase-analytics")
-
+    // Pagging 3
+    implementation("androidx.paging:paging-runtime-ktx:3.3.0")
+    implementation("androidx.paging:paging-compose:3.3.0")
 
     //Test
     androidTestImplementation(libs.androidx.junit)

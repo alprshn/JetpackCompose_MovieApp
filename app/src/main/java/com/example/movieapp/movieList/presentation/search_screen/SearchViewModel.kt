@@ -1,9 +1,13 @@
 package com.example.movieapp.movieList.presentation.search_screen
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.data.remote.respond.SearchMovie
 import com.example.movieapp.movieList.domain.repository.SearchRepository
 import com.example.movieapp.movieList.util.Resource
@@ -17,22 +21,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val repository: SearchRepository) : ViewModel() {
-    val searchList: MutableState<SearchState> = mutableStateOf(SearchState())
+    private val _searchResults: MutableStateFlow<PagingData<Result>> = MutableStateFlow(PagingData.empty())
+    val searchResults: StateFlow<PagingData<Result>> = _searchResults
 
-    fun search(query: String) = viewModelScope.launch {
-        val result = repository.searchQueries(query)
-        when(result){
-            is Resource.Loading -> {
-                searchList.value = SearchState(isLoading = true)
-            }
-            is Resource.Error ->{
-                searchList.value = SearchState(error = result.message.toString())
-            }
-            is Resource.Success ->{
-                result.data?.results?.let {
-                    searchList.value = SearchState(data = it)
+    fun search(query: String) {
+        viewModelScope.launch {
+            repository.searchMoviePaging(query)
+                .cachedIn(viewModelScope)
+                .collectLatest {
+                    _searchResults.value = it
+                    Log.d("SearchViewModel", "New data loaded for query: $query")
                 }
-            }
         }
     }
 }

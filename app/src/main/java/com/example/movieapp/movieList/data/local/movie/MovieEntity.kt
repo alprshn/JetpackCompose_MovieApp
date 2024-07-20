@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "favorite_movies")
 data class MovieEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") @NotNull val id: Int,
-    @ColumnInfo(name = "userId") @NotNull val userId: Int,
+    @PrimaryKey @ColumnInfo(name = "id") @NotNull val id: Int,
+    @ColumnInfo(name = "userId") @NotNull val userId: String = "",
     @ColumnInfo(name = "adult") @NotNull val adult: Boolean,
     @ColumnInfo(name = "backdrop_path") @NotNull val backdrop_path: String,
     @ColumnInfo(name = "genre_ids") @NotNull val genre_ids: String,

@@ -21,17 +21,21 @@ class RoomDataBaseRepositoryImpl @Inject constructor(
 
     override suspend fun delete(movieEntity: MovieEntity) {
         withContext(IO) {
-            dao.deleteMovie(movieEntity)
+            dao.deleteMovie(movieEntity.id, movieEntity.userId)
         }
     }
 
-    override suspend fun update(movieEntity: MovieEntity) {
-        TODO("Not yet implemented")
+    override suspend fun getMovieById(movieId: Int, userId: String): MovieEntity? {
+        return dao.getMovieById(movieId, userId)
     }
 
-    override suspend fun getFavoriteMovies(): Flow<List<MovieEntity>> {
+    override suspend fun getFavoriteMovies(userId: String): Flow<List<MovieEntity>> {
         return withContext(IO) {
-            dao.getFavoriteMovies()
+            dao.getFavoriteMovies(userId)
         }
     }
+    override suspend fun updateFavoriteStatus(id: Int, userId: String, isFavorite: Boolean) {
+        dao.updateFavoriteStatus(id, userId, isFavorite)
+    }
+
 }

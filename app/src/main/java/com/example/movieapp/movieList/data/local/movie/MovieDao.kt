@@ -14,15 +14,16 @@ import kotlinx.coroutines.flow.Flow
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(movie: MovieEntity)
 
-    @Delete
-    suspend fun deleteMovie(movie: MovieEntity)
+    @Query("DELETE FROM favorite_movies WHERE id = :id AND userId = :userId")
+    suspend fun deleteMovie(id: Int, userId: String)
 
-    @Query("SELECT * FROM favorite_movies WHERE id = :id")
-    suspend fun getMovieById(id: Int): MovieEntity?
 
-    @Query("SELECT * FROM favorite_movies")
-    fun getFavoriteMovies():  Flow<List<MovieEntity>>
+    @Query("SELECT * FROM favorite_movies WHERE id = :id AND userId = :userId")
+    suspend fun getMovieById(id: Int, userId: String): MovieEntity?
 
-    @Query("UPDATE favorite_movies SET isFavorite = :isFavorite WHERE id = :id")
-    suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean)
+    @Query("SELECT * FROM favorite_movies WHERE userId = :userId")
+    fun getFavoriteMovies(userId: String): Flow<List<MovieEntity>>
+
+    @Query("UPDATE favorite_movies SET isFavorite = :isFavorite WHERE id = :id AND userId = :userId")
+    suspend fun updateFavoriteStatus(id: Int, userId: String, isFavorite: Boolean)
 }
