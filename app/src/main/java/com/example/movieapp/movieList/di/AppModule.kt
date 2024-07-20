@@ -1,5 +1,9 @@
 package com.example.movieapp.movieList.di
 
+import android.app.Application
+import android.content.Context
+import androidx.room.Room
+import com.example.movieapp.movieList.data.local.movie.MovieDatabase
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.repository.AuthenticationRepositoryImpl
 import com.example.movieapp.movieList.data.repository.SearchRepositoryImpl
@@ -52,5 +56,18 @@ object AppModule {
     fun providesSearchRepository(movieApi: MovieApi): SearchRepository {
         return SearchRepositoryImpl(movieApi = movieApi)
     }
+
+    @Provides
+    @Singleton
+    fun provideRoomDataBase(app: Application): MovieDatabase {
+        return Room.databaseBuilder(
+            app,
+            MovieDatabase::class.java,
+            "movies.sqlite"
+        )
+//            .addMigrations() later add migrations if u change the table
+            .build()
+    }
+
 
 }

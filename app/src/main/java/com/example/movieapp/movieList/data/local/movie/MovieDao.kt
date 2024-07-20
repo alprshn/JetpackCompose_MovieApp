@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
     interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertMovie(movie: MovieEntity)
+    suspend fun insertMovie(movie: MovieEntity)
 
     @Delete
     suspend fun deleteMovie(movie: MovieEntity)
