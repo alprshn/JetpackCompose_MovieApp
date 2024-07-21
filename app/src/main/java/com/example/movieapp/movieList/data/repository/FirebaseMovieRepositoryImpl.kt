@@ -42,7 +42,7 @@ class FirebaseMovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieById(movieId: Int, userId: String) {
+    override suspend fun getMovieById(movieId: Int, userId: String): FirebaseMovieEntity? {
         return withContext(IO) {
             val documentSnapshot = firestore.collection("watchlist")
                 .document(userId)

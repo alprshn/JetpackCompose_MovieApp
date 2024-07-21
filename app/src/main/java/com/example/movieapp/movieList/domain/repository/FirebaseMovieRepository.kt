@@ -11,7 +11,7 @@ interface FirebaseMovieRepository {
     suspend fun delete(movieEntity: FirebaseMovieEntity)
 
     //suspend fun update(movieEntity: MovieEntity)
-    suspend fun getMovieById(movieId: Int, userId: String)
+    suspend fun getMovieById(movieId: Int, userId: String): FirebaseMovieEntity?
     suspend fun getWatchlistMovies(userId: String): Flow<List<FirebaseMovieEntity>>
     suspend fun updateWatchlistStatus(id: Int, userId: String, addedToWatchlist: Boolean)
 }
