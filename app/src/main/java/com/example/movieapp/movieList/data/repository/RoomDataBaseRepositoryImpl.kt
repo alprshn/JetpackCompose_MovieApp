@@ -36,6 +36,9 @@ class RoomDataBaseRepositoryImpl @Inject constructor(
     }
     override suspend fun updateFavoriteStatus(id: Int, userId: String, isFavorite: Boolean) {
         dao.updateFavoriteStatus(id, userId, isFavorite)
+        if (!isFavorite) {
+            dao.deleteMovie(id, userId)
+        }
     }
 
 }

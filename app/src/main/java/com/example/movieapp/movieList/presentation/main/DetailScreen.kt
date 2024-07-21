@@ -60,6 +60,9 @@ fun DetailScreen(
     LaunchedEffect(isWatchlist) {
         currentWatchlistState = isWatchlist
     }
+    LaunchedEffect(isFavorite) {
+        currentFavoriteState = isFavorite
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -84,7 +87,7 @@ fun DetailScreen(
                 IconButton(
                     onClick = {
                         Log.e("mEHABA", movie.title)
-                        if (isFavorite) {
+                        if (currentFavoriteState) {
                             viewModel.removeFavorite(
                                 MovieEntity(
                                     id = movie.id,
@@ -127,6 +130,7 @@ fun DetailScreen(
                                 )
                             )
                         }
+                        currentFavoriteState = !currentFavoriteState
                     }
                 ) {
                     Row(
@@ -136,9 +140,9 @@ fun DetailScreen(
                     ) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
-                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            imageVector = if (currentFavoriteState) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = "Favorite",
-                            tint = if (isFavorite) Color.Red else Color.Gray,
+                            tint = if (currentFavoriteState) Color.Red else Color.Gray,
                             modifier = Modifier.size(48.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -197,7 +201,6 @@ fun DetailScreen(
                             )
                         }
                         currentWatchlistState = !currentWatchlistState
-
                     }
                 ) {
                     Row(
