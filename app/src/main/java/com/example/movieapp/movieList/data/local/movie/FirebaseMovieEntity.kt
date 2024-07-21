@@ -40,4 +40,7 @@ data class FirebaseMovieEntity(
         vote_count = 0,
         addedToWatchlist = false
     )
+    fun getGenreIds(): List<Int> {
+        return genre_ids?.let { fromJsonToList(it) } ?: emptyList()
+    }
 }
