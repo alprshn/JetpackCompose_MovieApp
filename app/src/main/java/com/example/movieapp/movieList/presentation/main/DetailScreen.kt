@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,8 +24,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,8 +54,12 @@ fun DetailScreen(
     val isFavorite by viewModel.isFavorite(movie.id).observeAsState(initial = false)
     val isWatchlist by viewModelWatchlist.isWatchlist(movie.id).observeAsState(initial = false)
 
+    var currentFavoriteState by remember { mutableStateOf(isFavorite) }
+    var currentWatchlistState by remember { mutableStateOf(isWatchlist) }
 
-
+    LaunchedEffect(isWatchlist) {
+        currentWatchlistState = isWatchlist
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -146,7 +153,7 @@ fun DetailScreen(
                 IconButton(
                     onClick = {
                         Log.e("mEHABA", movie.title)
-                        if (isWatchlist) {
+                        if (currentWatchlistState) {
                             viewModelWatchlist.removeWatchlist(
                                 FirebaseMovieEntity(
                                     id = movie.id,
@@ -189,6 +196,8 @@ fun DetailScreen(
                                 )
                             )
                         }
+                        currentWatchlistState = !currentWatchlistState
+
                     }
                 ) {
                     Row(
@@ -198,9 +207,9 @@ fun DetailScreen(
                     ) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
-                            imageVector = if (isWatchlist) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                            imageVector = if (currentWatchlistState) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                             contentDescription = "Watchlist",
-                            tint = if (isWatchlist) Color.Blue else Color.Gray,
+                            tint = if (currentWatchlistState) Color.Blue else Color.Gray,
                             modifier = Modifier.size(48.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
