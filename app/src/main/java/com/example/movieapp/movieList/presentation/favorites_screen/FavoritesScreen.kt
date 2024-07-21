@@ -68,6 +68,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(), navControll
                         .padding(vertical = 4.dp)
                         .clickable {
                             val movieJson = Uri.encode(Gson().toJson(movie))
+                            Log.e("MovieJson", movieJson)
                             navController.navigate(Screens.DetailScreen.route + "/$movieJson")
                         }
                 ) {
@@ -112,7 +113,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(), navControll
                             Row {
                                 Icon(modifier = Modifier.padding(end = 4.dp), imageVector = Icons.Outlined.ConfirmationNumber, contentDescription =null, tint = Color.White)
                                 Text(
-                                    text = movie.genre_ids,
+                                    text = movie.getGenreIds().mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }.joinToString(", "),
                                     color = Color.White,
                                     fontSize = 14.sp
                                 )

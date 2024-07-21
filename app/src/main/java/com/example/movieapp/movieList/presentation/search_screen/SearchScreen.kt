@@ -162,6 +162,7 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: Na
                 .fillMaxWidth()
                 .clickable {
                     val movieJson = Uri.encode(Gson().toJson(movie))
+                    Log.e("MovieJson", movieJson)
                     navController.navigate(Screens.DetailScreen.route + "/$movieJson")
                 },
             colors = CardDefaults.cardColors(containerColor = backgroundColor)

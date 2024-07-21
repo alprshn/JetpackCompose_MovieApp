@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movieapp.movieList.data.local.movie.Genre
 import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
@@ -21,7 +22,27 @@ class FavoritesViewModel @Inject constructor(
     val favoriteMovies: LiveData<List<MovieEntity>> get() = _favoriteMovies
 
     private val currentUser = authRepository.getCurrentUser()
-
+    val genres = listOf(
+        Genre(28, "Action"),
+        Genre(12, "Adventure"),
+        Genre(16, "Animation"),
+        Genre(35, "Comedy"),
+        Genre(80, "Crime"),
+        Genre(99, "Documentary"),
+        Genre(18, "Drama"),
+        Genre(10751, "Family"),
+        Genre(14, "Fantasy"),
+        Genre(36, "History"),
+        Genre(27, "Horror"),
+        Genre(10402, "Music"),
+        Genre(9648, "Mystery"),
+        Genre(10749, "Romance"),
+        Genre(878, "Science Fiction"),
+        Genre(10770, "TV Movie"),
+        Genre(53, "Thriller"),
+        Genre(10752, "War"),
+        Genre(37, "Western")
+    )
     fun getFavoriteMovies() {
         currentUser?.let { user ->
             viewModelScope.launch {
