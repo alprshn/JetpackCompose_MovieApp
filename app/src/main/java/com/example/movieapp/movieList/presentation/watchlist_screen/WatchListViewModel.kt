@@ -33,7 +33,7 @@ class WatchListViewModel @Inject constructor(
         }
     }
 
-    fun addFavorite(movie: FirebaseMovieEntity) {
+    fun addWatchlist(movie: FirebaseMovieEntity) {
         viewModelScope.launch {
             currentUser?.let { user ->
                 firebaseMovieRepository.insert(movie.copy(userId = user.uid, addedToWatchlist = true))
@@ -42,7 +42,7 @@ class WatchListViewModel @Inject constructor(
     }
 
 
-    fun removeFavorite(movie: FirebaseMovieEntity) {
+    fun removeWatchlist(movie: FirebaseMovieEntity) {
         viewModelScope.launch {
             currentUser?.let { user ->
                 firebaseMovieRepository.updateWatchlistStatus(movie.id!!, user.uid, false)
@@ -50,7 +50,7 @@ class WatchListViewModel @Inject constructor(
         }
     }
 
-    fun isFavorite(movieId: Int): LiveData<Boolean> {
+    fun isWatchlist(movieId: Int): LiveData<Boolean> {
         val addedToWatchlist = MutableLiveData<Boolean>()
         viewModelScope.launch {
             currentUser?.let { user ->
