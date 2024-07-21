@@ -1,34 +1,25 @@
-package com.example.movieapp.movieList.presentation.main
+package com.example.movieapp.movieList.presentation.favorites_screen
 
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ConfirmationNumber
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarBorder
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -47,17 +38,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.movieapp.movieList.presentation.FavoritesViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.starColor
 import com.google.gson.Gson
 
 @Composable
-fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(),navController: NavHostController) {
+fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(), navController: NavHostController) {
     val favoriteMovies by viewModel.favoriteMovies.observeAsState(emptyList())
 
     LaunchedEffect(Unit) {

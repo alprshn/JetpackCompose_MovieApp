@@ -1,4 +1,4 @@
-package com.example.movieapp.movieList.presentation
+package com.example.movieapp.movieList.presentation.favorites_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

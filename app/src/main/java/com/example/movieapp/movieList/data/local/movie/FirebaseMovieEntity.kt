@@ -1,11 +1,11 @@
 package com.example.movieapp.movieList.data.local.movie
 
-import com.google.firebase.database.IgnoreExtraProperties
 
 
-@IgnoreExtraProperties
+
 data class FirebaseMovieEntity(
     val id: Int? = 0,
+    val userId: String = "",
     val adult: Boolean,
     val backdrop_path: String? = "",
     val genre_ids: String? = "",

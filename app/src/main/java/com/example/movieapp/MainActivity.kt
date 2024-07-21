@@ -23,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.presentation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
@@ -31,8 +30,8 @@ import com.example.movieapp.movieList.presentation.SplashScreen
 import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
 import com.example.movieapp.movieList.presentation.main.DetailScreen
 import com.example.movieapp.movieList.presentation.signup_screen.SignUpScreen
-import com.example.movieapp.movieList.presentation.main.FavoritesScreen
-import com.example.movieapp.movieList.presentation.main.WatchListScreen
+import com.example.movieapp.movieList.presentation.favorites_screen.FavoritesScreen
+import com.example.movieapp.movieList.presentation.watchlist_screen.WatchListScreen
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.theme.backgroundColor
