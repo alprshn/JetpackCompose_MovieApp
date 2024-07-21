@@ -1,6 +1,7 @@
 package com.example.movieapp.movieList.util
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
@@ -17,6 +18,6 @@ sealed class Screens(
     object SearchScreen : Screens("search_screen",Icons.Outlined.Search, "Search")
     object DetailScreen : Screens("detail_screen")
     object FavoritesScreen : Screens("favorite_screen", Icons.Outlined.FavoriteBorder, "Favorites")
-    object WatchListScreen : Screens("watchlist_screen", Icons.Outlined.Menu, "Watchlist")
+    object WatchListScreen : Screens("watchlist_screen", Icons.Outlined.BookmarkBorder, "Watchlist")
     object SplashScreen : Screens("splash_screen")
 }

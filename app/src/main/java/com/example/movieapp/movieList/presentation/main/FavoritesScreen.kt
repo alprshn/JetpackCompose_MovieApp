@@ -18,7 +18,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.ConfirmationNumber
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Movie
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,13 +39,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.presentation.FavoritesViewModel
 import com.example.movieapp.ui.theme.backgroundColor
+import com.example.movieapp.ui.theme.starColor
 
 @Composable
 fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel()) {
@@ -80,8 +94,42 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel()) {
                                 .background(backgroundColor)
                                 .padding(16.dp)
                         ) {
-                            Text(text = movie.title, color = Color.Black)
-                            Text(text = movie.release_date, color = Color.Gray)
+                            Text(
+                                text = movie.title,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            Row {
+                                Icon(modifier = Modifier.padding(end = 4.dp), tint = starColor, imageVector = Icons.Outlined.StarBorder, contentDescription =null)
+                                Text(
+                                    text = "${movie.vote_average}",
+                                    color = starColor,
+                                    fontSize = 14.sp
+                                )
+                            }
+
+                            Row {
+                                Icon(modifier = Modifier.padding(end = 4.dp), imageVector = Icons.Outlined.ConfirmationNumber, contentDescription =null, tint = Color.White)
+                                Text(
+                                    text = movie.genre_ids,
+                                    color = starColor,
+                                    fontSize = 14.sp
+                                )
+                            }
+
+                            Row {
+                                Icon(modifier = Modifier.padding(end = 4.dp), tint = Color.White, imageVector = Icons.Outlined.CalendarToday, contentDescription =null)
+                                Text(
+                                    text = movie.release_date.substring(0, 4),
+                                    color = Color.White,
+                                    fontSize = 14.sp
+                                )
+                            }
+
+
                         }
                     }
                 }

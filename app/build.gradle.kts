@@ -111,7 +111,8 @@ dependencies {
     // Pagging 3
     implementation("androidx.paging:paging-runtime-ktx:3.3.0")
     implementation("androidx.paging:paging-compose:3.3.0")
-
+    //Materal Libs
+    implementation(libs.androidx.material.icons.extended)
     //Test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

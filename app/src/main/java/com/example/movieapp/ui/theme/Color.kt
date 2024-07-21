@@ -16,4 +16,4 @@ val bottomBarUnSelectedItemColor= Color(0xFF67686D)
 val backgroundColor= Color(0xFF383950)
 val bottomBarIndicatorColor = Color.Transparent
 val searchTextColor =Color(0xFFBBBBBB)
-
+val starColor = Color(0xFFFF8700)
