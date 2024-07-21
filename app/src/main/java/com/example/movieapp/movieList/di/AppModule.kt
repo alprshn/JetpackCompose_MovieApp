@@ -6,9 +6,11 @@ import androidx.room.Room
 import com.example.movieapp.movieList.data.local.movie.MovieDatabase
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.repository.AuthenticationRepositoryImpl
+import com.example.movieapp.movieList.data.repository.FirebaseMovieRepositoryImpl
 import com.example.movieapp.movieList.data.repository.RoomDataBaseRepositoryImpl
 import com.example.movieapp.movieList.data.repository.SearchRepositoryImpl
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
+import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
 import com.example.movieapp.movieList.domain.use_cases.FirebaseAuthState
@@ -35,6 +37,17 @@ object AppModule {
     @Provides
     @Singleton
     fun providesFirebaseAuth() = FirebaseAuth.getInstance()
+
+
+    @Provides
+    @Singleton
+    fun providesFirebaseRepositoryImpl(firestore: FirebaseFirestore): FirebaseMovieRepository {
+        return FirebaseMovieRepositoryImpl(firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun providesFirebaseFirestore() = FirebaseFirestore.getInstance()
 
 
     @Provides

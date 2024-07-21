@@ -111,7 +111,7 @@ fun NavigationHost(navController: NavHostController) {
             FavoritesScreen(navController = navController)
         }
         composable(route = Screens.WatchListScreen.route) {
-            WatchListScreen()
+            WatchListScreen(navController = navController)
         }
         composable(route = Screens.DetailScreen.route + "/{movie}") { backStackEntry ->
             val movieJson = backStackEntry.arguments?.getString("movie")
