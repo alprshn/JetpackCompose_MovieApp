@@ -1,8 +1,10 @@
 package com.example.movieapp.movieList.presentation.main
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,13 +48,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.presentation.FavoritesViewModel
+import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.starColor
+import com.google.gson.Gson
 
 @Composable
-fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel()) {
+fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(),navController: NavHostController) {
     val favoriteMovies by viewModel.favoriteMovies.observeAsState(emptyList())
 
     LaunchedEffect(Unit) {
@@ -72,6 +77,10 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel()) {
                         .fillMaxWidth()
                         .background(Color.White)
                         .padding(vertical = 4.dp)
+                        .clickable {
+                            val movieJson = Uri.encode(Gson().toJson(movie))
+                            navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+                        }
                 ) {
                     Row(
                         modifier = Modifier
@@ -142,5 +151,5 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel()) {
 @Preview
 @Composable
 fun FavoritesScreenPreview() {
-    FavoritesScreen()
+    //FavoritesScreen(navController: NavController)
 }

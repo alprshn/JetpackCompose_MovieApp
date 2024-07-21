@@ -109,7 +109,7 @@ fun NavigationHost(navController: NavHostController) {
             SearchScreen(navController = navController)
         }
         composable(route = Screens.FavoritesScreen.route) {
-            FavoritesScreen()
+            FavoritesScreen(navController = navController)
         }
         composable(route = Screens.WatchListScreen.route) {
             WatchListScreen()
