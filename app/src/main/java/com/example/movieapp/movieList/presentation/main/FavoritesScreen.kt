@@ -115,7 +115,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel()) {
                                 Icon(modifier = Modifier.padding(end = 4.dp), imageVector = Icons.Outlined.ConfirmationNumber, contentDescription =null, tint = Color.White)
                                 Text(
                                     text = movie.genre_ids,
-                                    color = starColor,
+                                    color = Color.White,
                                     fontSize = 14.sp
                                 )
                             }
