@@ -13,11 +13,7 @@ import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
-import com.example.movieapp.movieList.domain.use_cases.FirebaseAuthState
-import com.example.movieapp.movieList.domain.use_cases.FirebaseSignIn
-import com.example.movieapp.movieList.domain.use_cases.FirebaseSignOut
-import com.example.movieapp.movieList.domain.use_cases.FirebaseSignUp
-import com.example.movieapp.movieList.domain.use_cases.IsUserAuthenticated
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage

@@ -71,7 +71,11 @@ class FirebaseMovieRepositoryImpl @Inject constructor(
                 .document(userId)
                 .collection("watchlistMovies")
                 .document(id.toString())
-            movieRef.update("addedToWatchlist", addedToWatchlist).await()
+            if (addedToWatchlist) {
+                movieRef.update("addedToWatchlist", true).await()
+            } else {
+                movieRef.delete().await()
+            }
         }
     }
 

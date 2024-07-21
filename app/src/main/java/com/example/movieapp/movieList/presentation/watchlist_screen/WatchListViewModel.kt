@@ -37,6 +37,7 @@ class WatchListViewModel @Inject constructor(
         viewModelScope.launch {
             currentUser?.let { user ->
                 firebaseMovieRepository.insert(movie.copy(userId = user.uid, addedToWatchlist = true))
+                //getWatchlistMovies()
             }
         }
     }
@@ -46,6 +47,8 @@ class WatchListViewModel @Inject constructor(
         viewModelScope.launch {
             currentUser?.let { user ->
                 firebaseMovieRepository.updateWatchlistStatus(movie.id!!, user.uid, false)
+                //getWatchlistMovies()
+
             }
         }
     }

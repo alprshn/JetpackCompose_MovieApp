@@ -36,7 +36,7 @@ class FavoritesViewModel @Inject constructor(
         viewModelScope.launch {
             currentUser?.let { user ->
                 roomDatabaseRepository.insert(movie.copy(userId = user.uid, isFavorite = true))
-               // getFavoriteMovies()
+              // getFavoriteMovies()
             }
         }
     }
@@ -45,7 +45,7 @@ class FavoritesViewModel @Inject constructor(
         viewModelScope.launch {
             currentUser?.let { user ->
                 roomDatabaseRepository.updateFavoriteStatus(movie.id, user.uid, false)
-               // getFavoriteMovies()
+               //getFavoriteMovies()
             }
         }
     }
