@@ -28,7 +28,7 @@ import com.example.movieapp.movieList.presentation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
 import com.example.movieapp.movieList.presentation.SplashScreen
 import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
-import com.example.movieapp.movieList.presentation.main.DetailScreen
+import com.example.movieapp.movieList.presentation.detail_screen.DetailScreen
 import com.example.movieapp.movieList.presentation.signup_screen.SignUpScreen
 import com.example.movieapp.movieList.presentation.favorites_screen.FavoritesScreen
 import com.example.movieapp.movieList.presentation.watchlist_screen.WatchListScreen

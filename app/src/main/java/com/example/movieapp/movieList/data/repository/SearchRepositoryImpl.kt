@@ -9,7 +9,6 @@ import com.example.movieapp.movieList.data.mappers.toMovieEntity
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.data.remote.respond.SearchMovie
-import com.example.movieapp.movieList.domain.repository.MovieListRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
 import com.example.movieapp.movieList.util.Constants
 import com.example.movieapp.movieList.util.Resource

@@ -64,15 +64,15 @@ fun LoginScreen(navController: NavHostController, viewModel: SignInViewModel = h
             TextField(
                 value = email.value,
                 onValueChange = { email.value = it },
-                label = { Text("Email") },
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
+                placeholder = { Text("Email") }
             )
             TextField(
                 value = password.value,
                 onValueChange = { password.value = it },
-                label = { Text("Password") },
                 modifier = Modifier.padding(10.dp),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = PasswordVisualTransformation(),
+                placeholder = { Text("Password") }
             )
             Button(
                 onClick = {

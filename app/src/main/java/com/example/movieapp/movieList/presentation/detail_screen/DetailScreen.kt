@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.movieapp.movieList.presentation.main
+package com.example.movieapp.movieList.presentation.detail_screen
 
 import android.util.Log
 import androidx.compose.foundation.background
