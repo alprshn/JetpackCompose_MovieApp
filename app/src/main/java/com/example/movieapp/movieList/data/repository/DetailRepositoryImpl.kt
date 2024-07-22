@@ -5,6 +5,7 @@ import com.example.movieapp.movieList.data.local.movie.MovieDao
 import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.data.remote.MovieApi
 import com.example.movieapp.movieList.data.remote.respond.Result
+import com.example.movieapp.movieList.data.remote.respond.SearchMovie
 import com.example.movieapp.movieList.domain.repository.DetailRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -18,8 +19,12 @@ class DetailRepositoryImpl @Inject constructor(
     private val movieDao: MovieDao,
     private val firestore: FirebaseFirestore
 ) : DetailRepository {
-    override suspend fun getMovieFromApi(movieId: Int): Result {
-        apiService.searchMovie(movieId)
+    override suspend fun getMovieFromApi(movieId: Int, authorization: String): SearchMovie? {
+        return try {
+            apiService.searchMovie(query = movieId.toString(), page = 1, authorization = authorization)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     override suspend fun getMovieFromRoom(movieId: Int, userId: String): MovieEntity? {
