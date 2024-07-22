@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.presentation.watchlist_screen
 
+import MovieMapper
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -40,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.movieapp.movieList.presentation.favorites_screen.FavoritesViewModel
+import com.example.movieapp.movieList.presentation.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.starColor
@@ -48,7 +49,7 @@ import com.google.gson.Gson
 
 
 @Composable
-fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navController: NavHostController) {
+fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavHostController) {
 
     val watchlistMovies by viewModel.watchlistMovies.observeAsState(emptyList())
 
@@ -63,7 +64,8 @@ fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navControll
     ) {
         LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
             items(watchlistMovies) { movie ->
-                Log.e("Poster", "${movie.poster_path}")
+                val movie = MovieMapper().firestoreMapToResult(movie)
+                Log.e("Poster", movie.poster_path)
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -115,7 +117,7 @@ fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navControll
                             Row {
                                 Icon(modifier = Modifier.padding(end = 4.dp), imageVector = Icons.Outlined.ConfirmationNumber, contentDescription =null, tint = Color.White)
                                 Text(
-                                    text =movie.getGenreIds().mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }.joinToString(", "),
+                                    text =movie.genre_ids.toString(),
                                     color = Color.White,
                                     fontSize = 14.sp
                                 )

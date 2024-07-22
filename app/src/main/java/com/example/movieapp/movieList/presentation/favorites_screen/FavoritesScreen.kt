@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.presentation.favorites_screen
 
+import MovieMapper
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -40,13 +41,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.example.movieapp.movieList.presentation.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.starColor
 import com.google.gson.Gson
 
 @Composable
-fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(), navController: NavHostController) {
+fun FavoritesScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavHostController) {
     val favoriteMovies by viewModel.favoriteMovies.observeAsState(emptyList())
 
     LaunchedEffect(Unit) {
@@ -60,6 +62,8 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(), navControll
     ) {
         LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
             items(favoriteMovies) { movie ->
+                val movie = MovieMapper().roomMapToResult(movie)
+
                 Log.e("Poster", "${movie.poster_path}")
                 Card(
                     modifier = Modifier
@@ -113,7 +117,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = hiltViewModel(), navControll
                             Row {
                                 Icon(modifier = Modifier.padding(end = 4.dp), imageVector = Icons.Outlined.ConfirmationNumber, contentDescription =null, tint = Color.White)
                                 Text(
-                                    text = movie.getGenreIds().mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }.joinToString(", "),
+                                    text = movie.genre_ids.toString(),
                                     color = Color.White,
                                     fontSize = 14.sp
                                 )
