@@ -8,7 +8,7 @@ data class FirebaseMovieEntity(
     val userId: String = "",
     val adult: Boolean = false,
     val backdrop_path: String? = "",
-    val genre_ids: String? = "",
+    val genre_ids: List<Int> = emptyList(),
     val original_language: String? = "",
     val original_title: String? = "",
     val overview: String? = "",
@@ -27,7 +27,7 @@ data class FirebaseMovieEntity(
         userId = "",
         adult = false,
         backdrop_path = "",
-        genre_ids = "",
+        genre_ids = emptyList(),
         original_language = "",
         original_title = "",
         overview = "",
@@ -41,6 +41,6 @@ data class FirebaseMovieEntity(
         addedToWatchlist = false
     )
     fun getGenreIds(): List<Int> {
-        return genre_ids?.let { fromJsonToList(it) } ?: emptyList()
+        return genre_ids
     }
 }

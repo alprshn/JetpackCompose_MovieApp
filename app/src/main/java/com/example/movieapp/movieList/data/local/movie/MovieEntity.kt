@@ -11,7 +11,7 @@ data class MovieEntity(
     @ColumnInfo(name = "userId") @NotNull val userId: String = "",
     @ColumnInfo(name = "adult") @NotNull val adult: Boolean,
     @ColumnInfo(name = "backdrop_path") @NotNull val backdrop_path: String,
-    @ColumnInfo(name = "genre_ids") @NotNull var genre_ids: String,
+    @ColumnInfo(name = "genre_ids") @NotNull    val genre_ids: List<Int> = emptyList(),
     @ColumnInfo(name = "original_language") @NotNull val original_language: String,
     @ColumnInfo(name = "original_title") @NotNull val original_title: String,
     @ColumnInfo(name = "overview") @NotNull val overview: String,
@@ -25,7 +25,7 @@ data class MovieEntity(
     @ColumnInfo(name = "isFavorite", defaultValue = "0") var isFavorite: Boolean
 ){
     fun getGenreIds(): List<Int> {
-        return fromJsonToList(genre_ids)
+        return genre_ids
     }
 
     // Yardımcı fonksiyon: Dizi formatındaki genre_ids değerini JSON formatındaki dizeye dönüştürmek için
