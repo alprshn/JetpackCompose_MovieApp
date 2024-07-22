@@ -3,12 +3,16 @@
 package com.example.movieapp.movieList.presentation.detail_screen
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,10 +23,12 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,27 +38,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.data.local.movie.FirebaseMovieEntity
 import com.example.movieapp.movieList.data.local.movie.MovieEntity
 import com.example.movieapp.movieList.data.remote.respond.Result
-import com.example.movieapp.movieList.presentation.favorites_screen.FavoritesViewModel
-import com.example.movieapp.movieList.presentation.watchlist_screen.WatchListViewModel
+import com.example.movieapp.movieList.domain.model.Movie
+import com.example.movieapp.movieList.presentation.MainViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 
 
 @Composable
 fun DetailScreen(
-    viewModel: FavoritesViewModel = hiltViewModel(),
-    viewModelWatchlist: WatchListViewModel = hiltViewModel(),
-    movie: Result,
+    viewModel: MainViewModel = hiltViewModel(), movie: Result,navController: NavHostController
 ) {
 
     val isFavorite by viewModel.isFavorite(movie.id).observeAsState(initial = false)
-    val isWatchlist by viewModelWatchlist.isWatchlist(movie.id).observeAsState(initial = false)
+    val isWatchlist by viewModel.isWatchlist(movie.id).observeAsState(initial = false)
 
     var currentFavoriteState by remember { mutableStateOf(isFavorite) }
     var currentWatchlistState by remember { mutableStateOf(isWatchlist) }
@@ -70,11 +81,103 @@ fun DetailScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.backdrop_path}"),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+                Button(
+                    onClick = { navController.popBackStack() },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(16.dp)
+                ) {
+                    Text(text = "Buton")
+                }
+            }
+            Text(
+                text = movie.original_title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 25.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp) // Burada padding ekliyoruz
+            ) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color.Gray)
+                )
+            }
+            Row {
+                Column {
+                    Text(
+                        text = "Release Date",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = movie.release_date,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Column {
+                    Text(
+                        text = "Genre",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = movie.getGenreIds().mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }.joinToString(", "),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                }
+            }
+
+            Text(
+                text = "About Movie",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = movie.overview,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White,
+            )
             Row(
                 modifier = Modifier
                     .background(color = bottomBarColor, shape = RoundedCornerShape(50))
@@ -94,7 +197,7 @@ fun DetailScreen(
                                     userId = "", // Kullanıcı kimliğini burada belirtmeyin
                                     adult = movie.adult,
                                     backdrop_path = movie.backdrop_path,
-                                    genre_ids = movie.genre_ids.toString(),
+                                    genre_ids = movie.genre_ids,
                                     original_language = movie.original_language,
                                     original_title = movie.original_title,
                                     overview = movie.overview,
@@ -109,26 +212,7 @@ fun DetailScreen(
                                 )
                             )
                         } else {
-                            viewModel.addFavorite(
-                                MovieEntity(
-                                    id = movie.id,
-                                    userId = "", // Kullanıcı kimliğini burada belirtmeyin
-                                    adult = movie.adult,
-                                    backdrop_path = movie.backdrop_path,
-                                    genre_ids = movie.genre_ids.toString(),
-                                    original_language = movie.original_language,
-                                    original_title = movie.original_title,
-                                    overview = movie.overview,
-                                    popularity = movie.popularity,
-                                    poster_path = movie.poster_path,
-                                    release_date = movie.release_date,
-                                    title = movie.title,
-                                    video = movie.video,
-                                    vote_average = movie.vote_average,
-                                    vote_count = movie.vote_count,
-                                    isFavorite = true
-                                )
-                            )
+                            viewModel.addFavorite(movie)
                         }
                         currentFavoriteState = !currentFavoriteState
                     }
@@ -158,13 +242,13 @@ fun DetailScreen(
                     onClick = {
                         Log.e("mEHABA", movie.title)
                         if (currentWatchlistState) {
-                            viewModelWatchlist.removeWatchlist(
+                            viewModel.removeWatchlist(
                                 FirebaseMovieEntity(
                                     id = movie.id,
                                     userId = "", // Kullanıcı kimliğini burada belirtmeyin
                                     adult = movie.adult,
                                     backdrop_path = movie.backdrop_path,
-                                    genre_ids = movie.genre_ids.toString(),
+                                    genre_ids = movie.genre_ids,
                                     original_language = movie.original_language,
                                     original_title = movie.original_title,
                                     overview = movie.overview,
@@ -179,26 +263,7 @@ fun DetailScreen(
                                 )
                             )
                         } else {
-                            viewModelWatchlist.addWatchlist(
-                                FirebaseMovieEntity(
-                                    id = movie.id,
-                                    userId = "", // Kullanıcı kimliğini burada belirtmeyin
-                                    adult = movie.adult,
-                                    backdrop_path = movie.backdrop_path,
-                                    genre_ids = movie.genre_ids.toString(),
-                                    original_language = movie.original_language,
-                                    original_title = movie.original_title,
-                                    overview = movie.overview,
-                                    popularity = movie.popularity,
-                                    poster_path = movie.poster_path,
-                                    release_date = movie.release_date,
-                                    title = movie.title,
-                                    video = movie.video,
-                                    vote_average = movie.vote_average,
-                                    vote_count = movie.vote_count,
-                                    addedToWatchlist = true
-                                )
-                            )
+                            viewModel.addWatchlist(movie)
                         }
                         currentWatchlistState = !currentWatchlistState
                     }
