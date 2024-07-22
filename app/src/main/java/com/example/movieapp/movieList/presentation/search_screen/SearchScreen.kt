@@ -187,12 +187,17 @@ fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: Na
                             .fillMaxSize()
                     )
                 }
-                Text(
-                    text = "${movie.title} (${movie.release_date.substring(0, 4)})",
-                    modifier = Modifier
-                        .padding(4.dp),
-                    color = Color.White
-                )
+//                val releaseYear = if (movie.release_date.isNotEmpty() && movie.release_date.length >= 4) {
+//                    movie.release_date.substring(0, 4)
+//                } else {
+//                    "Unknown"
+//                }
+//                Text(
+//                    text = "${movie.title} ($releaseYear)",
+//                    modifier = Modifier
+//                        .padding(4.dp),
+//                    color = Color.White
+//                )
             }
 
         }
