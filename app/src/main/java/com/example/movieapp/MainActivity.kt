@@ -116,7 +116,7 @@ fun NavigationHost(navController: NavHostController) {
         composable(route = Screens.DetailScreen.route + "/{movie}") { backStackEntry ->
             val movieJson = backStackEntry.arguments?.getString("movie")
             val movie = Gson().fromJson(movieJson, Result::class.java)
-            DetailScreen(movie = movie)
+            DetailScreen(movie = movie, navController = navController)
         }
     }
 }
