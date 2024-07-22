@@ -60,6 +60,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.data.remote.respond.Result
+import com.example.movieapp.movieList.presentation.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
@@ -69,7 +70,7 @@ import com.google.gson.Gson
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(viewModel: SearchViewModel = hiltViewModel(), navController: NavHostController) {
+fun SearchScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavHostController) {
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
     Surface(
