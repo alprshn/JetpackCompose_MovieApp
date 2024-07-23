@@ -21,7 +21,7 @@ import javax.inject.Inject
 class AuthenticationRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : AuthenticationRepository {
-    override fun loginUser(email: String, password: String): Flow<Resource<AuthResult>> {
+    override suspend fun loginUser(email: String, password: String): Flow<Resource<AuthResult>> {
         return flow {
             emit(value = Resource.Loading())
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -31,7 +31,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun registerUser(email: String, password: String): Flow<Resource<AuthResult>> {
+    override suspend fun registerUser(email: String, password: String): Flow<Resource<AuthResult>> {
         return flow {
             emit(value = Resource.Loading())
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
@@ -50,11 +50,15 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return firebaseAuth.currentUser != null
     }
 
-    override fun signOut(): Flow<Resource<Unit>> {
+    override suspend fun signOut(): Flow<Resource<Unit>> {
         return flow {
             emit(value = Resource.Loading())
-            val result = firebaseAuth.signOut()
-            emit(value = Resource.Success(data = result))
+            try {
+                firebaseAuth.signOut()
+                emit(value = Resource.Success(Unit))
+            } catch (e: Exception) {
+                emit(value = Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            }
         }.catch {
             emit(value = Resource.Error(it.message.toString()))
         }
