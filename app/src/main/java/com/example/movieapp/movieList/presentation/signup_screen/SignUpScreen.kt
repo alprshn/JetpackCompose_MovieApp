@@ -56,6 +56,8 @@ fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationView
         ) {
             val email = remember { mutableStateOf("") }
             val password = remember { mutableStateOf("") }
+            val confirmPassword = remember { mutableStateOf("") }
+
             Text(
                 text = "Sign Up",
                 modifier = Modifier.padding(10.dp),
@@ -76,9 +78,20 @@ fun SignUpScreen(navController: NavHostController, viewModel: AuthenticationView
                 visualTransformation = PasswordVisualTransformation(),
                 placeholder = { Text("Password") }
             )
+            TextField(
+                value = confirmPassword.value,
+                onValueChange = { confirmPassword.value = it },
+                modifier = Modifier.padding(10.dp),
+                visualTransformation = PasswordVisualTransformation(),
+                placeholder = { Text("Confirm Password") }
+            )
             Button(
                 onClick = {
-                    viewModel.registerUser(email = email.value, password = password.value)
+                    if (password.value == confirmPassword.value) {
+                        viewModel.registerUser(email = email.value, password = password.value)
+                    } else {
+                        makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 modifier = Modifier.padding(10.dp)
             ) {
