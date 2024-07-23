@@ -115,6 +115,8 @@ dependencies {
     implementation("androidx.paging:paging-compose:3.3.0")
     //Materal Libs
     implementation(libs.androidx.material.icons.extended)
+    //Font Libs
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
     //Test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
