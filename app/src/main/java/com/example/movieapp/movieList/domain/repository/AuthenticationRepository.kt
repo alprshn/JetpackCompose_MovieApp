@@ -11,4 +11,7 @@ interface AuthenticationRepository {
 
     fun registerUser(email: String, password: String): Flow<Resource<AuthResult>>
     fun getCurrentUser(): FirebaseUser?
+
+    fun isUserAuthenticated(): Boolean
+    fun signOut(): Flow<Resource<Unit>>
 }

@@ -18,6 +18,9 @@ class SignInViewModel@Inject constructor(private val repository: AuthenticationR
     private var _signInState = MutableStateFlow<SignInState>(value = SignInState())
     val signInState: StateFlow<SignInState> = _signInState.asStateFlow()
 
+    private val _isUserAuthenticated = MutableStateFlow(false)
+    val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated.asStateFlow()
+
     fun loginUser(email: String, password: String) = viewModelScope.launch {
         repository.loginUser(email = email, password = password).collect { result ->
             when(result) {
@@ -32,6 +35,22 @@ class SignInViewModel@Inject constructor(private val repository: AuthenticationR
                 is Resource.Error -> {
                     _signInState.update { it.copy(isError = result.message.toString()) }
                 }
+            }
+        }
+    }
+
+    fun isUserAuthenticated(): Boolean {
+        return repository.isUserAuthenticated()
+    }
+
+    fun signOut() = viewModelScope.launch {
+        val result = repository.signOut()
+        when(result) {
+            is Resource.Success<*> -> {
+                _isUserAuthenticated.update { false }
+            }
+            is Resource.Error<*> -> {
+                // Hata mesajı gösterilebilir
             }
         }
     }

@@ -46,4 +46,19 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return firebaseAuth.currentUser
     }
 
+    override fun isUserAuthenticated(): Boolean {
+        return firebaseAuth.currentUser != null
+    }
+
+    override fun signOut(): Flow<Resource<Unit>> {
+        return flow {
+            emit(value = Resource.Loading())
+            val result = firebaseAuth.signOut()
+            emit(value = Resource.Success(data = result))
+        }.catch {
+            emit(value = Resource.Error(it.message.toString()))
+        }
+    }
+
+
 }

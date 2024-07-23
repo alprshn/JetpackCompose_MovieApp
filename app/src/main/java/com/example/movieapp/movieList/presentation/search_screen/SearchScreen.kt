@@ -11,11 +11,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,12 +27,16 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SearchBar
@@ -61,6 +67,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.data.remote.respond.Result
 import com.example.movieapp.movieList.presentation.MainViewModel
+import com.example.movieapp.movieList.presentation.login_screen.SignInViewModel
+import com.example.movieapp.movieList.presentation.signup_screen.SignUpViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
@@ -70,7 +78,11 @@ import com.google.gson.Gson
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavHostController) {
+fun SearchScreen(
+    viewModel: MainViewModel = hiltViewModel(),
+    navController: NavHostController,
+    signInViewModel: SignInViewModel = hiltViewModel()
+) {
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
     Surface(
@@ -79,37 +91,67 @@ fun SearchScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavH
         color = backgroundColor
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            OutlinedTextField(
-                value = query.value,
-                onValueChange = {
-                    query.value = it
-                    viewModel.search(query.value)
-                },
-                enabled = true,
-                singleLine = true,
-                leadingIcon = {
-                    Icon(
-                        tint = Color.White,
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon",
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
-                },
-                placeholder = { Text(text = "Search Movie", color = searchTextColor) },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = bottomBarColor,  // Odaklanmış durumda çerçeve rengi
-                    unfocusedBorderColor = bottomBarColor,  // Odaklanmamış durumda çerçeve rengi
-                    cursorColor = Color.White,  // İmleç rengi
-                    focusedTextColor = Color.White,  // Metin rengi
-                    disabledTextColor = searchTextColor,
-                    containerColor = bottomBarColor,
-                ),
-                shape = RoundedCornerShape(30.dp),
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+            ) {
+                OutlinedTextField(
+                    value = query.value,
+                    onValueChange = {
+                        query.value = it
+                        viewModel.search(query.value)
+                    },
+                    enabled = true,
+                    singleLine = true,
+                    leadingIcon = {
+                        Icon(
+                            tint = Color.White,
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search Icon",
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    },
+                    placeholder = { Text(text = "Search Movie", color = searchTextColor) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = bottomBarColor,  // Odaklanmış durumda çerçeve rengi
+                        unfocusedBorderColor = bottomBarColor,  // Odaklanmamış durumda çerçeve rengi
+                        cursorColor = Color.White,  // İmleç rengi
+                        focusedTextColor = Color.White,  // Metin rengi
+                        disabledTextColor = searchTextColor,
+                        containerColor = bottomBarColor,
+                    ),
+                    shape = RoundedCornerShape(30.dp),
+                    modifier = Modifier
+                        .height(56.dp)
+                        .padding(end = 8.dp)
+                )
 
-            )
+                IconButton(
+                    onClick = {
+                        signInViewModel.signOut()
+                        navController.navigate(Screens.LoginScreen.route) {
+                            popUpTo(Screens.SearchScreen.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    modifier = Modifier.size(56.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = Color.White,
+                        containerColor = bottomBarColor
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PowerSettingsNew, // Buraya kullanmak istediğiniz ikonu koyun
+                        contentDescription = "Icon Button",
+                        modifier = Modifier.size(24.dp), // İkon boyutunu belirliyoruz
+                        tint = Color.White,
+                    )
+                }
+            }
+
+
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize()
@@ -125,10 +167,12 @@ fun SearchScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavH
                         loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                             item {
                                 Box(
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                                    CircularProgressIndicator()
                                 }
                             }
                         }
@@ -150,56 +194,59 @@ fun SearchScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavH
         }
     }
 }
-    @Composable
-    fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
-        if (movie == null){
-            Log.e("Search Movie", "Movie is null")
-            return
-        }
 
-        Card(
-            modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth()
-                .clickable {
-                    val movieJson = Uri.encode(Gson().toJson(movie))
-                    Log.e("MovieJson", movieJson)
-                    navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-                },
-            colors = CardDefaults.cardColors(containerColor = backgroundColor)
-
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(15.dp))
-                        .height(300.dp)
-                ) {
-                    Image(
-                        painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
-                        contentScale = ContentScale.FillHeight,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    )
-                }
-//                val releaseYear = if (movie.release_date.isNotEmpty() && movie.release_date.length >= 4) {
-//                    movie.release_date.substring(0, 4)
-//                } else {
-//                    "Unknown"
-//                }
-//                Text(
-//                    text = "${movie.title} ($releaseYear)",
-//                    modifier = Modifier
-//                        .padding(4.dp),
-//                    color = Color.White
-//                )
-            }
-
-        }
+@Composable
+fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
+    if (movie == null) {
+        Log.e("Search Movie", "Movie is null")
+        return
     }
+
+    Card(
+        modifier = Modifier
+            .padding(12.dp)
+            .fillMaxWidth()
+            .clickable {
+                val movieJson = Uri.encode(Gson().toJson(movie))
+                Log.e("MovieJson", movieJson)
+                navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+            },
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(15.dp))
+                    .height(300.dp)
+                    .background(Color.White)
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
+                    contentScale = ContentScale.FillHeight,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
+            val releaseYear =
+                if (movie.release_date.isNullOrEmpty() || movie.release_date.length < 4) {
+                    "Unknown"
+                } else {
+                    movie.release_date.substring(0, 4)
+                }
+            Text(
+                text = "${movie.title} (${releaseYear})",
+                modifier = Modifier
+                    .padding(4.dp),
+                color = Color.White
+            )
+        }
+
+    }
+}
