@@ -86,8 +86,7 @@ fun FavoritesScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(20.dp))
-                                .height(200.dp)
-                                .width(135.dp)
+                                .width(130.dp)
                                 .background(Color.DarkGray)
                         ) {
                             Image(
