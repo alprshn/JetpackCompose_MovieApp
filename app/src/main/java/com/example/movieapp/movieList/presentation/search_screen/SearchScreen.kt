@@ -222,7 +222,7 @@ fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(15.dp))
-                    .height(300.dp)
+                    .height(275.dp)
                     .background(Color.White)
             ) {
                 Image(
