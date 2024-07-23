@@ -33,11 +33,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.movieList.presentation.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavHostController, viewModel: SignInViewModel = hiltViewModel()) {
+fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewModel = hiltViewModel()) {
     val scope = rememberCoroutineScope()
     val state = viewModel.signInState.collectAsState(initial = null)
     val context = LocalContext.current
