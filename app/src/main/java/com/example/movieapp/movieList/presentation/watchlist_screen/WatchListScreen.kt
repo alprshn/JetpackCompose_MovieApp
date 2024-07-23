@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.outlined.ConfirmationNumber
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -46,6 +48,7 @@ import coil.compose.rememberImagePainter
 import com.example.movieapp.movieList.presentation.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
+import com.example.movieapp.ui.theme.latoFontFamily
 import com.example.movieapp.ui.theme.starColor
 import com.google.gson.Gson
 
@@ -64,17 +67,23 @@ fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
             .fillMaxSize(),
         color = backgroundColor
     ) {
-        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.background(backgroundColor),
+        ) {
             items(watchlistMovies) { movie ->
                 val movie = MovieMapper().firestoreMapToResult(movie)
-                Log.e("Poster", movie.poster_path)
+
+                Log.e("Poster", "${movie.poster_path}")
                 Card(
+                    colors = CardDefaults.cardColors(containerColor = backgroundColor),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White)
+                        .background(backgroundColor)
                         .padding(vertical = 4.dp)
                         .clickable {
                             val movieJson = Uri.encode(Gson().toJson(movie))
+                            Log.e("MovieJson", movieJson)
                             navController.navigate(Screens.DetailScreen.route + "/$movieJson")
                         }
                 ) {
@@ -82,6 +91,7 @@ fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
                         modifier = Modifier
                             .padding(8.dp)
                             .height(200.dp)
+                            .background(backgroundColor)
                     ) {
                         Box(
                             modifier = Modifier
@@ -98,44 +108,78 @@ fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
                             )
                         }
 
+
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(backgroundColor)
-                                .padding(16.dp)
+                                .padding(start = 10.dp, top = 2.dp)
                         ) {
                             Text(
-                                text = movie.title!!,
+                                text = movie.title,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
                                 color = Color.White,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                modifier = Modifier.padding(vertical = 2.dp),
+                                fontSize = 18.sp,
+                                fontFamily = latoFontFamily
                             )
-                            Row {
-                                Icon(modifier = Modifier.padding(end = 4.dp), tint = starColor, imageVector = Icons.Outlined.StarBorder, contentDescription =null)
+                            Row(
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            ) {
+                                Icon(
+                                    modifier = Modifier.padding(end = 6.dp).size(23.dp),
+                                    tint = starColor,
+                                    imageVector = Icons.Outlined.StarBorder,
+                                    contentDescription = null
+                                )
                                 Text(
-                                    text = "${movie.vote_average}",
+                                    text = String.format("%.1f", movie.vote_average),
                                     color = starColor,
-                                    fontSize = 14.sp
+                                    fontSize = 15.sp,
+                                    fontFamily = latoFontFamily
                                 )
                             }
 
-                            Row {
-                                Icon(modifier = Modifier.padding(end = 4.dp), imageVector = Icons.Outlined.ConfirmationNumber, contentDescription =null, tint = Color.White)
+                            Row(
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            ) {
+                                Icon(
+                                    modifier = Modifier.padding(end = 6.dp).size(23.dp),
+                                    imageVector = Icons.Outlined.ConfirmationNumber,
+                                    contentDescription = null,
+                                    tint = Color.White,
+
+                                    )
                                 Text(
-                                    text =movie.genre_ids.toString(),
+                                    text = movie.getGenreIds()
+                                        .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
+                                        .joinToString(", "),
                                     color = Color.White,
-                                    fontSize = 14.sp
+                                    fontSize = 15.sp,
+                                    fontFamily = latoFontFamily
                                 )
                             }
 
-                            Row {
-                                Icon(modifier = Modifier.padding(end = 4.dp), tint = Color.White, imageVector = Icons.Outlined.CalendarToday, contentDescription =null)
+                            Row(
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            ) {
+                                Icon(
+                                    modifier = Modifier.padding(end = 6.dp).size(23.dp),
+                                    tint = Color.White,
+                                    imageVector = Icons.Outlined.CalendarToday,
+                                    contentDescription = null
+                                )
+                                val releaseYear =
+                                    if (movie.release_date.isNullOrEmpty() || movie.release_date.length < 4) {
+                                        "Unknown"
+                                    } else {
+                                        movie.release_date.substring(0, 4)
+                                    }
                                 Text(
-                                    text = movie.release_date!!.substring(0, 4),
+                                    text = releaseYear,
                                     color = Color.White,
-                                    fontSize = 14.sp
+                                    fontSize = 15.sp,
+                                    fontFamily = latoFontFamily
                                 )
                             }
 
