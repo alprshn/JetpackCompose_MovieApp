@@ -1,12 +1,8 @@
 package com.example.movieapp.movieList.data.repository
 
 
-import com.example.movieapp.movieList.data.local.movie.FirebaseMovieEntity
-import com.example.movieapp.movieList.domain.model.Movie
+import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
-import com.example.movieapp.movieList.util.Resource
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.Dispatchers.IO

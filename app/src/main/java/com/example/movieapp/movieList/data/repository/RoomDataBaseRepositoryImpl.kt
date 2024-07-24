@@ -1,10 +1,8 @@
 package com.example.movieapp.movieList.data.repository
 
-import com.example.movieapp.movieList.data.local.movie.MovieDao
-import com.example.movieapp.movieList.data.local.movie.MovieEntity
-import com.example.movieapp.movieList.data.remote.MovieApi
+import com.example.movieapp.movieList.data.local.MovieDao
+import com.example.movieapp.movieList.data.local.entity.MovieEntity
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
-import com.example.movieapp.movieList.domain.repository.SearchRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

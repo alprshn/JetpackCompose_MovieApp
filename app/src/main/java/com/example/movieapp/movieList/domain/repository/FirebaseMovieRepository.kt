@@ -1,6 +1,6 @@
 package com.example.movieapp.movieList.domain.repository
 
-import com.example.movieapp.movieList.data.local.movie.FirebaseMovieEntity
+import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 
 import kotlinx.coroutines.flow.Flow
 

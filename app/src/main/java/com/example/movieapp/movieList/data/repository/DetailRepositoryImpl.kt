@@ -1,11 +1,10 @@
 package com.example.movieapp.movieList.data.repository
 
-import com.example.movieapp.movieList.data.local.movie.FirebaseMovieEntity
-import com.example.movieapp.movieList.data.local.movie.MovieDao
-import com.example.movieapp.movieList.data.local.movie.MovieEntity
-import com.example.movieapp.movieList.data.remote.MovieApi
-import com.example.movieapp.movieList.data.remote.respond.Result
-import com.example.movieapp.movieList.data.remote.respond.SearchMovie
+import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
+import com.example.movieapp.movieList.data.local.MovieDao
+import com.example.movieapp.movieList.data.local.entity.MovieEntity
+import com.example.movieapp.movieList.data.remote.api.MovieApi
+import com.example.movieapp.movieList.data.remote.api.response.SearchMovie
 import com.example.movieapp.movieList.domain.repository.DetailRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject

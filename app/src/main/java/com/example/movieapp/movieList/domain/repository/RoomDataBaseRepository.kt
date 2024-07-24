@@ -1,6 +1,6 @@
 package com.example.movieapp.movieList.domain.repository
 
-import com.example.movieapp.movieList.data.local.movie.MovieEntity
+import com.example.movieapp.movieList.data.local.entity.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
 interface RoomDataBaseRepository {

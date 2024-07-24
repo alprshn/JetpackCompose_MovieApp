@@ -1,4 +1,4 @@
-    package com.example.movieapp.movieList.data.remote.respond
+    package com.example.movieapp.movieList.data.remote.api.response
 
     data class SearchMovie(
         val page: Int,

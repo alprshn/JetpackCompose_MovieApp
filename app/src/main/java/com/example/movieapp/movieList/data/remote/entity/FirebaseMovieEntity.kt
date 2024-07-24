@@ -1,4 +1,4 @@
-package com.example.movieapp.movieList.data.local.movie
+package com.example.movieapp.movieList.data.remote.entity
 
 
 

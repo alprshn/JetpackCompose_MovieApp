@@ -1,4 +1,4 @@
-package com.example.movieapp.movieList.presentation
+package com.example.movieapp.movieList.presentation.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -10,7 +10,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController

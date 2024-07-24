@@ -1,4 +1,4 @@
-package com.example.movieapp.movieList.presentation
+package com.example.movieapp.movieList.presentation.viewmodel
 
 import MovieMapper
 import android.util.Log
@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.movieapp.movieList.data.local.movie.FirebaseMovieEntity
-import com.example.movieapp.movieList.data.local.movie.Genre
-import com.example.movieapp.movieList.data.local.movie.MovieEntity
-import com.example.movieapp.movieList.data.remote.respond.Result
+import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
+import com.example.movieapp.movieList.domain.model.Genre
+import com.example.movieapp.movieList.data.local.entity.MovieEntity
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository

@@ -3,11 +3,9 @@ package com.example.movieapp.movieList.data.repository
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.movieapp.movieList.data.remote.MovieApi
-import com.example.movieapp.movieList.data.remote.respond.Result
-import com.example.movieapp.movieList.domain.repository.SearchRepository
+import com.example.movieapp.movieList.data.remote.api.MovieApi
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.util.Constants
-import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 

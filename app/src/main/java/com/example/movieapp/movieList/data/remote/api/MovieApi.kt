@@ -1,6 +1,6 @@
-package com.example.movieapp.movieList.data.remote
+package com.example.movieapp.movieList.data.remote.api
 
-import com.example.movieapp.movieList.data.remote.respond.SearchMovie
+import com.example.movieapp.movieList.data.remote.api.response.SearchMovie
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

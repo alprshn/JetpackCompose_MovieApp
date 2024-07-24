@@ -23,10 +23,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.movieapp.movieList.data.remote.respond.Result
-import com.example.movieapp.movieList.presentation.BottomNavigation
+import com.example.movieapp.movieList.data.remote.api.response.Result
+import com.example.movieapp.movieList.presentation.navigation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
-import com.example.movieapp.movieList.presentation.SplashScreen
+import com.example.movieapp.movieList.presentation.splash_screen.SplashScreen
 import com.example.movieapp.movieList.presentation.login_screen.LoginScreen
 import com.example.movieapp.movieList.presentation.detail_screen.DetailScreen
 import com.example.movieapp.movieList.presentation.signup_screen.SignUpScreen

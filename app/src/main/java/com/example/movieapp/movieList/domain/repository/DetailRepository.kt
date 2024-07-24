@@ -1,9 +1,8 @@
 package com.example.movieapp.movieList.domain.repository
 
-import com.example.movieapp.movieList.data.local.movie.FirebaseMovieEntity
-import com.example.movieapp.movieList.data.local.movie.MovieEntity
-import com.example.movieapp.movieList.data.remote.respond.Result
-import com.example.movieapp.movieList.data.remote.respond.SearchMovie
+import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
+import com.example.movieapp.movieList.data.local.entity.MovieEntity
+import com.example.movieapp.movieList.data.remote.api.response.SearchMovie
 
 interface DetailRepository {
     suspend fun getMovieFromApi(movieId: Int, authorization: String): SearchMovie?

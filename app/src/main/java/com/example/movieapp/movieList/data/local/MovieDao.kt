@@ -1,11 +1,10 @@
-package com.example.movieapp.movieList.data.local.movie
+package com.example.movieapp.movieList.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
+import com.example.movieapp.movieList.data.local.entity.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
