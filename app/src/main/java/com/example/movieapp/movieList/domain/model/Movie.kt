@@ -1,6 +1,6 @@
 package com.example.movieapp.movieList.domain.model
 
-import androidx.room.PrimaryKey
+
 
 data class Movie(
     val adult: Boolean,

@@ -22,11 +22,6 @@ class SearchApiPagingSource @Inject constructor(
         Log.d("Paging", "Loading page: $page")
         return try {
             val response = api.searchMovie(query, page, Constants.API_KEY)
-           // val nextKey = if (response.results.isEmpty() || page >= response.total_pages) {
-          //      null
-           // } else {
-           //     page + 1
-//}
             LoadResult.Page(
                 data = response.results,
                 prevKey = if (page == 1) null else (page - 1),

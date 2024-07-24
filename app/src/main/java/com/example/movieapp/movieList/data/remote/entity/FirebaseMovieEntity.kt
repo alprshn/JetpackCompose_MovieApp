@@ -21,7 +21,6 @@ data class FirebaseMovieEntity(
     val vote_count: Int? = 0,
     val addedToWatchlist: Boolean = false // Yeni özellik
 ) {
-    // Boş yapıcı
     constructor() : this(
         id = 0,
         userId = "",

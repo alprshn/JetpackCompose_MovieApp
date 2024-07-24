@@ -41,15 +41,8 @@ fun SplashScreen(navController: NavController, viewModel: AuthenticationViewMode
         )
     }
     LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 0.5f,
-            animationSpec = tween(
-                durationMillis = 1500,
-                easing = {
-                    OvershootInterpolator(2f).getInterpolation(it)
-                })
-        )
-        delay(1000)
+
+        delay(2500)
         Log.e("authValue", authValue.toString())
         if (authValue) {
             navController.navigate(Screens.SearchScreen.route) {

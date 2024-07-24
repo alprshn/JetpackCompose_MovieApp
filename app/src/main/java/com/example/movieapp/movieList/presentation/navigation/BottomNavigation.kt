@@ -23,7 +23,7 @@ import com.example.movieapp.ui.theme.bottomBarUnSelectedItemColor
 
 @Composable
 fun BottomNavigation(
-    navController: NavHostController, state: MutableState<Boolean>, modifier: Modifier = Modifier
+    navController: NavHostController, modifier: Modifier = Modifier
 ) {
     val screens = listOf(
         Screens.FavoritesScreen, Screens.SearchScreen, Screens.WatchListScreen

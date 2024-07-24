@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+
 
 package com.example.movieapp.movieList.presentation.detail_screen
 
@@ -150,12 +150,11 @@ fun DetailScreen(
             ) {
                 IconButton(
                     onClick = {
-                        Log.e("mEHABA", movie.title)
                         if (currentFavoriteState) {
                             viewModel.removeFavorite(
                                 MovieEntity(
                                     id = movie.id,
-                                    userId = "", // Kullanıcı kimliğini burada belirtmeyin
+                                    userId = "",
                                     adult = movie.adult,
                                     backdrop_path = movie.backdrop_path ?: "Unknown",
                                     genre_ids = movie.genre_ids,
@@ -202,12 +201,11 @@ fun DetailScreen(
                 )
                 IconButton(
                     onClick = {
-                        Log.e("mEHABA", movie.title)
                         if (currentWatchlistState) {
                             viewModel.removeWatchlist(
                                 FirebaseMovieEntity(
                                     id = movie.id,
-                                    userId = "", // Kullanıcı kimliğini burada belirtmeyin
+                                    userId = "",
                                     adult = movie.adult,
                                     backdrop_path = movie.backdrop_path,
                                     genre_ids = movie.genre_ids,
@@ -274,7 +272,7 @@ fun DetailScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp) // Burada padding ekliyoruz
+                            .padding(bottom = 16.dp)
                     ) {
                         Spacer(
                             modifier = Modifier
@@ -287,7 +285,7 @@ fun DetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 32.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween, // Ekleme
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Column(
                         ) {

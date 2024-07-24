@@ -100,10 +100,10 @@ fun SearchScreen(
                     },
                     placeholder = { Text(text = "Search Movie", color = searchTextColor) },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = bottomBarColor,  // Odaklanmış durumda çerçeve rengi
-                        unfocusedBorderColor = bottomBarColor,  // Odaklanmamış durumda çerçeve rengi
-                        cursorColor = Color.White,  // İmleç rengi
-                        focusedTextColor = Color.White,  // Metin rengi
+                        focusedBorderColor = bottomBarColor,
+                        unfocusedBorderColor = bottomBarColor,
+                        cursorColor = Color.White,
+                        focusedTextColor = Color.White,
                         disabledTextColor = searchTextColor,
                         containerColor = bottomBarColor,
                     ),
@@ -129,9 +129,9 @@ fun SearchScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Default.PowerSettingsNew, // Buraya kullanmak istediğiniz ikonu koyun
+                        imageVector = Icons.Default.PowerSettingsNew,
                         contentDescription = "Icon Button",
-                        modifier = Modifier.size(24.dp), // İkon boyutunu belirliyoruz
+                        modifier = Modifier.size(24.dp),
                         tint = Color.White,
                     )
                 }
@@ -183,10 +183,6 @@ fun SearchScreen(
 
 @Composable
 fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
-    if (movie == null) {
-        Log.e("Search Movie", "Movie is null")
-        return
-    }
 
     Card(
         modifier = Modifier

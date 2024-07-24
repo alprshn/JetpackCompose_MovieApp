@@ -11,11 +11,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavHostController
@@ -50,14 +47,10 @@ class MainActivity : ComponentActivity() {
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 val insetsController = WindowInsetsControllerCompat(window, window.decorView)
                 window.statusBarColor =
-                    backgroundColor.toArgb() // Status bar rengini burada değiştirebilirsiniz
+                    backgroundColor.toArgb()
                 insetsController.isAppearanceLightStatusBars = false
 
                 Surface {
-                    val bottomBarHeight = 56.dp
-                    val bottomBarOffsetHeightPx = remember { mutableStateOf(0f) }
-                    var buttonsVisible = remember { mutableStateOf(true) }
-
                     val navController = rememberNavController()
                     Scaffold(
                         bottomBar = {
@@ -71,7 +64,6 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 BottomNavigation(
                                     navController = navController,
-                                    state = remember { mutableStateOf(true) },
                                     modifier = Modifier
                                 )
                             }

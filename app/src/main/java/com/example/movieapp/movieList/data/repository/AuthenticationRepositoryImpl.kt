@@ -1,18 +1,12 @@
 package com.example.movieapp.movieList.data.repository
 
-import android.util.Log
-import com.example.movieapp.movieList.domain.model.User
+
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
-import com.example.movieapp.movieList.util.Constants
 import com.example.movieapp.movieList.util.Resource
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await

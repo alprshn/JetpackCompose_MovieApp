@@ -59,7 +59,6 @@ class MainViewModel @Inject constructor(
                 val movieEntity = movieMapper.mapToMovieEntity(result, user.uid)
 
                 roomDatabaseRepository.insert(movieEntity.copy(userId = user.uid, isFavorite = true))
-                // getFavoriteMovies()
             }
         }
     }
@@ -68,7 +67,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             currentUser?.let { user ->
                 roomDatabaseRepository.updateFavoriteStatus(movie.id, user.uid, false)
-                //getFavoriteMovies()
             }
         }
     }
@@ -83,9 +81,7 @@ class MainViewModel @Inject constructor(
         }
         return isFavorite
     }
-    //Favorites Finish
 
-    //Search
     fun search(query: String) {
         viewModelScope.launch {
             searchRepository.searchMoviePaging(query)
@@ -96,9 +92,7 @@ class MainViewModel @Inject constructor(
                 }
         }
     }
-    //Search Finish
 
-    //Watchlist
     fun getWatchlistMovies() {
         currentUser?.let { user ->
             viewModelScope.launch {
@@ -120,7 +114,6 @@ class MainViewModel @Inject constructor(
                         addedToWatchlist = true
                     )
                 )
-                //getWatchlistMovies()
             }
         }
     }
@@ -130,8 +123,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             currentUser?.let { user ->
                 firebaseMovieRepository.updateWatchlistStatus(movie.id!!, user.uid, false)
-                //getWatchlistMovies()
-
             }
         }
     }

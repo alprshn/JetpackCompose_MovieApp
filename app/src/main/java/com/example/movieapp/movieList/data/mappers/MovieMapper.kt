@@ -84,15 +84,4 @@ class MovieMapper {
             vote_count = movieEntity.vote_count ?: 0
         )
     }
-
-    // Yardımcı fonksiyonlar
-    private fun toJsonFromList(list: List<Int>): String {
-        // Burada JSON'a dönüştürme işlemini yapın
-        return list.joinToString(",") { it.toString() }
-    }
-
-    private fun fromJsonToList(json: String): List<Int> {
-        // Burada JSON'dan listeye dönüştürme işlemini yapın
-        return json.split(",").map { it.toInt() }
-    }
 }

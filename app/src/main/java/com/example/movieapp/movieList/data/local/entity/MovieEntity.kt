@@ -24,5 +24,4 @@ data class MovieEntity(
     @ColumnInfo(name = "vote_count") @NotNull val vote_count: Int,
     @ColumnInfo(name = "isFavorite", defaultValue = "0") var isFavorite: Boolean
 ){
-    // Yardımcı fonksiyon: Dizi formatındaki genre_ids değerini JSON formatındaki dizeye dönüştürmek için
 }
