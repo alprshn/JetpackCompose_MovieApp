@@ -64,7 +64,7 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
                 }
 
                 is Resource.Error -> {
-                    _signInState.update { it.copy(isError = "Email or Password is incorrect") }
+                    _signInState.update { it.copy(isError = "Email Veya Şifre Hatalı") }
                 }
             }
         }
