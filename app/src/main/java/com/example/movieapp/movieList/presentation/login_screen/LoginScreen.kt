@@ -14,11 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,8 +48,12 @@ import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.latoFontFamily
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewModel = hiltViewModel()) {
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: AuthenticationViewModel = hiltViewModel()
+) {
     val scope = rememberCoroutineScope()
     val state = viewModel.signInState.collectAsState(initial = null)
     val context = LocalContext.current
@@ -63,7 +71,12 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
         ) {
             val email = remember { mutableStateOf("") }
             val password = remember { mutableStateOf("") }
-            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            val emailError = remember { mutableStateOf(false) }
+            val passwordError = remember { mutableStateOf(false) }
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = "Login",
                     modifier = Modifier.padding(10.dp),
@@ -91,8 +104,14 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                     .clip(
                         RoundedCornerShape(6.dp)
                     ),
-                placeholder = { Text("Email") }
-
+                placeholder = { Text("Email") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                isError = emailError.value,
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                    focusedIndicatorColor = if (emailError.value) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (emailError.value) Color.Red else Color.Gray
+                )
             )
             Text(
                 text = "Password",
@@ -110,14 +129,26 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
                 visualTransformation = PasswordVisualTransformation(),
-                placeholder = { Text("Password") }
+                placeholder = { Text("Password") },
+                isError = passwordError.value,
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.Transparent,
+                    focusedIndicatorColor = if (passwordError.value) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (passwordError.value) Color.Red else Color.Gray
+                )
             )
             Button(
                 onClick = {
-                    if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
+                    emailError.value = email.value.isEmpty()
+                    passwordError.value = password.value.isEmpty()
+                    if (!emailError.value && !passwordError.value) {
                         viewModel.loginUser(email = email.value, password = password.value)
                     } else {
-                        makeText(context, "Email and Password cannot be empty", android.widget.Toast.LENGTH_SHORT).show()
+                        makeText(
+                            context,
+                            "Email and Password cannot be empty",
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
                     }
                 },
                 modifier = Modifier
@@ -128,7 +159,12 @@ fun LoginScreen(navController: NavHostController, viewModel: AuthenticationViewM
                     .background(Color(0xFF0982C3)),
                 colors = ButtonDefaults.buttonColors(Color(0xFF0982C3))
             ) {
-                Text(text = "Sign In", color = Color.White, fontSize = 18.sp, fontFamily = latoFontFamily)
+                Text(
+                    text = "Sign In",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontFamily = latoFontFamily
+                )
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
