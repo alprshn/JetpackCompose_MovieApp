@@ -29,6 +29,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return flow {
             emit(value = Resource.Loading())
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            result.user?.sendEmailVerification()?.await()
             emit(value = Resource.Success(data = result))
         }.catch {
             emit(value = Resource.Error(it.message.toString()))

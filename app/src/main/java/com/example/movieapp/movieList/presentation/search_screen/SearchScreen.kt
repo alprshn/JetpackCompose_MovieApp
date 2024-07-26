@@ -138,9 +138,7 @@ fun SearchScreen(
                 }
             }
 
-            HorizontalPager() {
-                
-            }
+
 
             LazyVerticalStaggeredGrid(
                 columns = StaggeredGridCells.Fixed(2),
