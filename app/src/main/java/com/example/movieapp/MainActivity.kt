@@ -110,5 +110,8 @@ fun NavigationHost(navController: NavHostController) {
             val movie = Gson().fromJson(movieJson, Result::class.java)
             DetailScreen(movie = movie, navController = navController)
         }
+        composable(route = Screens.SettingsScreen.route) {
+            SettingsScreen(navController = navController)
+        }
     }
 }
