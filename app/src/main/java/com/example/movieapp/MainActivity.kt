@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.movieList.data.remote.api.response.Result
+import com.example.movieapp.movieList.presentation.SettingsScreen
 import com.example.movieapp.movieList.presentation.navigation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
 import com.example.movieapp.movieList.presentation.splash_screen.SplashScreen
