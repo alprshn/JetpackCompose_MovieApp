@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -61,125 +62,148 @@ fun FavoritesScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = backgroundColor
-    ) {
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            modifier = Modifier.background(backgroundColor),
+        color = backgroundColor,
+
         ) {
-            items(favoriteMovies) { movie ->
-                val movie = MovieMapper().roomMapToResult(movie)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Favorites",
+                color = Color.White,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = latoFontFamily,
+                modifier = Modifier.padding(top = 16.dp)
+            )
 
-                Log.e("Poster", "${movie.poster_path}")
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = backgroundColor),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(backgroundColor)
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            val movieJson = Uri.encode(Gson().toJson(movie))
-                            Log.e("MovieJson", movieJson)
-                            navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-                        }
-                ) {
-                    Row(
+            LazyColumn(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier.background(backgroundColor),
+            ) {
+                items(favoriteMovies) { movie ->
+                    val movie = MovieMapper().roomMapToResult(movie)
+
+                    Log.e("Poster", "${movie.poster_path}")
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = backgroundColor),
                         modifier = Modifier
-                            .padding(8.dp)
-                            .height(200.dp)
+                            .fillMaxWidth()
                             .background(backgroundColor)
+                            .padding(vertical = 4.dp)
+                            .clickable {
+                                val movieJson = Uri.encode(Gson().toJson(movie))
+                                Log.e("MovieJson", movieJson)
+                                navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+                            }
                     ) {
-                        Box(
+                        Row(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(20.dp))
-                                .width(130.dp)
-                                .background(Color.DarkGray)
-                        ) {
-                            Image(
-                                painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
-                                contentScale = ContentScale.FillHeight,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                            )
-                        }
-
-
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
+                                .padding(8.dp)
+                                .height(200.dp)
                                 .background(backgroundColor)
-                                .padding(start = 10.dp, top = 2.dp)
                         ) {
-                            Text(
-                                text = movie.title,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                modifier = Modifier.padding(vertical = 2.dp),
-                                fontSize = 18.sp,
-                                fontFamily = latoFontFamily
-                            )
-                            Row(
-                                modifier = Modifier.padding(vertical = 2.dp)
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .width(130.dp)
+                                    .background(Color.DarkGray)
                             ) {
-                                Icon(
-                                    modifier = Modifier.padding(end = 6.dp).size(23.dp),
-                                    tint = starColor,
-                                    imageVector = Icons.Outlined.StarBorder,
-                                    contentDescription = null
-                                )
-                                Text(
-                                    text = String.format("%.1f", movie.vote_average),
-                                    color = starColor,
-                                    fontSize = 15.sp,
-                                    fontFamily = latoFontFamily
-                                )
-                            }
-
-                            Row(
-                                modifier = Modifier.padding(vertical = 2.dp)
-                            ) {
-                                Icon(
-                                    modifier = Modifier.padding(end = 6.dp).size(23.dp),
-                                    imageVector = Icons.Outlined.ConfirmationNumber,
+                                Image(
+                                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
+                                    contentScale = ContentScale.FillHeight,
                                     contentDescription = null,
-                                    tint = Color.White,
-
-                                )
-                                Text(
-                                    text = movie.getGenreIds()
-                                        .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
-                                        .joinToString(", "),
-                                    color = Color.White,
-                                    fontSize = 15.sp,
-                                    fontFamily = latoFontFamily
+                                    modifier = Modifier
+                                        .fillMaxHeight()
                                 )
                             }
 
-                            Row(
-                                modifier = Modifier.padding(vertical = 2.dp)
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(backgroundColor)
+                                    .padding(start = 10.dp, top = 2.dp)
                             ) {
-                                Icon(
-                                    modifier = Modifier.padding(end = 6.dp).size(23.dp),
-                                    tint = Color.White,
-                                    imageVector = Icons.Outlined.CalendarToday,
-                                    contentDescription = null
-                                )
-                                val releaseYear =
-                                    if (movie.release_date.isNullOrEmpty() || movie.release_date.length < 4) {
-                                        "Unknown"
-                                    } else {
-                                        movie.release_date.substring(0, 4)
-                                    }
                                 Text(
-                                    text = releaseYear,
+                                    text = movie.title,
+                                    fontWeight = FontWeight.Bold,
                                     color = Color.White,
-                                    fontSize = 15.sp,
+                                    modifier = Modifier.padding(vertical = 2.dp),
+                                    fontSize = 18.sp,
                                     fontFamily = latoFontFamily
                                 )
+                                Row(
+                                    modifier = Modifier.padding(vertical = 2.dp)
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(end = 6.dp)
+                                            .size(23.dp),
+                                        tint = starColor,
+                                        imageVector = Icons.Outlined.StarBorder,
+                                        contentDescription = null
+                                    )
+                                    Text(
+                                        text = String.format("%.1f", movie.vote_average),
+                                        color = starColor,
+                                        fontSize = 15.sp,
+                                        fontFamily = latoFontFamily
+                                    )
+                                }
+
+                                Row(
+                                    modifier = Modifier.padding(vertical = 2.dp)
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(end = 6.dp)
+                                            .size(23.dp),
+                                        imageVector = Icons.Outlined.ConfirmationNumber,
+                                        contentDescription = null,
+                                        tint = Color.White,
+
+                                        )
+                                    Text(
+                                        text = movie.getGenreIds()
+                                            .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
+                                            .joinToString(", "),
+                                        color = Color.White,
+                                        fontSize = 15.sp,
+                                        fontFamily = latoFontFamily
+                                    )
+                                }
+
+                                Row(
+                                    modifier = Modifier.padding(vertical = 2.dp)
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(end = 6.dp)
+                                            .size(23.dp),
+                                        tint = Color.White,
+                                        imageVector = Icons.Outlined.CalendarToday,
+                                        contentDescription = null
+                                    )
+                                    val releaseYear =
+                                        if (movie.release_date.isNullOrEmpty() || movie.release_date.length < 4) {
+                                            "Unknown"
+                                        } else {
+                                            movie.release_date.substring(0, 4)
+                                        }
+                                    Text(
+                                        text = releaseYear,
+                                        color = Color.White,
+                                        fontSize = 15.sp,
+                                        fontFamily = latoFontFamily
+                                    )
+                                }
+
+
                             }
-
-
                         }
                     }
                 }
