@@ -22,11 +22,13 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -56,6 +58,7 @@ import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.latoFontFamily
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
@@ -117,7 +120,10 @@ fun SignUpScreen(
                         RoundedCornerShape(6.dp)
                     ),
                 placeholder = { Text("Email") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                ),
             )
             Text(
                 text = "Password",
@@ -135,6 +141,9 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
                 placeholder = { Text("Password") },
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                ),
                 visualTransformation = if (showPassword) {
 
                     VisualTransformation.None
@@ -180,6 +189,9 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
                 placeholder = { Text("Confirm Password") },
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.White,
+                ),
                 visualTransformation = if (confirmShowPassword) {
 
                     VisualTransformation.None
