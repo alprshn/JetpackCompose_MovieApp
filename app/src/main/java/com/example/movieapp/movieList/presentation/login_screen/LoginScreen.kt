@@ -157,15 +157,14 @@ fun LoginScreen(
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
-                    if (showPassword){
+                    if (showPassword) {
                         IconButton(onClick = { showPassword = false }) {
                             Icon(
                                 imageVector = Icons.Filled.Visibility,
                                 contentDescription = "hide_password"
                             )
                         }
-                    }
-                    else{
+                    } else {
                         IconButton(
                             onClick = { showPassword = true }) {
                             Icon(
