@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -67,6 +69,7 @@ fun LoginScreen(
     val state = viewModel.signInState.collectAsState(initial = null)
     val context = LocalContext.current
     var showPassword by remember { mutableStateOf(value = false) }
+    val signInState by viewModel.signInState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -198,12 +201,20 @@ fun LoginScreen(
                     .background(Color(0xFF0982C3)),
                 colors = ButtonDefaults.buttonColors(Color(0xFF0982C3))
             ) {
-                Text(
-                    text = "Sign In",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontFamily = latoFontFamily
-                )
+                if (signInState.isLoading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Text(
+                        text = "Sign In",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontFamily = latoFontFamily
+                    )
+                }
+
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
