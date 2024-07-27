@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -68,7 +69,6 @@ import com.google.gson.Gson
 fun SearchScreen(
     viewModel: MainViewModel = hiltViewModel(),
     navController: NavHostController,
-    signInViewModel: AuthenticationViewModel = hiltViewModel()
 ) {
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
@@ -116,12 +116,7 @@ fun SearchScreen(
 
                 IconButton(
                     onClick = {
-                        signInViewModel.signOut()
-                        navController.navigate(Screens.LoginScreen.route) {
-                            popUpTo(Screens.SearchScreen.route) {
-                                inclusive = true
-                            }
-                        }
+                        navController.navigate(Screens.SettingsScreen.route)
                     },
                     modifier = Modifier.size(56.dp),
                     colors = IconButtonDefaults.iconButtonColors(
@@ -130,7 +125,7 @@ fun SearchScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Default.PowerSettingsNew,
+                        imageVector = Icons.Default.Settings,
                         contentDescription = "Icon Button",
                         modifier = Modifier.size(24.dp),
                         tint = Color.White,
