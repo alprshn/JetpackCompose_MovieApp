@@ -1,9 +1,11 @@
 package com.example.movieapp.movieList.domain.repository
 
 import androidx.paging.PagingData
-import com.example.movieapp.movieList.data.remote.api.response.Result
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
     fun searchMoviePaging(query: String): Flow<PagingData<Result>>
+    suspend fun popularMoviePaging(): Flow<PagingData<Result>>
+
 }
