@@ -18,7 +18,8 @@ import javax.inject.Inject
 class AuthenticationViewModel @Inject constructor(private val repository: AuthenticationRepository) :
     ViewModel() {
 
-    private var _registerState = MutableStateFlow<AuthenticationState>(value = AuthenticationState())
+    private var _registerState =
+        MutableStateFlow<AuthenticationState>(value = AuthenticationState())
     val registerState: StateFlow<AuthenticationState> = _registerState.asStateFlow()
 
     private var _signInState = MutableStateFlow<AuthenticationState>(value = AuthenticationState())
@@ -31,6 +32,7 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
     init {
         checkIfUserIsAuthenticated()
     }
+
     fun registerUser(email: String, password: String) = viewModelScope.launch {
         repository.registerUser(email = email, password = password).collect { result ->
             when (result) {
@@ -59,8 +61,41 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
                 }
 
                 is Resource.Success -> {
-                    _signInState.update { it.copy(isSuccess = "Sign In Successful!") }
-                    _isUserAuthenticated.update { true }
+                    repository.isEmailVerified().collect { verificationResult ->
+                        Log.d(
+                            "AuthViewModel",
+                            "Email verification result: ${verificationResult.data}"
+                        )
+                        Log.d(
+                            "AuthViewModel",
+                            "Email verification result: ${repository.isEmailVerified()}"
+                        )
+
+                        when (verificationResult) {
+                            is Resource.Error -> {
+                                _signInState.update { it.copy(isError = "Email doğrulama durumu kontrol edilemedi. Lütfen tekrar deneyin.") }
+                            }
+
+                            is Resource.Loading -> {
+                                _signInState.update { it.copy(isLoading = true) }
+                            }
+
+                            is Resource.Success -> {
+                                Log.d(
+                                    "AuthViewModel",
+                                    "Email success verification result: ${verificationResult.data}"
+                                )
+                                if (verificationResult.data == true) {
+                                    _signInState.update { it.copy(isSuccess = "Sign In Successful!") }
+                                    _isUserAuthenticated.update { true }
+                                } else {
+                                    _signInState.update { it.copy(isError = "Email adresiniz doğrulanmamış. Lütfen e-postanızı doğrulayın.") }
+                                    _isUserAuthenticated.update { false }
+                                }
+                            }
+                        }
+                    }
+
                 }
 
                 is Resource.Error -> {
@@ -77,14 +112,16 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
     }
 
     fun signOut() = viewModelScope.launch {
-        repository.signOut().collect{result ->
+        repository.signOut().collect { result ->
             when (result) {
                 is Resource.Success -> {
                     _isUserAuthenticated.update { false }
                 }
+
                 is Resource.Error -> {
                     Log.e("AuthViewModel", "Sign out failed: ${result.message}")
                 }
+
                 is Resource.Loading -> {
 
                 }

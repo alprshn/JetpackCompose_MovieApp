@@ -12,4 +12,5 @@ interface AuthenticationRepository {
     fun getCurrentUser(): FirebaseUser?
     fun isUserAuthenticated(): Boolean
     suspend fun signOut(): Flow<Resource<Unit>>
+    fun isEmailVerified(): Flow<Resource<Boolean>>
 }

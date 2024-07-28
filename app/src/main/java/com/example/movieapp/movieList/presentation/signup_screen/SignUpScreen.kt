@@ -281,8 +281,8 @@ fun SignUpScreen(
                     if (state.value?.isSuccess!!.isNotEmpty() == true) {
                         val success = state.value?.isSuccess
                         makeText(context, success.toString(), Toast.LENGTH_SHORT).show()
-                        navController.navigate(Screens.SearchScreen.route) {
-                            popUpTo(Screens.LoginScreen.route) {
+                        navController.navigate(Screens.LoginScreen.route) {
+                            popUpTo(Screens.SignUpScreen.route) {
                                 inclusive = true
                             }
                         }

@@ -242,7 +242,7 @@ fun LoginScreen(
 
         LaunchedEffect(key1 = state.value?.isSuccess) {
             scope.launch {
-                if (state.value?.isSuccess!!.isNotEmpty() == true) {
+                if (state.value?.isSuccess!!.isNotEmpty()) {
                     val success = state.value?.isSuccess
                     makeText(context, success.toString(), android.widget.Toast.LENGTH_SHORT).show()
                     navController.navigate(Screens.SearchScreen.route) {
@@ -256,7 +256,7 @@ fun LoginScreen(
 
         LaunchedEffect(key1 = state.value?.isError) {
             scope.launch {
-                if (state.value?.isError!!.isNotEmpty() == true) {
+                if (state.value?.isError!!.isNotEmpty()) {
                     val error = state.value?.isError
                     makeText(context, error.toString(), android.widget.Toast.LENGTH_SHORT).show()
                 }

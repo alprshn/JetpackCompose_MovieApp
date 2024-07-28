@@ -59,5 +59,14 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun isEmailVerified(): Flow<Resource<Boolean>> = flow {
+        emit(value = Resource.Loading())
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser != null) {
+            emit(Resource.Success(currentUser.isEmailVerified))
+        } else {
+            emit(Resource.Error("Kullanıcı oturumu açık değil"))
+        }
+    }
 
 }
