@@ -127,6 +127,13 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
                 }
             }
         }
+    }
 
+    fun resetLoadingState() {
+        _signInState.update { it.copy(isLoading = false) }
+    }
+
+    fun resetErrorState() {
+        _signInState.update { it.copy(isError = "") }
     }
 }

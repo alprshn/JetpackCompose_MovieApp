@@ -66,10 +66,14 @@ fun LoginScreen(
     viewModel: AuthenticationViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
-    val state = viewModel.signInState.collectAsState(initial = null)
+    val state by viewModel.signInState.collectAsState()
     val context = LocalContext.current
     var showPassword by remember { mutableStateOf(value = false) }
-    val signInState by viewModel.signInState.collectAsState()
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -83,10 +87,7 @@ fun LoginScreen(
                 .wrapContentHeight()
                 .verticalScroll(rememberScrollState()),
         ) {
-            val email = remember { mutableStateOf("") }
-            val password = remember { mutableStateOf("") }
-            val emailError = remember { mutableStateOf(false) }
-            val passwordError = remember { mutableStateOf(false) }
+
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -120,11 +121,11 @@ fun LoginScreen(
                     ),
                 placeholder = { Text("Email") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                isError = emailError.value,
+                isError = emailError,
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
-                    focusedIndicatorColor = if (emailError.value) Color.Red else Color(0xFF0982C3),
-                    unfocusedIndicatorColor = if (emailError.value) Color.Red else Color.Gray
+                    focusedIndicatorColor = if (emailError) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (emailError) Color.Red else Color.Gray
                 )
             )
             Text(
@@ -143,11 +144,11 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
                 placeholder = { Text("Password") },
-                isError = passwordError.value,
+                isError = passwordError,
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
-                    focusedIndicatorColor = if (passwordError.value) Color.Red else Color(0xFF0982C3),
-                    unfocusedIndicatorColor = if (passwordError.value) Color.Red else Color.Gray
+                    focusedIndicatorColor = if (passwordError) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (passwordError) Color.Red else Color.Gray
                 ),
                 visualTransformation = if (showPassword) {
 
@@ -177,20 +178,25 @@ fun LoginScreen(
                         }
                     }
                 }
-
             )
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                    fontSize = 16.sp,
+                    fontFamily = latoFontFamily
+                )
+            }
+
             Button(
                 onClick = {
-                    emailError.value = email.value.isEmpty()
-                    passwordError.value = password.value.isEmpty()
-                    if (!emailError.value && !passwordError.value) {
+                    emailError = email.value.isEmpty()
+                    passwordError = password.value.isEmpty()
+                    if (!emailError && !passwordError) {
                         viewModel.loginUser(email = email.value, password = password.value)
                     } else {
-                        makeText(
-                            context,
-                            "Email and Password cannot be empty",
-                            android.widget.Toast.LENGTH_SHORT
-                        ).show()
+                        errorMessage = "Email and Password cannot be empty"
                     }
                 },
                 modifier = Modifier
@@ -201,7 +207,7 @@ fun LoginScreen(
                     .background(Color(0xFF0982C3)),
                 colors = ButtonDefaults.buttonColors(Color(0xFF0982C3))
             ) {
-                if (signInState.isLoading) {
+                if (state.isLoading) {
                     CircularProgressIndicator(
                         color = Color.White,
                         modifier = Modifier.size(24.dp)
@@ -240,25 +246,28 @@ fun LoginScreen(
         }
 
 
-        LaunchedEffect(key1 = state.value?.isSuccess) {
+        LaunchedEffect(key1 = state.isSuccess) {
             scope.launch {
-                if (state.value?.isSuccess!!.isNotEmpty()) {
-                    val success = state.value?.isSuccess
+                if (state.isSuccess!!.isNotEmpty()) {
+                    val success = state.isSuccess
                     makeText(context, success.toString(), android.widget.Toast.LENGTH_SHORT).show()
                     navController.navigate(Screens.SearchScreen.route) {
                         popUpTo(Screens.LoginScreen.route) {
                             inclusive = true
                         }
                     }
+                    viewModel.resetLoadingState()
                 }
             }
         }
 
-        LaunchedEffect(key1 = state.value?.isError) {
+        LaunchedEffect(key1 = state.isError) {
             scope.launch {
-                if (state.value?.isError!!.isNotEmpty()) {
-                    val error = state.value?.isError
-                    makeText(context, error.toString(), android.widget.Toast.LENGTH_SHORT).show()
+                if (state.isError.isNotEmpty()) {
+                    errorMessage = state.isError
+                    emailError = true
+                    passwordError = true
+                    viewModel.resetLoadingState()
                 }
             }
         }
