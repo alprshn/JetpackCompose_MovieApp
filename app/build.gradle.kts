@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
 ///Other
     implementation(libs.androidx.navigation.compose)
@@ -127,7 +128,8 @@ dependencies {
     //lottie
     implementation(libs.lottie)
     implementation(libs.lottie.compose)
-
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
 }
 kapt {
