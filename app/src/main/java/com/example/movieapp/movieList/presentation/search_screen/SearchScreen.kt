@@ -9,9 +9,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,9 +22,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
@@ -39,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,8 +57,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
-import com.example.movieapp.movieList.data.remote.api.response.Result
-import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -72,12 +74,25 @@ fun SearchScreen(
 ) {
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
+    val popularMovies = viewModel.popularMovies.collectAsLazyPagingItems()
+    val pagerState = rememberPagerState(pageCount = { popularMovies.itemCount })
+
+    LaunchedEffect(Unit) {
+        viewModel.popularMovies()
+        Log.d("SearchScreen", "Loading popular movies...")
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxSize(),
         color = backgroundColor
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,47 +148,105 @@ fun SearchScreen(
                 }
             }
 
-
-
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(searchResults.itemCount) { index ->
-                    searchResults[index]?.let {
-                        SearchMovieContentItem(it, navController)
+            if (query.value.isEmpty()) {
+                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) { page ->
+                    popularMovies[page]?.let {
+                        PopularMovieItem(it, navController)
                     }
+
                 }
 
-                searchResults.apply {
+
+                popularMovies.apply {
                     when {
                         loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator()
-                                }
-                            }
+                            CircularProgressIndicator(
+                                color = Color.White,
+                                modifier = Modifier.size(58.dp)
+                            )
                         }
 
                         loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
-                            item {
-                                Text(text = "Error")
-                            }
+                            Text(text = "Error loading popular movies")
                         }
 
                         loadState.refresh is LoadState.NotLoading -> {
                         }
                     }
+                }
+            } else {
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+
+                    ) {
+                    searchResults.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator(
+                                            color = Color.White,
+                                            modifier = Modifier.size(58.dp)
+                                        )
+                                    }
+                                }
+                            }
+
+                            loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
+                                item {
+                                    Text(text = "Error")
+                                }
+                            }
+
+                            loadState.refresh is LoadState.NotLoading -> {
+                            }
+                        }
+
+                    }
+                    items(searchResults.itemCount) { index ->
+                        searchResults[index]?.let {
+                            SearchMovieContentItem(it, navController)
+                        }
+                    }
+
 
                 }
-
-
             }
+
+
+        }
+    }
+}
+
+@Composable
+fun PopularMovieItem(movie: Result, navController: NavHostController) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxHeight()
+            .clickable {
+                val movieJson = Uri.encode(Gson().toJson(movie))
+                navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+            },
+        colors = CardDefaults.cardColors(containerColor = bottomBarColor)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(bottomBarColor)
+        ) {
+            Image(
+                painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
         }
     }
 }
