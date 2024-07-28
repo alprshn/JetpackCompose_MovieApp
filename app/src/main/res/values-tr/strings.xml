@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="release_date">Çıkış Tarihi</string>
+    <string name="genre">Tür</string>
+    <string name="about_movie">Film Hakkında</string>
+    <string name="favorites">Favoriler</string>
+    <string name="unknown">Bilinmeyen</string>
+    <string name="login">Giriş</string>
+    <string name="email">Email</string>
+    <string name="password">Şifre</string>
+    <string name="email_password_empty">Email ve Şifre boş olamaz</string>
+    <string name="no_account">Hesabınız yok mu?</string>
+    <string name="signup">Kayıt Ol</string>
+    <string name="search_movie">Film Ara</string>
+    <string name="error_loading_movies">Popüler filmler yüklenirken hata oluştu</string>
+    <string name="error">Hata</string>
+    <string name="sign_up">Kayıt Ol</string>
+    <string name="confirm_password">Şifreyi Onayla</string>
+    <string name="email_empty">Email boş olamaz</string>
+    <string name="password_empty">Şifre boş olamaz</string>
+    <string name="confirm_password_empty">Şifre Onayı boş olamaz</string>
+    <string name="passwords_not_match">Şifreler uyuşmuyor</string>
+    <string name="already_have_account">Zaten hesabınız var mı!</string>
+    <string name="watchlist">İzleme Listesi</string>
+    <string name="logout">Çıkış</string>
+    <string name="languages">Diller</string>
+    <string name="dark_mode">Karanlık Mod</string>
+    <string name="settings">Ayarlar</string>
+    <string name="login_error">Email veya Şifre Hatalı</string>
+    <string name="email_not_verified">Email adresiniz doğrulanmamış. Lütfen e-postanızı doğrulayın.</string>
+    <string name="sign_in_successful">Giriş Başarılı!</string>
+    <string name="email_verification_error">Email doğrulama durumu kontrol edilemedi. Lütfen tekrar deneyin.</string>
+    <string name="register_successful">Kayıt Başarılı!</string>
+</resources>
