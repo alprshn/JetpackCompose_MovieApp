@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -50,8 +51,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
@@ -64,6 +68,8 @@ import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.searchTextColor
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
+import kotlin.math.absoluteValue
 
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -81,7 +87,13 @@ fun SearchScreen(
         viewModel.popularMovies()
         Log.d("SearchScreen", "Loading popular movies...")
     }
-
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(3000)
+            val nextPage = (pagerState.currentPage + 1) % (pagerState.pageCount)
+            pagerState.animateScrollToPage(nextPage)
+        }
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -149,9 +161,13 @@ fun SearchScreen(
             }
 
             if (query.value.isEmpty()) {
-                HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) { page ->
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxWidth(),
+                    beyondBoundsPageCount = 3
+                ) { page ->
                     popularMovies[page]?.let {
-                        PopularMovieItem(it, navController)
+                        PopularMovieItem(it, navController,pagerState,page)
                     }
 
                 }
@@ -223,12 +239,30 @@ fun SearchScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PopularMovieItem(movie: Result, navController: NavHostController) {
+fun PopularMovieItem(
+    movie: Result,
+    navController: NavHostController,
+    pagerState: PagerState,
+    page: Int
+) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxHeight()
+            .graphicsLayer {
+                val pageOffset = (
+                        (pagerState.currentPage - page) + pagerState
+                            .currentPageOffsetFraction
+                        ).absoluteValue
+                alpha = lerp(
+                    start = 0.5f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                )
+
+            }
             .clickable {
                 val movieJson = Uri.encode(Gson().toJson(movie))
                 navController.navigate(Screens.DetailScreen.route + "/$movieJson")
