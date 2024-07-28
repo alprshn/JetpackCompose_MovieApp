@@ -6,12 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.domain.model.Genre
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
-import com.example.movieapp.movieList.data.remote.api.response.Result
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
@@ -38,6 +39,10 @@ class MainViewModel @Inject constructor(
     private val _searchResults: MutableStateFlow<PagingData<Result>> =
         MutableStateFlow(PagingData.empty())
     val searchResults: StateFlow<PagingData<Result>> = _searchResults
+
+    private val _popularMovies: MutableStateFlow<PagingData<Result>> =
+        MutableStateFlow(PagingData.empty())
+    val popularMovies: StateFlow<PagingData<Result>> = _popularMovies
 
     private val _watchlistMovies = MutableLiveData<List<FirebaseMovieEntity>>()
     val watchlistMovies: LiveData<List<FirebaseMovieEntity>> get() = _watchlistMovies
@@ -93,6 +98,17 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun popularMovies() {
+        viewModelScope.launch {
+            searchRepository.popularMoviePaging()
+                .cachedIn(viewModelScope)
+                .collectLatest {
+                    _popularMovies.value = it
+                    Log.d("MainViewModel", "Popular movies loaded")
+                }
+        }
+    }
+
     fun getWatchlistMovies() {
         currentUser?.let { user ->
             viewModelScope.launch {
@@ -138,6 +154,8 @@ class MainViewModel @Inject constructor(
         }
         return addedToWatchlist
     }
+
+
     val genres = listOf(
         Genre(28, "Action"),
         Genre(12, "Adventure"),

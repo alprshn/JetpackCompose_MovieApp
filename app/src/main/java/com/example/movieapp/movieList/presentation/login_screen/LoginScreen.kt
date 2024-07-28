@@ -268,6 +268,7 @@ fun LoginScreen(
                     emailError = true
                     passwordError = true
                     viewModel.resetLoadingState()
+                    viewModel.resetErrorState()
                 }
             }
         }
