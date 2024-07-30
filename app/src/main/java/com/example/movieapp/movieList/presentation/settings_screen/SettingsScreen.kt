@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -256,16 +257,22 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                text = stringResource(id = R.string.logout),
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 18.sp,
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .align(Alignment.CenterVertically)
-                            )
-
+                            if (state.isLoading) {
+                                CircularProgressIndicator(
+                                    color = Color.White,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }else{
+                                Text(
+                                    text = stringResource(id = R.string.logout),
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    fontSize = 18.sp,
+                                    modifier = Modifier
+                                        .padding(horizontal = 4.dp)
+                                        .align(Alignment.CenterVertically)
+                                )
+                            }
                         }
 
                     }
