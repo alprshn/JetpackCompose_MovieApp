@@ -1,7 +1,5 @@
 package com.example.movieapp.movieList.presentation.signup_screen
 
-import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +21,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -52,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -66,10 +68,19 @@ fun SignUpScreen(
 ) {
 
     val scope = rememberCoroutineScope()
-    val state = viewModel.registerState.collectAsState(initial = null)
+    val state by viewModel.registerState.collectAsState()
     val context = LocalContext.current
     var showPassword by remember { mutableStateOf(value = false) }
     var confirmShowPassword by remember { mutableStateOf(value = false) }
+    var errorMessage by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var confirmPasswordError by remember { mutableStateOf(false) }
+
+    val emailEmptyMessage = stringResource(id = R.string.email_empty)
+    val passwordEmptyMessage = stringResource(id = R.string.password_empty)
+    val confirmPasswordEmptyMessage = stringResource(id = R.string.confirm_password_empty)
+    val passwordsNotMatchMessage = stringResource(id = R.string.passwords_not_match)
 
     Box(
         modifier = Modifier
@@ -93,7 +104,7 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Sign Up",
+                    text = stringResource(id = R.string.sign_up),
                     modifier = Modifier.padding(10.dp),
                     fontSize = 45.sp,
                     fontFamily = latoFontFamily,
@@ -103,7 +114,7 @@ fun SignUpScreen(
             }
 
             Text(
-                text = "Email",
+                text = stringResource(id = R.string.email),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                 fontSize = 18.sp,
                 fontFamily = latoFontFamily,
@@ -113,20 +124,23 @@ fun SignUpScreen(
             OutlinedTextField(
                 value = email.value.trim(),
                 onValueChange = { email.value = it },
+                isError = emailError,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .clip(
                         RoundedCornerShape(6.dp)
                     ),
-                placeholder = { Text("Email") },
+                placeholder = { Text(stringResource(id = R.string.email)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
+                    focusedIndicatorColor = if (emailError) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (emailError) Color.Red else Color.Gray
                 ),
             )
             Text(
-                text = "Password",
+                text = stringResource(id = R.string.password),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                 fontSize = 18.sp,
                 fontFamily = latoFontFamily,
@@ -136,13 +150,16 @@ fun SignUpScreen(
             OutlinedTextField(
                 value = password.value.trim(),
                 onValueChange = { password.value = it },
+                isError = passwordError,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
-                placeholder = { Text("Password") },
+                placeholder = { Text(stringResource(id = R.string.password)) },
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
+                    focusedIndicatorColor = if (passwordError) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (passwordError) Color.Red else Color.Gray
                 ),
                 visualTransformation = if (showPassword) {
 
@@ -174,7 +191,7 @@ fun SignUpScreen(
                 }
             )
             Text(
-                text = "Confirm Password",
+                text = stringResource(id = R.string.confirm_password),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                 fontSize = 18.sp,
                 fontFamily = latoFontFamily,
@@ -184,13 +201,16 @@ fun SignUpScreen(
             OutlinedTextField(
                 value = confirmPassword.value.trim(),
                 onValueChange = { confirmPassword.value = it },
+                isError = confirmPasswordError,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
-                placeholder = { Text("Confirm Password") },
+                placeholder = { Text(stringResource(id = R.string.confirm_password)) },
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
+                    focusedIndicatorColor = if (confirmPasswordError) Color.Red else Color(0xFF0982C3),
+                    unfocusedIndicatorColor = if (confirmPasswordError) Color.Red else Color.Gray
                 ),
                 visualTransformation = if (confirmShowPassword) {
 
@@ -222,21 +242,29 @@ fun SignUpScreen(
                 }
             )
 
-
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                    fontSize = 16.sp,
+                    fontFamily = latoFontFamily
+                )
+            }
             Button(
                 onClick = {
-                    if (email.value.isEmpty()) {
-                        makeText(context, "Email cannot be empty", Toast.LENGTH_SHORT).show()
-                    } else if (password.value.isEmpty()) {
-                        makeText(context, "Password cannot be empty", Toast.LENGTH_SHORT).show()
-                    } else if (confirmPassword.value.isEmpty()) {
-                        makeText(
-                            context,
-                            "Confirm Password cannot be empty",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    emailError = email.value.isEmpty()
+                    passwordError = password.value.isEmpty()
+                    confirmPasswordError = confirmPassword.value.isEmpty()
+                    if (emailError) {
+                        errorMessage = emailEmptyMessage
+                    } else if (passwordError) {
+                        errorMessage = passwordEmptyMessage
+                    } else if (confirmPasswordError) {
+                        errorMessage = confirmPasswordEmptyMessage
                     } else if (password.value != confirmPassword.value) {
-                        makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                        confirmPasswordError = true
+                        errorMessage = passwordsNotMatchMessage
                     } else {
                         viewModel.registerUser(email = email.value, password = password.value)
                     }
@@ -249,22 +277,29 @@ fun SignUpScreen(
                     .background(Color(0xFF0982C3)),
                 colors = ButtonDefaults.buttonColors(Color(0xFF0982C3))
             ) {
-                Text(
-                    text = "Sign Up",
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontFamily = latoFontFamily
-                )
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Text(
+                        text = stringResource(id = R.string.sign_up),
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontFamily = latoFontFamily
+                    )
+                }
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
-                    text = "Already have an account! ",
+                    text = stringResource(id = R.string.already_have_account),
                     color = Color.White,
                     fontSize = 16.sp, fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal
                 )
                 Text(
-                    text = "Login",
+                    text = stringResource(id = R.string.login),
                     color = Color(0xFF0982C3),
                     fontSize = 16.sp,
                     modifier = Modifier.clickable {
@@ -276,11 +311,10 @@ fun SignUpScreen(
                     fontWeight = FontWeight.Normal
                 )
             }
-            LaunchedEffect(key1 = state.value?.isSuccess) {
+            LaunchedEffect(key1 = state.isSuccess) {
                 scope.launch {
-                    if (state.value?.isSuccess!!.isNotEmpty() == true) {
-                        val success = state.value?.isSuccess
-                        makeText(context, success.toString(), Toast.LENGTH_SHORT).show()
+                    if (state.isSuccess!!.isNotEmpty() == true) {
+                        val success = state.isSuccess
                         navController.navigate(Screens.LoginScreen.route) {
                             popUpTo(Screens.SignUpScreen.route) {
                                 inclusive = true
@@ -290,11 +324,15 @@ fun SignUpScreen(
                 }
             }
 
-            LaunchedEffect(key1 = state.value?.isError) {
+            LaunchedEffect(key1 = state.isError) {
                 scope.launch {
-                    if (state.value?.isError!!.isNotEmpty() == true) {
-                        val error = state.value?.isError
-                        makeText(context, error.toString(), Toast.LENGTH_SHORT).show()
+                    if (state.isError.isNotEmpty()) {
+                        errorMessage = state.isError
+                        emailError = true
+                        passwordError = true
+                        confirmPasswordError = true
+                        viewModel.resetLoadingState()
+                        viewModel.resetErrorState()
                     }
                 }
             }

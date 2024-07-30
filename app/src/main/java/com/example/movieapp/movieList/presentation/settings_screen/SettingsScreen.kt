@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +52,8 @@ import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.R
+import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
@@ -61,7 +64,8 @@ import java.util.Locale
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    authenticationViewModel: AuthenticationViewModel = hiltViewModel()
 ) {
     val isChecked by viewModel.isDarkModeEnabled.collectAsState()
     var mExpanded by remember { mutableStateOf(false) }
@@ -101,7 +105,7 @@ fun SettingsScreen(
                             navController.popBackStack()
                         })
                 Text(
-                    text = "Settings",
+                    text = stringResource(id = R.string.settings),
                     fontSize = 24.sp,
                     color = Color.White,
                     fontFamily = latoFontFamily,
@@ -137,12 +141,13 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .background(bottomBarColor).fillMaxSize(),
+                                .background(bottomBarColor)
+                                .fillMaxSize(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Dark Mode",
+                                text = stringResource(id = R.string.dark_mode),
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
                                 fontSize = 18.sp,
@@ -159,7 +164,9 @@ fun SettingsScreen(
                                     checkedThumbColor = Color.White,
                                     uncheckedThumbColor = Color.Gray
                                 ),
-                                modifier = Modifier.align(Alignment.CenterVertically).padding(end = 4.dp)
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(end = 4.dp)
 
                             )
                         }
@@ -179,12 +186,13 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .background(bottomBarColor).fillMaxHeight(),
+                                .background(bottomBarColor)
+                                .fillMaxHeight(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Languages:",
+                                text = stringResource(id = R.string.languages),
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
                                 fontSize = 18.sp,
@@ -233,7 +241,12 @@ fun SettingsScreen(
                             .padding(vertical = 7.dp, horizontal = 6.dp)
                             .height(70.dp)
                             .clickable {
-                                //viewModel.signOut()
+                                authenticationViewModel.signOut()
+                                navController.navigate(Screens.LoginScreen.route) {
+                                    popUpTo(Screens.SettingsScreen.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                     ) {
                         Row(
@@ -245,7 +258,7 @@ fun SettingsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Logout",
+                                text = stringResource(id = R.string.logout),
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White,
                                 fontSize = 18.sp,
@@ -282,11 +295,7 @@ fun setLocale(context: Context, languageCode: String) {
     val resources = context.resources
     val config = Configuration(resources.configuration)
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        config.setLocale(locale)
-    } else {
-        config.locale = locale
-    }
+    config.setLocale(locale)
 
     resources.updateConfiguration(config, resources.displayMetrics)
 }

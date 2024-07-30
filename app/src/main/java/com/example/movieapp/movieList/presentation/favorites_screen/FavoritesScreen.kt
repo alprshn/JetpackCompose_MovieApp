@@ -38,12 +38,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -72,7 +74,7 @@ fun FavoritesScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Favorites",
+                text = stringResource(id = R.string.favorites),
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Normal,
@@ -87,7 +89,6 @@ fun FavoritesScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
                 items(favoriteMovies) { movie ->
                     val movie = MovieMapper().roomMapToResult(movie)
 
-                    Log.e("Poster", "${movie.poster_path}")
                     Card(
                         colors = CardDefaults.cardColors(containerColor = backgroundColor),
                         modifier = Modifier
@@ -96,7 +97,6 @@ fun FavoritesScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
                             .padding(vertical = 4.dp)
                             .clickable {
                                 val movieJson = Uri.encode(Gson().toJson(movie))
-                                Log.e("MovieJson", movieJson)
                                 navController.navigate(Screens.DetailScreen.route + "/$movieJson")
                             }
                     ) {

@@ -17,6 +17,7 @@ import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
+import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +29,7 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthenticationRepository,
     private val firebaseMovieRepository: FirebaseMovieRepository,
     private val searchRepository: SearchRepository,
-    private val roomDatabaseRepository: RoomDataBaseRepository
+    private val roomDatabaseRepository: RoomDataBaseRepository,
 ) : ViewModel() {
     private val currentUser = authRepository.getCurrentUser()
     private val movieMapper = MovieMapper()
@@ -46,6 +47,7 @@ class MainViewModel @Inject constructor(
 
     private val _watchlistMovies = MutableLiveData<List<FirebaseMovieEntity>>()
     val watchlistMovies: LiveData<List<FirebaseMovieEntity>> get() = _watchlistMovies
+
 
     //Favorites
     fun getFavoriteMovies() {
@@ -87,9 +89,9 @@ class MainViewModel @Inject constructor(
         return isFavorite
     }
 
-    fun search(query: String) {
+    fun search(query: String,language: String) {
         viewModelScope.launch {
-            searchRepository.searchMoviePaging(query)
+            searchRepository.searchMoviePaging(query,language)
                 .cachedIn(viewModelScope)
                 .collectLatest {
                     _searchResults.value = it
@@ -98,9 +100,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun popularMovies() {
+    fun popularMovies(language: String) {
         viewModelScope.launch {
-            searchRepository.popularMoviePaging()
+            searchRepository.popularMoviePaging(language)
                 .cachedIn(viewModelScope)
                 .collectLatest {
                     _popularMovies.value = it

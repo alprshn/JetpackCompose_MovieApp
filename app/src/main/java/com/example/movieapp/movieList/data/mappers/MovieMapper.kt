@@ -1,6 +1,6 @@
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
-import com.example.movieapp.movieList.data.remote.api.response.Result
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 
 class MovieMapper {
 

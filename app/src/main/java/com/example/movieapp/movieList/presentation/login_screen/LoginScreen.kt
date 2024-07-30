@@ -1,6 +1,5 @@
 package com.example.movieapp.movieList.presentation.login_screen
 
-import android.widget.Toast.makeText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -67,13 +68,19 @@ fun LoginScreen(
 ) {
     val scope = rememberCoroutineScope()
     val state by viewModel.signInState.collectAsState()
-    val context = LocalContext.current
     var showPassword by remember { mutableStateOf(value = false) }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+    val emailPasswordEmptyMessage =
+        stringResource(id = R.string.email_password_empty) // Hata mesajını burada tanımla
+
+    val emailVerificationErrorMessage = stringResource(id = R.string.email_verification_error)
+    val loginErrorMessage = stringResource(id = R.string.login_error)
+    val emailVerificationMessage = stringResource(id = R.string.email_not_verified)
+
 
     Box(
         modifier = Modifier
@@ -93,7 +100,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Login",
+                    text = stringResource(id = R.string.login),
                     modifier = Modifier.padding(10.dp),
                     fontSize = 45.sp,
                     fontFamily = latoFontFamily,
@@ -103,7 +110,7 @@ fun LoginScreen(
             }
 
             Text(
-                text = "Email",
+                text = stringResource(id = R.string.email),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                 fontSize = 18.sp,
                 fontFamily = latoFontFamily,
@@ -119,7 +126,7 @@ fun LoginScreen(
                     .clip(
                         RoundedCornerShape(6.dp)
                     ),
-                placeholder = { Text("Email") },
+                placeholder = { Text(stringResource(id = R.string.email)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 isError = emailError,
                 colors = TextFieldDefaults.textFieldColors(
@@ -129,7 +136,7 @@ fun LoginScreen(
                 )
             )
             Text(
-                text = "Password",
+                text = stringResource(id = R.string.password),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                 fontSize = 18.sp,
                 fontFamily = latoFontFamily,
@@ -143,7 +150,7 @@ fun LoginScreen(
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp)),
-                placeholder = { Text("Password") },
+                placeholder = { Text(stringResource(id = R.string.password)) },
                 isError = passwordError,
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White,
@@ -194,9 +201,15 @@ fun LoginScreen(
                     emailError = email.value.isEmpty()
                     passwordError = password.value.isEmpty()
                     if (!emailError && !passwordError) {
-                        viewModel.loginUser(email = email.value, password = password.value)
+                        viewModel.loginUser(
+                            email = email.value,
+                            password = password.value,
+                            emailVerificationErrorMessage = emailVerificationErrorMessage,
+                            loginErrorMessage = loginErrorMessage,
+                            emailVerificationMessage = emailVerificationMessage,
+                        )
                     } else {
-                        errorMessage = "Email and Password cannot be empty"
+                        errorMessage = emailPasswordEmptyMessage
                     }
                 },
                 modifier = Modifier
@@ -214,7 +227,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        text = "Sign In",
+                        text = stringResource(id = R.string.sign_in),
                         color = Color.White,
                         fontSize = 18.sp,
                         fontFamily = latoFontFamily
@@ -224,13 +237,13 @@ fun LoginScreen(
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
-                    text = "Don’t have an account? ",
+                    text = stringResource(id = R.string.no_account),
                     color = Color.White,
                     fontSize = 16.sp, fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal
                 )
                 Text(
-                    text = "Signup",
+                    text = stringResource(id = R.string.signup),
                     color = Color(0xFF0982C3),
                     fontSize = 16.sp,
                     modifier = Modifier.clickable {
@@ -250,7 +263,6 @@ fun LoginScreen(
             scope.launch {
                 if (state.isSuccess!!.isNotEmpty()) {
                     val success = state.isSuccess
-                    makeText(context, success.toString(), android.widget.Toast.LENGTH_SHORT).show()
                     navController.navigate(Screens.SearchScreen.route) {
                         popUpTo(Screens.LoginScreen.route) {
                             inclusive = true

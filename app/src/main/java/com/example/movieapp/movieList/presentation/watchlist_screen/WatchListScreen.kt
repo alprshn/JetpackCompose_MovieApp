@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -74,7 +76,7 @@ fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Watchlist",
+                text = stringResource(id = R.string.watchlist),
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Normal,

@@ -10,21 +10,22 @@
     <string name="email">Email</string>
     <string name="password">Şifre</string>
     <string name="email_password_empty">Email ve Şifre boş olamaz</string>
-    <string name="no_account">Hesabınız yok mu?</string>
+    <string name="no_account">Hesabınız yok mu? </string>
     <string name="signup">Kayıt Ol</string>
     <string name="search_movie">Film Ara</string>
     <string name="error_loading_movies">Popüler filmler yüklenirken hata oluştu</string>
     <string name="error">Hata</string>
     <string name="sign_up">Kayıt Ol</string>
+    <string name="sign_in">Giriş Yap</string>
     <string name="confirm_password">Şifreyi Onayla</string>
     <string name="email_empty">Email boş olamaz</string>
     <string name="password_empty">Şifre boş olamaz</string>
     <string name="confirm_password_empty">Şifre Onayı boş olamaz</string>
     <string name="passwords_not_match">Şifreler uyuşmuyor</string>
-    <string name="already_have_account">Zaten hesabınız var mı!</string>
+    <string name="already_have_account">Zaten hesabınız var mı! </string>
     <string name="watchlist">İzleme Listesi</string>
-    <string name="logout">Çıkış</string>
-    <string name="languages">Diller</string>
+    <string name="logout">Çıkış Yap</string>
+    <string name="languages">Diller:</string>
     <string name="dark_mode">Karanlık Mod</string>
     <string name="settings">Ayarlar</string>
     <string name="login_error">Email veya Şifre Hatalı</string>
@@ -32,4 +33,26 @@
     <string name="sign_in_successful">Giriş Başarılı!</string>
     <string name="email_verification_error">Email doğrulama durumu kontrol edilemedi. Lütfen tekrar deneyin.</string>
     <string name="register_successful">Kayıt Başarılı!</string>
+    <string name="popular_movies">Popüler Filmler</string>
+
+    <!-- Genre Strings -->
+    <string name="genre_action">Aksiyon</string>
+    <string name="genre_adventure">Macera</string>
+    <string name="genre_animation">Animasyon</string>
+    <string name="genre_comedy">Komedi</string>
+    <string name="genre_crime">Suç</string>
+    <string name="genre_documentary">Belgesel</string>
+    <string name="genre_drama">Drama</string>
+    <string name="genre_family">Aile</string>
+    <string name="genre_fantasy">Fantastik</string>
+    <string name="genre_history">Tarih</string>
+    <string name="genre_horror">Korku</string>
+    <string name="genre_music">Müzik</string>
+    <string name="genre_mystery">Gizem</string>
+    <string name="genre_romance">Romantik</string>
+    <string name="genre_science_fiction">Bilim Kurgu</string>
+    <string name="genre_tv_movie">TV Filmi</string>
+    <string name="genre_thriller">Gerilim</string>
+    <string name="genre_war">Savaş</string>
+    <string name="genre_western">Western</string>
 </resources>

@@ -1,8 +1,10 @@
 package com.example.movieapp.movieList.presentation.viewmodel
 
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movieapp.R
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,7 +55,7 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
     }
 
 
-    fun loginUser(email: String, password: String) = viewModelScope.launch {
+    fun loginUser(email: String, password: String, emailVerificationErrorMessage: String, loginErrorMessage: String, emailVerificationMessage: String,) = viewModelScope.launch {
         repository.loginUser(email = email, password = password).collect { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -73,7 +75,7 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
 
                         when (verificationResult) {
                             is Resource.Error -> {
-                                _signInState.update { it.copy(isError = "Email doğrulama durumu kontrol edilemedi. Lütfen tekrar deneyin.") }
+                                _signInState.update { it.copy(isError =emailVerificationErrorMessage) }
                             }
 
                             is Resource.Loading -> {
@@ -86,10 +88,10 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
                                     "Email success verification result: ${verificationResult.data}"
                                 )
                                 if (verificationResult.data == true) {
-                                    _signInState.update { it.copy(isSuccess = "Sign In Successful!") }
+                                    _signInState.update { it.copy(isSuccess = "Login Successful!") }
                                     _isUserAuthenticated.update { true }
                                 } else {
-                                    _signInState.update { it.copy(isError = "Email adresiniz doğrulanmamış. Lütfen e-postanızı doğrulayın.") }
+                                    _signInState.update { it.copy(isError =emailVerificationMessage) }
                                     _isUserAuthenticated.update { false }
                                 }
                             }
@@ -99,7 +101,7 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
                 }
 
                 is Resource.Error -> {
-                    _signInState.update { it.copy(isError = "Email Veya Şifre Hatalı") }
+                    _signInState.update { it.copy(isError = loginErrorMessage) }
                 }
             }
         }

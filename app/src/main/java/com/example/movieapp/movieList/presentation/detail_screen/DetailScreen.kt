@@ -2,7 +2,6 @@
 
 package com.example.movieapp.movieList.presentation.detail_screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +25,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,15 +41,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.example.movieapp.R
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
-import com.example.movieapp.movieList.data.remote.api.response.Result
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
@@ -290,7 +290,7 @@ fun DetailScreen(
                         Column(
                         ) {
                             Text(
-                                text = "Release Date",
+                                text = stringResource(id = R.string.release_date),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
                                 color = Color.White,
@@ -307,7 +307,7 @@ fun DetailScreen(
                         }
                         Column() {
                             Text(
-                                text = "Genre",
+                                text = stringResource(id = R.string.genre),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
                                 color = Color.White,
@@ -325,7 +325,7 @@ fun DetailScreen(
                         }
                     }
                     Text(
-                        text = "About Movie",
+                        text = stringResource(id = R.string.about_movie),
                         fontWeight = FontWeight.Medium,
                         fontSize = 18.sp,
                         color = Color.White,
