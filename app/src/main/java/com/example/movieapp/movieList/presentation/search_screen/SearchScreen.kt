@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.HorizontalPager
@@ -54,10 +55,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.Modifier
@@ -101,7 +104,6 @@ fun SearchScreen(
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
     val popularMovies = viewModel.popularMovies.collectAsLazyPagingItems()
-    val pagerState = rememberPagerState(pageCount = { popularMovies.itemCount })
     val selectedLanguage by settingsViewModel.selectedLanguage.collectAsState()
 
     LaunchedEffect(selectedLanguage) {
@@ -119,13 +121,8 @@ fun SearchScreen(
     LaunchedEffect(Unit) {
         viewModel.getFavoriteMovies()
     }
-    LaunchedEffect(pagerState) {
-        while (true) {
-            delay(3000)
-            val nextPage = (pagerState.currentPage + 1) % (pagerState.pageCount)
-            pagerState.animateScrollToPage(nextPage)
-        }
-    }
+
+
     Surface(
         modifier = Modifier
             .fillMaxSize(),
