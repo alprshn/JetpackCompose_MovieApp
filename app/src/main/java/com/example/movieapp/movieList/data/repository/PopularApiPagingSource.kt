@@ -10,7 +10,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class PopularApiPagingSource @Inject constructor(
-    private val api: MovieApi
+    private val api: MovieApi,
+    private val language: String
 ) : PagingSource<Int, Result>() {
     override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
         return state.anchorPosition
@@ -20,7 +21,7 @@ class PopularApiPagingSource @Inject constructor(
         val page = params.key ?: 1
         Log.d("Paging", "Loading page: $page")
         return try {
-            val popularResponse = api.popularMovie(page, Constants.API_KEY)
+            val popularResponse = api.popularMovie(page, language, Constants.API_KEY)
             LoadResult.Page(
                 data = popularResponse.results,
                 prevKey = if (page == 1) null else (page - 1),

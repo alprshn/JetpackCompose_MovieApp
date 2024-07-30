@@ -12,17 +12,17 @@ import javax.inject.Inject
 class SearchRepositoryImpl @Inject constructor(
     private val movieApi: MovieApi,
 ) : SearchRepository {
-    override fun searchMoviePaging(query: String): Flow<PagingData<Result>> {
+    override fun searchMoviePaging(query: String,language:String): Flow<PagingData<Result>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { SearchApiPagingSource(movieApi, query) }
+            pagingSourceFactory = { SearchApiPagingSource(movieApi, query,language) }
         ).flow
     }
 
-    override suspend fun popularMoviePaging(): Flow<PagingData<Result>> {
+    override suspend fun popularMoviePaging(language:String): Flow<PagingData<Result>> {
         return Pager(
             config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { PopularApiPagingSource(movieApi) }
+            pagingSourceFactory = { PopularApiPagingSource(movieApi,language) }
         ).flow
     }
 }

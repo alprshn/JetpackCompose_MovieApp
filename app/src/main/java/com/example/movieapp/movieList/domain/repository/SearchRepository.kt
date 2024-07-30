@@ -5,7 +5,7 @@ import com.example.movieapp.movieList.data.remote.api.response.search_data.Resul
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    fun searchMoviePaging(query: String): Flow<PagingData<Result>>
-    suspend fun popularMoviePaging(): Flow<PagingData<Result>>
+    fun searchMoviePaging(query: String, language:String): Flow<PagingData<Result>>
+    suspend fun popularMoviePaging(language:String): Flow<PagingData<Result>>
 
 }
