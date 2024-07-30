@@ -27,6 +27,8 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
     private var _signInState = MutableStateFlow<AuthenticationState>(value = AuthenticationState())
     val signInState: StateFlow<AuthenticationState> = _signInState.asStateFlow()
 
+    private var _signOutState = MutableStateFlow<AuthenticationState>(value = AuthenticationState())
+    val signOutState: StateFlow<AuthenticationState> = _signOutState.asStateFlow()
 
     private val _isUserAuthenticated = MutableStateFlow(false)
     val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated.asStateFlow()
@@ -118,14 +120,16 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
             when (result) {
                 is Resource.Success -> {
                     _isUserAuthenticated.update { false }
+                    _signOutState.update { it.copy(isSuccess = "Sign out successful!") }
                 }
 
                 is Resource.Error -> {
                     Log.e("AuthViewModel", "Sign out failed: ${result.message}")
+                    _signOutState.update { it.copy(isError = result.message.toString()) }
                 }
 
                 is Resource.Loading -> {
-
+                    _signOutState.update { it.copy(isLoading = true) }
                 }
             }
         }
@@ -137,5 +141,9 @@ class AuthenticationViewModel @Inject constructor(private val repository: Authen
 
     fun resetErrorState() {
         _signInState.update { it.copy(isError = "") }
+    }
+
+    fun resetSignOutState() {
+        _signOutState.update { it.copy(isSuccess = "", isError = "", isLoading = false) }
     }
 }

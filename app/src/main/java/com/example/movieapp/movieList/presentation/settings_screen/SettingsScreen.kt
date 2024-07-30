@@ -31,6 +31,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +59,7 @@ import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.latoFontFamily
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,6 +78,7 @@ fun SettingsScreen(
 
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
     val selectedLanguageLabel = languages.find { it.second == selectedLanguage }?.first ?: "Languages"
+    val state by authenticationViewModel.signOutState.collectAsState()
 
     Log.e("selectedLanguage", selectedLanguage.toString())
 
@@ -242,11 +245,7 @@ fun SettingsScreen(
                             .height(70.dp)
                             .clickable {
                                 authenticationViewModel.signOut()
-                                navController.navigate(Screens.LoginScreen.route) {
-                                    popUpTo(Screens.SettingsScreen.route) {
-                                        inclusive = true
-                                    }
-                                }
+
                             }
                     ) {
                         Row(
@@ -274,8 +273,23 @@ fun SettingsScreen(
             }
 
         },
-
         )
+
+    LaunchedEffect(key1 = state.isSuccess, key2 = state.isError) {
+        if (state.isSuccess!!.isNotEmpty()) {
+            navController.navigate(Screens.LoginScreen.route) {
+                popUpTo(Screens.SettingsScreen.route) {
+                    inclusive = true
+                }
+            }
+            authenticationViewModel.resetSignOutState()
+        }
+        if (state.isError.isNotEmpty()) {
+            // Error handling burada yapılabilir, örneğin bir hata mesajı gösterebilirsiniz.
+            Log.e("SettingsScreen", "Sign out failed: ${state.isError}")
+            authenticationViewModel.resetSignOutState()
+        }
+    }
 }
 
 
