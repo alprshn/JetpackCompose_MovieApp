@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.HorizontalPager
@@ -44,6 +45,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
@@ -61,7 +65,9 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
+import com.example.movieapp.R
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -76,15 +82,18 @@ import kotlin.math.absoluteValue
 @Composable
 fun SearchScreen(
     viewModel: MainViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
     val popularMovies = viewModel.popularMovies.collectAsLazyPagingItems()
     val pagerState = rememberPagerState(pageCount = { popularMovies.itemCount })
+    val selectedLanguage by settingsViewModel.selectedLanguage.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.popularMovies()
+    LaunchedEffect(selectedLanguage) {
+        Log.e("SearchScreen language", selectedLanguage.toString())
+        viewModel.popularMovies(settingsViewModel.getApiLanguage())
         Log.d("SearchScreen", "Loading popular movies...")
     }
     LaunchedEffect(pagerState) {
@@ -114,7 +123,8 @@ fun SearchScreen(
                     value = query.value,
                     onValueChange = {
                         query.value = it
-                        viewModel.search(query.value)
+                        Log.e("SearchScreen OutlinedTextField", selectedLanguage.toString())
+                        viewModel.search(query.value,settingsViewModel.getApiLanguage())
                     },
                     enabled = true,
                     singleLine = true,
@@ -126,7 +136,7 @@ fun SearchScreen(
                             modifier = Modifier.padding(start = 10.dp)
                         )
                     },
-                    placeholder = { Text(text = "Search Movie", color = searchTextColor) },
+                    placeholder = { Text(text = stringResource(id = R.string.search_movie), color = searchTextColor) },
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = bottomBarColor,
                         unfocusedBorderColor = bottomBarColor,
@@ -161,16 +171,35 @@ fun SearchScreen(
             }
 
             if (query.value.isEmpty()) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxWidth(),
-                    beyondBoundsPageCount = 3
-                ) { page ->
-                    popularMovies[page]?.let {
-                        PopularMovieItem(it, navController,pagerState,page)
-                    }
 
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    items(popularMovies.itemCount) { index ->
+                        popularMovies[index]?.let {
+                            Box(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(150.dp) // Resimleri küçültmek için boyutu belirtiyoruz
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable {
+                                        val movieJson = Uri.encode(Gson().toJson(it))
+                                        navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+                                    }
+                            ) {
+                                Image(
+                                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${it.poster_path}"),
+                                    contentScale = ContentScale.Crop,
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+                    }
                 }
+
 
 
                 popularMovies.apply {
@@ -183,7 +212,7 @@ fun SearchScreen(
                         }
 
                         loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
-                            Text(text = "Error loading popular movies")
+                            Text(text =stringResource(id = R.string.error_loading_movies))
                         }
 
                         loadState.refresh is LoadState.NotLoading -> {
@@ -215,7 +244,7 @@ fun SearchScreen(
 
                             loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
                                 item {
-                                    Text(text = "Error")
+                                    Text(text = stringResource(id = R.string.error))
                                 }
                             }
 
