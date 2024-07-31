@@ -320,6 +320,7 @@ fun SignUpScreen(
                                 inclusive = true
                             }
                         }
+                        viewModel.resetLoadingState()
                     }
                 }
             }
