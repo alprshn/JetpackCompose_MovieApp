@@ -1,6 +1,8 @@
 package com.example.movieapp.movieList.presentation.settings_screen
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.movieList.data.repository.DataStorePreferenceRepository
@@ -18,13 +20,13 @@ class SettingsViewModel @Inject constructor(
     private val _isDarkModeEnabled = MutableStateFlow(false)
     val isDarkModeEnabled: StateFlow<Boolean> get() = _isDarkModeEnabled
 
-    private val _selectedLanguage = MutableStateFlow("en")
-    val selectedLanguage: StateFlow<String> get() = _selectedLanguage
+    private val _language = MutableLiveData("en")
+    var language: LiveData<String> = _language
 
     init {
         viewModelScope.launch {
-            dataStorePreferenceRepository.getLanguage.collect { language ->
-                _selectedLanguage.value = language
+            dataStorePreferenceRepository.getLanguage.collect {
+                _language.value = it
             }
         }
     }
@@ -32,15 +34,12 @@ class SettingsViewModel @Inject constructor(
         _isDarkModeEnabled.value = !_isDarkModeEnabled.value
     }
 
-    fun setLanguage(languageCode: String) {
-        viewModelScope.launch {
-            dataStorePreferenceRepository.setLanguage(languageCode)
-            _selectedLanguage.value = languageCode
-            Log.e("selectedLanguage viewModel", languageCode)
-        }
+    suspend fun saveLanguage(language: String) {
+        dataStorePreferenceRepository.setLanguage(language.toString())
     }
+
     fun getApiLanguage(): String {
-        return when (_selectedLanguage.value) {
+        return when (_language.value) {
             "tr" -> "tr-TR"
             else -> "en-US"
         }

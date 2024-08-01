@@ -14,7 +14,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "La
 
 class DataStorePreferenceRepository(context: Context) {
     private val dataStore = context.dataStore
-    private val defaultLanguage = 1
+    private val defaultLanguage = "en"
 
     companion object {
         val PREF_LANGUAGE = stringPreferencesKey("language")
@@ -40,7 +40,7 @@ class DataStorePreferenceRepository(context: Context) {
 
     val getLanguage: Flow<String> = dataStore.data
         .map { preferences ->
-            preferences[PREF_LANGUAGE] ?: "en-US"
+            preferences[PREF_LANGUAGE] ?: defaultLanguage
         }
 }
 

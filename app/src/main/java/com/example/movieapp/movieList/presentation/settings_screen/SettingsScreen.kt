@@ -1,9 +1,12 @@
 package com.example.movieapp.movieList.presentation.settings_screen
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
+import android.os.LocaleList
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -51,10 +56,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.R
+import com.example.movieapp.movieList.data.repository.DataStorePreferenceRepository
 import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -77,11 +86,13 @@ fun SettingsScreen(
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     val context = LocalContext.current
 
-    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
-    val selectedLanguageLabel = languages.find { it.second == selectedLanguage }?.first ?: "Languages"
+    val currentLanguage = viewModel.language.observeAsState().value
+    val selectedLanguageLabel = languages.find { it.second == currentLanguage }?.first ?: "Languages"
+
+    // val selectedLanguageLabel =
+    //languages.find { it.second == selectedLanguage }?.first ?: "Languages"
     val state by authenticationViewModel.signOutState.collectAsState()
 
-    Log.e("selectedLanguage", selectedLanguage.toString())
 
 
     Scaffold(
@@ -224,13 +235,18 @@ fun SettingsScreen(
                                     DropdownMenuItem(
                                         text = { Text(label, color = Color.Black) },
                                         onClick = {
-                                            viewModel.setLanguage(code)
+                                            viewModel.viewModelScope.launch {
+                                                viewModel.saveLanguage(code)
+                                            }
+
                                             Log.e("selectedLanguage code", code.toString())
-                                            setLocale(context, code)
+
                                             mExpanded = false
                                             // Yeni dili uygulamak için aktiviteyi yeniden başlat
                                             navController.navigate(Screens.SettingsScreen.route) {
-                                                popUpTo(Screens.SettingsScreen.route) { inclusive = true }
+                                                popUpTo(Screens.SettingsScreen.route) {
+                                                    inclusive = true
+                                                }
                                             }
                                         }
                                     )
@@ -262,7 +278,7 @@ fun SettingsScreen(
                                     color = Color.White,
                                     modifier = Modifier.size(24.dp)
                                 )
-                            }else{
+                            } else {
                                 Text(
                                     text = stringResource(id = R.string.logout),
                                     fontWeight = FontWeight.Bold,
@@ -280,7 +296,7 @@ fun SettingsScreen(
             }
 
         },
-        )
+    )
 
     LaunchedEffect(key1 = state.isSuccess, key2 = state.isError) {
         if (state.isSuccess!!.isNotEmpty()) {
@@ -309,14 +325,13 @@ fun settingsScreenPreview() {
 }
 
 
-fun setLocale(context: Context, languageCode: String) {
+@Composable
+fun SetLanguage(languageCode: String) {
     val locale = Locale(languageCode)
-    Locale.setDefault(locale)
+    val configuration = LocalConfiguration.current
+    configuration.setLocale(locale)
+    val resources = LocalContext.current.resources
+    resources.updateConfiguration(configuration, resources.displayMetrics)
 
-    val resources = context.resources
-    val config = Configuration(resources.configuration)
-
-    config.setLocale(locale)
-
-    resources.updateConfiguration(config, resources.displayMetrics)
 }
+

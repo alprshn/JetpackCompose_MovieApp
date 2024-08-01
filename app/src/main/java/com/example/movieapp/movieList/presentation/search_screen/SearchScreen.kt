@@ -104,10 +104,10 @@ fun SearchScreen(
     val query: MutableState<String> = remember { mutableStateOf("") }
     val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
     val popularMovies = viewModel.popularMovies.collectAsLazyPagingItems()
-    val selectedLanguage by settingsViewModel.selectedLanguage.collectAsState()
+    val currentLanguage = settingsViewModel.language.observeAsState().value
 
-    LaunchedEffect(selectedLanguage) {
-        Log.e("SearchScreen language", selectedLanguage.toString())
+    LaunchedEffect(currentLanguage) {
+        Log.e("SearchScreen language", currentLanguage.toString())
         viewModel.popularMovies(settingsViewModel.getApiLanguage())
         Log.d("SearchScreen", "Loading popular movies...")
     }
@@ -143,7 +143,7 @@ fun SearchScreen(
                     value = query.value,
                     onValueChange = {
                         query.value = it
-                        Log.e("SearchScreen OutlinedTextField", selectedLanguage.toString())
+                        Log.e("SearchScreen OutlinedTextField", currentLanguage.toString())
                         viewModel.search(query.value, settingsViewModel.getApiLanguage())
                     },
                     enabled = true,
