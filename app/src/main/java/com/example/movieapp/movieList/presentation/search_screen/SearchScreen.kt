@@ -81,6 +81,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import com.example.movieapp.R
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.presentation.components.MovieRowList
+import com.example.movieapp.movieList.presentation.components.MovieSectionTitle
 import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.movieList.util.Screens
@@ -89,6 +91,7 @@ import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.latoFontFamily
 import com.example.movieapp.ui.theme.searchTextColor
 import com.example.movieapp.ui.theme.starColor
+import com.example.movieapp.ui.theme.whiteColor
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
@@ -150,7 +153,7 @@ fun SearchScreen(
                     singleLine = true,
                     leadingIcon = {
                         Icon(
-                            tint = Color.White,
+                            tint = whiteColor,
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search Icon",
                             modifier = Modifier.padding(start = 10.dp)
@@ -165,8 +168,8 @@ fun SearchScreen(
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = bottomBarColor,
                         unfocusedBorderColor = bottomBarColor,
-                        cursorColor = Color.White,
-                        focusedTextColor = Color.White,
+                        cursorColor = whiteColor,
+                        focusedTextColor = whiteColor,
                         disabledTextColor = searchTextColor,
                         containerColor = bottomBarColor,
                     ),
@@ -182,7 +185,7 @@ fun SearchScreen(
                     },
                     modifier = Modifier.size(56.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = Color.White,
+                        contentColor = whiteColor,
                         containerColor = bottomBarColor
                     )
                 ) {
@@ -190,7 +193,7 @@ fun SearchScreen(
                         imageVector = Icons.Default.Settings,
                         contentDescription = "Icon Button",
                         modifier = Modifier.size(24.dp),
-                        tint = Color.White,
+                        tint = whiteColor,
                     )
                 }
             }
@@ -198,130 +201,33 @@ fun SearchScreen(
             if (query.value.isEmpty()) {
                 LazyColumn {
                     item {
-                        Text(
-                            text = stringResource(id = R.string.popular_movies),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            fontFamily = latoFontFamily,
-                            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp)
+                        MovieRowList(
+                            title = stringResource(id = R.string.popular_movies),
+                            movies = popularMovies.itemSnapshotList.items,
+                            navController = navController
                         )
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp)
-                        ) {
-                            items(popularMovies.itemCount) { index ->
-                                popularMovies[index]?.let {
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                            .height(200.dp)
-                                            .width(130.dp)
-                                            .clip(RoundedCornerShape(8.dp))
-                                            .clickable {
-                                                val movieJson = Uri.encode(Gson().toJson(it))
-                                                navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-                                            }
-                                    ) {
-                                        Image(
-                                            painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${it.poster_path}"),
-                                            contentScale = ContentScale.FillHeight,
-                                            contentDescription = null,
-                                            modifier = Modifier.fillMaxSize()
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        Text(
-                            text = stringResource(id = R.string.favorites),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            fontFamily = latoFontFamily,
-                            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp)
+                        MovieRowList(
+                            title = stringResource(id = R.string.favorites),
+                            movies = favoriteMovies.map { MovieMapper().roomMapToResult(it) },
+                            navController = navController
                         )
-                        LazyRow(
-                            modifier = Modifier
-                                .background(backgroundColor)
-                                .padding(start = 8.dp),
-                        ) {
-                            items(favoriteMovies) { movie ->
-                                val movie = MovieMapper().roomMapToResult(movie)
-
-                                Box(
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .height(200.dp)
-                                        .width(130.dp)
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .clickable {
-                                            val movieJson = Uri.encode(Gson().toJson(movie))
-                                            navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-                                        }
-                                ) {
-                                    Image(
-                                        painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
-                                        contentScale = ContentScale.FillHeight,
-                                        contentDescription = null,
-                                        modifier = Modifier.fillMaxSize(),
-                                    )
-                                }
-
-                            }
-                        }
-                        Text(
-                            text = stringResource(id = R.string.watchlist),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 18.sp,
-                            color = Color.White,
-                            fontFamily = latoFontFamily,
-                            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp)
+                        MovieRowList(
+                            title = stringResource(id = R.string.watchlist),
+                            movies = watchlistMovies.map { MovieMapper().firestoreMapToResult(it) },
+                            navController = navController
                         )
-                        LazyRow(
-                            modifier = Modifier
-                                .background(backgroundColor)
-                                .padding(start = 8.dp),
-                        ) {
-                            items(watchlistMovies) { movieWatchlist ->
-                                val movieWatchlist =
-                                    MovieMapper().firestoreMapToResult(movieWatchlist)
-
-                                Box(
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .height(200.dp)
-                                        .width(130.dp)
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .clickable {
-                                            val movieJson =
-                                                Uri.encode(Gson().toJson(movieWatchlist))
-                                            navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-                                        }
-                                ) {
-                                    Image(
-                                        painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movieWatchlist.poster_path}"),
-                                        contentScale = ContentScale.FillHeight,
-                                        contentDescription = null,
-                                        modifier = Modifier.fillMaxSize()
-                                    )
-                                }
-
-                            }
-                        }
-
-
+                        MovieRowList(
+                            title = stringResource(id = R.string.comedy),
+                            movies = popularMovies.itemSnapshotList.items.filter { it.genre_ids.contains(35) },
+                            navController = navController
+                        )
                     }
                 }
-
-
-
                 popularMovies.apply {
                     when {
                         loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                             CircularProgressIndicator(
-                                color = Color.White,
+                                color = whiteColor,
                                 modifier = Modifier.size(58.dp)
                             )
                         }
@@ -350,7 +256,7 @@ fun SearchScreen(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         CircularProgressIndicator(
-                                            color = Color.White,
+                                            color = whiteColor,
                                             modifier = Modifier.size(58.dp)
                                         )
                                     }
@@ -409,7 +315,7 @@ fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(15.dp))
                     .height(275.dp)
-                    .background(Color.White)
+                    .background(whiteColor)
             ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
@@ -429,7 +335,7 @@ fun SearchMovieContentItem(movie: Result, navController: NavHostController) {
                 text = "${movie.title} (${releaseYear})",
                 modifier = Modifier
                     .padding(4.dp),
-                color = Color.White
+                color = whiteColor
             )
         }
 
