@@ -33,6 +33,7 @@
     <string name="email_verification_error">Unable to check email verification status. Please try again.</string>
     <string name="register_successful">Register Successful!</string>
     <string name="popular_movies">Popular Movies</string>
+    <string name="comedy">Comedy</string>
 
 
     <!-- Genre Strings -->

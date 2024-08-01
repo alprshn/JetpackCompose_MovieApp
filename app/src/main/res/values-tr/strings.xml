@@ -34,6 +34,7 @@
     <string name="email_verification_error">Email doğrulama durumu kontrol edilemedi. Lütfen tekrar deneyin.</string>
     <string name="register_successful">Kayıt Başarılı!</string>
     <string name="popular_movies">Popüler Filmler</string>
+    <string name="comedy">Komedi</string>
 
     <!-- Genre Strings -->
     <string name="genre_action">Aksiyon</string>
