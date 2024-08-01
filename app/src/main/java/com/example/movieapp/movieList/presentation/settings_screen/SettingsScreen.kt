@@ -68,7 +68,10 @@ import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewM
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
+import com.example.movieapp.ui.theme.colorBlack
+import com.example.movieapp.ui.theme.darkGreyColor
 import com.example.movieapp.ui.theme.latoFontFamily
+import com.example.movieapp.ui.theme.whiteColor
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -111,7 +114,7 @@ fun SettingsScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null,
-                    tint = Color(0xFFB0B0B0),
+                    tint = darkGreyColor,
                     modifier = Modifier
                         .size(40.dp)
                         .align(Alignment.CenterStart)
@@ -122,7 +125,7 @@ fun SettingsScreen(
                 Text(
                     text = stringResource(id = R.string.settings),
                     fontSize = 24.sp,
-                    color = Color.White,
+                    color = whiteColor,
                     fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier.align(Alignment.Center)
@@ -164,7 +167,7 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(id = R.string.dark_mode),
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
@@ -176,8 +179,8 @@ fun SettingsScreen(
                                     viewModel.toggleDarkMode()
                                 },
                                 colors = SwitchDefaults.colors(
-                                    checkedThumbColor = Color.White,
-                                    uncheckedThumbColor = Color.Gray
+                                    checkedThumbColor = whiteColor,
+                                    uncheckedThumbColor = darkGreyColor
                                 ),
                                 modifier = Modifier
                                     .align(Alignment.CenterVertically)
@@ -209,7 +212,7 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(id = R.string.languages),
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
@@ -219,7 +222,7 @@ fun SettingsScreen(
                             Text(
                                 text = selectedLanguageLabel,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .padding(vertical = 2.dp)
@@ -233,7 +236,7 @@ fun SettingsScreen(
                             ) {
                                 languages.forEach { (label, code) ->
                                     DropdownMenuItem(
-                                        text = { Text(label, color = Color.Black) },
+                                        text = { Text(label, color = colorBlack) },
                                         onClick = {
                                             viewModel.viewModelScope.launch {
                                                 viewModel.saveLanguage(code)
@@ -275,14 +278,14 @@ fun SettingsScreen(
                         ) {
                             if (state.isLoading) {
                                 CircularProgressIndicator(
-                                    color = Color.White,
+                                    color = whiteColor,
                                     modifier = Modifier.size(24.dp)
                                 )
                             } else {
                                 Text(
                                     text = stringResource(id = R.string.logout),
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.White,
+                                    color = whiteColor,
                                     fontSize = 18.sp,
                                     modifier = Modifier
                                         .padding(horizontal = 4.dp)

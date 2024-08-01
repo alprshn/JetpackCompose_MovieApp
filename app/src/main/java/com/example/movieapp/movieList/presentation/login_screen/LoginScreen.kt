@@ -57,7 +57,9 @@ import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
+import com.example.movieapp.ui.theme.buttonColor
 import com.example.movieapp.ui.theme.latoFontFamily
+import com.example.movieapp.ui.theme.whiteColor
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -140,7 +142,7 @@ fun LoginScreen(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                 fontSize = 18.sp,
                 fontFamily = latoFontFamily,
-                color = Color.White,
+                color = whiteColor,
                 fontWeight = FontWeight.Bold
             )
             OutlinedTextField(
@@ -217,18 +219,18 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(50.dp)
                     .clip(RoundedCornerShape(6.dp))
-                    .background(Color(0xFF0982C3)),
-                colors = ButtonDefaults.buttonColors(Color(0xFF0982C3))
+                    .background(buttonColor),
+                colors = ButtonDefaults.buttonColors(buttonColor)
             ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = whiteColor,
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
                     Text(
                         text = stringResource(id = R.string.sign_in),
-                        color = Color.White,
+                        color = whiteColor,
                         fontSize = 18.sp,
                         fontFamily = latoFontFamily
                     )
@@ -238,13 +240,13 @@ fun LoginScreen(
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = stringResource(id = R.string.no_account),
-                    color = Color.White,
+                    color = whiteColor,
                     fontSize = 16.sp, fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal
                 )
                 Text(
                     text = stringResource(id = R.string.signup),
-                    color = Color(0xFF0982C3),
+                    color = buttonColor,
                     fontSize = 16.sp,
                     modifier = Modifier.clickable {
                         navController.navigate(Screens.SignUpScreen.route) {

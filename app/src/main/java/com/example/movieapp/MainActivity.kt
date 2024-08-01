@@ -12,6 +12,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
@@ -56,7 +58,9 @@ class MainActivity : ComponentActivity() {
             val currentLanguage = settingsViewModel.language.observeAsState(initial = "en")
             currentLanguage.value?.let { SetLanguage(it) }
 
-            MovieAppTheme {
+
+
+            MovieAppTheme() {
                 val window = window
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 val insetsController = WindowInsetsControllerCompat(window, window.decorView)

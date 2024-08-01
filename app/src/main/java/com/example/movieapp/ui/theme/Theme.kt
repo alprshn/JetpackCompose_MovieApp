@@ -14,23 +14,40 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
+    background = backgroundColor,
+    surface = bottomBarColor,
+    onPrimary = whiteColor,
+    onSecondary = whiteColor,
+    onTertiary = whiteColor,
+    onBackground = searchTextColor,
+    onSurface = bottomBarSelectedItemColor,
+    primaryContainer = bottomBarUnSelectedItemColor,
+    secondaryContainer = darkGreyColor,
+    tertiaryContainer = starColor,
+    surfaceTint = buttonColor,
+    inverseSurface = colorBlack,
+    inversePrimary = releaseDateColor
 )
 
+// Light Color Scheme
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiary = Pink40,
+    background = backgroundColorLight,
+    surface = bottomBarColorLight,
+    onPrimary = colorBlackLight,
+    onSecondary = colorBlackLight,
+    onTertiary = colorBlackLight,
+    onBackground = searchTextColorLight,
+    onSurface = bottomBarSelectedItemColorLight,
+    primaryContainer = bottomBarUnSelectedItemColorLight,
+    secondaryContainer = darkGreyColorLight,
+    tertiaryContainer = starColorLight,
+    surfaceTint = buttonColorLight,
+    inverseSurface = whiteColorLight,
+    inversePrimary = releaseDateColorLight
 )
 
 @Composable

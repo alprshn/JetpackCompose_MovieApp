@@ -56,7 +56,9 @@ import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.latoFontFamily
+import com.example.movieapp.ui.theme.releaseDateColor
 import com.example.movieapp.ui.theme.starColor
+import com.example.movieapp.ui.theme.whiteColor
 
 
 @Composable
@@ -128,7 +130,7 @@ fun DetailScreen(
                         Text(
                             text = String.format("%.1f", movie.vote_average),
                             fontSize = 18.sp,
-                            color = Color.White,
+                            color = whiteColor,
                             fontFamily = latoFontFamily
                         )
                     }
@@ -266,7 +268,7 @@ fun DetailScreen(
                         modifier = Modifier.padding(bottom = 16.dp),
                         text = movie.original_title,
                         fontSize = 25.sp,
-                        color = Color.White,
+                        color = whiteColor,
                         fontFamily = latoFontFamily
                     )
                     Column(
@@ -293,7 +295,7 @@ fun DetailScreen(
                                 text = stringResource(id = R.string.release_date),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontFamily = latoFontFamily,
                                 modifier = Modifier.padding(end = 30.dp)
                             )
@@ -301,7 +303,7 @@ fun DetailScreen(
                                 text = movie.release_date,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
-                                color = Color(0xFFBCBCBC),
+                                color = releaseDateColor,
                                 fontFamily = latoFontFamily
                             )
                         }
@@ -310,7 +312,7 @@ fun DetailScreen(
                                 text = stringResource(id = R.string.genre),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontFamily = latoFontFamily
                             )
                             Text(
@@ -319,7 +321,7 @@ fun DetailScreen(
                                     .joinToString(", "),
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontFamily = latoFontFamily
                             )
                         }
@@ -328,7 +330,7 @@ fun DetailScreen(
                         text = stringResource(id = R.string.about_movie),
                         fontWeight = FontWeight.Medium,
                         fontSize = 18.sp,
-                        color = Color.White,
+                        color = whiteColor,
                         modifier = Modifier.padding(bottom = 16.dp),
                         fontFamily = latoFontFamily
                     )
@@ -338,7 +340,7 @@ fun DetailScreen(
                                 text = movie.overview,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
-                                color = Color.White,
+                                color = whiteColor,
                                 fontFamily = latoFontFamily
                             )
                         }
