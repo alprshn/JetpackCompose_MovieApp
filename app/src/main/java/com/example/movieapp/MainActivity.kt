@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -50,17 +51,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
+        var darkMode by mutableStateOf(true)
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel(
                 factory = DataStoreViewModelFactory(DataStorePreferenceRepository(this))
             )
             val currentLanguage = settingsViewModel.language.observeAsState(initial = "en")
             currentLanguage.value?.let { SetLanguage(it) }
+            val isDarkModeEnabled by settingsViewModel.isDarkModeEnabled.collectAsState()
 
 
 
-            MovieAppTheme() {
+            MovieAppTheme(darkTheme = isDarkModeEnabled) {
                 val window = window
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 val insetsController = WindowInsetsControllerCompat(window, window.decorView)
