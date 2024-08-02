@@ -35,6 +35,7 @@
     <string name="register_successful">Kayıt Başarılı!</string>
     <string name="popular_movies">Popüler Filmler</string>
     <string name="comedy">Komedi</string>
+    <string name="home">Ana Sayfa</string>
 
     <!-- Genre Strings -->
     <string name="genre_action">Aksiyon</string>
