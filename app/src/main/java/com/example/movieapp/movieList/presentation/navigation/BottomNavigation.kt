@@ -40,7 +40,7 @@ fun BottomNavigation(
 
             NavigationBarItem(
                 label = {
-                    Text(text = screen.title!!)
+                    Text(text = screen.title?.invoke() ?: "")
                 },
                 icon = {
                     Icon(imageVector = screen.icon!!, contentDescription = "")
