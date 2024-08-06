@@ -1,5 +1,3 @@
-
-
 package com.example.movieapp.movieList.presentation.detail_screen
 
 import androidx.compose.foundation.Image
@@ -28,6 +26,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,6 +51,7 @@ import com.example.movieapp.R
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.presentation.components.DetailMovieCardText
 import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
@@ -105,7 +105,7 @@ fun DetailScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null,
-                    tint = Color(0xFFB0B0B0),
+                    tint = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier
                         .size(40.dp)
                         .clickable {
@@ -114,7 +114,7 @@ fun DetailScreen(
 
                 Box(
                     modifier = Modifier
-                        .background(Color(0xFFB0B0B0), shape = RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(16.dp))
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Row(
@@ -124,14 +124,14 @@ fun DetailScreen(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = starColor,
-                            modifier = Modifier.size(24.dp).padding(end = 2.dp)
+                            tint = MaterialTheme.colorScheme.tertiaryContainer,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(end = 2.dp)
                         )
-                        Text(
+                        DetailMovieCardText(
                             text = String.format("%.1f", movie.vote_average),
-                            fontSize = 18.sp,
-                            color = whiteColor,
-                            fontFamily = latoFontFamily
+                            Modifier
                         )
                     }
                 }
@@ -143,7 +143,7 @@ fun DetailScreen(
         floatingActionButton = {
             Row(
                 modifier = Modifier
-                    .background(color = bottomBarColor, shape = RoundedCornerShape(50))
+                    .background(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(50))
                     .padding(8.dp)
                     .width(200.dp)
                     .height(50.dp),
@@ -189,7 +189,7 @@ fun DetailScreen(
                         Icon(
                             imageVector = if (currentFavoriteState) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = "Favorite",
-                            tint = if (currentFavoriteState) Color.Red else Color.Gray,
+                            tint = if (currentFavoriteState) Color.Red else MaterialTheme.colorScheme.secondaryContainer,
                             modifier = Modifier.size(48.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -199,7 +199,7 @@ fun DetailScreen(
                     modifier = Modifier
                         .width(1.dp)
                         .height(40.dp)
-                        .background(Color.Gray)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                 )
                 IconButton(
                     onClick = {
@@ -239,7 +239,7 @@ fun DetailScreen(
                         Icon(
                             imageVector = if (currentWatchlistState) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                             contentDescription = "Watchlist",
-                            tint = if (currentWatchlistState) Color.Blue else Color.Gray,
+                            tint = if (currentWatchlistState) Color.Blue else MaterialTheme.colorScheme.secondaryContainer,
                             modifier = Modifier.size(48.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -256,7 +256,7 @@ fun DetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-                    .background(backgroundColor)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
 
                 Column(
@@ -268,7 +268,7 @@ fun DetailScreen(
                         modifier = Modifier.padding(bottom = 16.dp),
                         text = movie.original_title,
                         fontSize = 25.sp,
-                        color = whiteColor,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontFamily = latoFontFamily
                     )
                     Column(
@@ -280,7 +280,7 @@ fun DetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(1.dp)
-                                .background(Color.Gray)
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
                         )
                     }
                     Row(
@@ -291,29 +291,22 @@ fun DetailScreen(
                     ) {
                         Column(
                         ) {
-                            Text(
+                            DetailMovieCardText(
                                 text = stringResource(id = R.string.release_date),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp,
-                                color = whiteColor,
-                                fontFamily = latoFontFamily,
                                 modifier = Modifier.padding(end = 30.dp)
                             )
                             Text(
                                 text = movie.release_date,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
-                                color = releaseDateColor,
+                                color = MaterialTheme.colorScheme.inversePrimary,
                                 fontFamily = latoFontFamily
                             )
                         }
                         Column() {
-                            Text(
+                            DetailMovieCardText(
                                 text = stringResource(id = R.string.genre),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp,
-                                color = whiteColor,
-                                fontFamily = latoFontFamily
+                                modifier = Modifier
                             )
                             Text(
                                 text = movie.getGenreIds()
@@ -321,18 +314,14 @@ fun DetailScreen(
                                     .joinToString(", "),
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
-                                color = whiteColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontFamily = latoFontFamily
                             )
                         }
                     }
-                    Text(
+                    DetailMovieCardText(
                         text = stringResource(id = R.string.about_movie),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 18.sp,
-                        color = whiteColor,
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        fontFamily = latoFontFamily
+                        modifier = Modifier.padding(bottom = 16.dp)
                     )
                     LazyColumn(modifier = Modifier.padding(bottom = 50.dp)) {
                         item {
@@ -340,7 +329,7 @@ fun DetailScreen(
                                 text = movie.overview,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
-                                color = whiteColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontFamily = latoFontFamily
                             )
                         }

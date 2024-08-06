@@ -25,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -54,6 +55,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.R
+import com.example.movieapp.movieList.presentation.components.MovieButton
+import com.example.movieapp.movieList.presentation.components.MovieLoginText
+import com.example.movieapp.movieList.presentation.components.MovieTextField
 import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
@@ -87,7 +91,7 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -107,66 +111,29 @@ fun LoginScreen(
                     fontSize = 45.sp,
                     fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
-            Text(
-                text = stringResource(id = R.string.email),
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                fontSize = 18.sp,
-                fontFamily = latoFontFamily,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-            OutlinedTextField(
+            MovieLoginText(stringResource(id = R.string.password))
+            MovieTextField(
                 value = email.value.trim(),
                 onValueChange = { email.value = it },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(6.dp)
-                    ),
-                placeholder = { Text(stringResource(id = R.string.email)) },
+                placeholder = stringResource(id = R.string.email),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                isError = emailError,
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    focusedIndicatorColor = if (emailError) Color.Red else Color(0xFF0982C3),
-                    unfocusedIndicatorColor = if (emailError) Color.Red else Color.Gray
-                )
+                error = emailError,
+                trailingIcon = null,
+                visualTransformation = VisualTransformation.None
             )
-            Text(
-                text = stringResource(id = R.string.password),
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                fontSize = 18.sp,
-                fontFamily = latoFontFamily,
-                color = whiteColor,
-                fontWeight = FontWeight.Bold
-            )
-            OutlinedTextField(
+            MovieLoginText(stringResource(id = R.string.password))
+            MovieTextField(
                 value = password.value.trim(),
                 onValueChange = { password.value = it },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(6.dp)),
-                placeholder = { Text(stringResource(id = R.string.password)) },
-                isError = passwordError,
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    focusedIndicatorColor = if (passwordError) Color.Red else Color(0xFF0982C3),
-                    unfocusedIndicatorColor = if (passwordError) Color.Red else Color.Gray
-                ),
+                placeholder = stringResource(id = R.string.password),
+                error = passwordError,
                 visualTransformation = if (showPassword) {
-
                     VisualTransformation.None
-
                 } else {
-
                     PasswordVisualTransformation()
-
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
@@ -197,56 +164,34 @@ fun LoginScreen(
                     fontFamily = latoFontFamily
                 )
             }
-
-            Button(
-                onClick = {
-                    emailError = email.value.isEmpty()
-                    passwordError = password.value.isEmpty()
-                    if (!emailError && !passwordError) {
-                        viewModel.loginUser(
-                            email = email.value,
-                            password = password.value,
-                            emailVerificationErrorMessage = emailVerificationErrorMessage,
-                            loginErrorMessage = loginErrorMessage,
-                            emailVerificationMessage = emailVerificationMessage,
-                        )
-                    } else {
-                        errorMessage = emailPasswordEmptyMessage
-                    }
-                },
-                modifier = Modifier
-                    .padding(40.dp)
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                    .background(buttonColor),
-                colors = ButtonDefaults.buttonColors(buttonColor)
-            ) {
-                if (state.isLoading) {
-                    CircularProgressIndicator(
-                        color = whiteColor,
-                        modifier = Modifier.size(24.dp)
+            MovieButton(onClick = {
+                emailError = email.value.isEmpty()
+                passwordError = password.value.isEmpty()
+                if (!emailError && !passwordError) {
+                    viewModel.loginUser(
+                        email = email.value,
+                        password = password.value,
+                        emailVerificationErrorMessage = emailVerificationErrorMessage,
+                        loginErrorMessage = loginErrorMessage,
+                        emailVerificationMessage = emailVerificationMessage,
                     )
                 } else {
-                    Text(
-                        text = stringResource(id = R.string.sign_in),
-                        color = whiteColor,
-                        fontSize = 18.sp,
-                        fontFamily = latoFontFamily
-                    )
+                    errorMessage = emailPasswordEmptyMessage
                 }
+            }, isLoading = state.isLoading, text = stringResource(id = R.string.sign_in))
 
-            }
+
+
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = stringResource(id = R.string.no_account),
-                    color = whiteColor,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.sp, fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal
                 )
                 Text(
                     text = stringResource(id = R.string.signup),
-                    color = buttonColor,
+                    color = MaterialTheme.colorScheme.surfaceTint,
                     fontSize = 16.sp,
                     modifier = Modifier.clickable {
                         navController.navigate(Screens.SignUpScreen.route) {
