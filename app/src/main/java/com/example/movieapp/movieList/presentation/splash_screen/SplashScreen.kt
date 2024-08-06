@@ -27,8 +27,6 @@ fun SplashScreen(navController: NavController, viewModel: AuthenticationViewMode
 
     val authValue by viewModel.isUserAuthenticated.collectAsState()
 
-    val scale = remember { androidx.compose.animation.core.Animatable(0f) }
-
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.Url("https://lottie.host/7b919bcd-15c2-4360-98fb-97ded08c9f28/QY6HPNAWcp.json"))
 
     Box(

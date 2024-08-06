@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,17 +71,17 @@ fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = backgroundColor
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(backgroundColor),
+                .background(MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.watchlist),
-                color = whiteColor,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Normal,
                 fontFamily = latoFontFamily,
@@ -89,7 +90,7 @@ fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: N
 
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                modifier = Modifier.background(backgroundColor),
+                modifier = Modifier.background(MaterialTheme.colorScheme.background),
             ) {
                 items(watchlistMovies) { movie ->
                     val movie = MovieMapper().firestoreMapToResult(movie)

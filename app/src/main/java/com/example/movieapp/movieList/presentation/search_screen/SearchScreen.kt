@@ -45,6 +45,7 @@
     import androidx.compose.material3.Icon
     import androidx.compose.material3.IconButton
     import androidx.compose.material3.IconButtonDefaults
+    import androidx.compose.material3.MaterialTheme
     import androidx.compose.material3.OutlinedTextField
     import androidx.compose.material3.Surface
 
@@ -129,7 +130,7 @@
         Surface(
             modifier = Modifier
                 .fillMaxSize(),
-            color = backgroundColor
+            color = MaterialTheme.colorScheme.background
         ) {
             Column(
                 modifier = Modifier
@@ -140,7 +141,7 @@
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+                        .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 10.dp),
                 ) {
                     OutlinedTextField(
                         value = query.value,
@@ -153,7 +154,7 @@
                         singleLine = true,
                         leadingIcon = {
                             Icon(
-                                tint = whiteColor,
+                                tint = MaterialTheme.colorScheme.onPrimary,
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Search Icon",
                                 modifier = Modifier.padding(start = 10.dp)
@@ -162,16 +163,16 @@
                         placeholder = {
                             Text(
                                 text = stringResource(id = R.string.search_movie),
-                                color = searchTextColor
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = bottomBarColor,
-                            unfocusedBorderColor = bottomBarColor,
-                            cursorColor = whiteColor,
-                            focusedTextColor = whiteColor,
-                            disabledTextColor = searchTextColor,
-                            containerColor = bottomBarColor,
+                            focusedBorderColor = MaterialTheme.colorScheme.surface,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.surface,
+                            cursorColor = MaterialTheme.colorScheme.onPrimary,
+                            focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+                            containerColor = MaterialTheme.colorScheme.surface,
                         ),
                         shape = RoundedCornerShape(30.dp),
                         modifier = Modifier
@@ -185,15 +186,15 @@
                         },
                         modifier = Modifier.size(56.dp),
                         colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = whiteColor,
-                            containerColor = bottomBarColor
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.surface
                         )
                     ) {
                         Icon(
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Icon Button",
                             modifier = Modifier.size(24.dp),
-                            tint = whiteColor,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
                 }
@@ -227,7 +228,7 @@
                         when {
                             loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                                 CircularProgressIndicator(
-                                    color = whiteColor,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(58.dp)
                                 )
                             }
@@ -256,7 +257,7 @@
                                             contentAlignment = Alignment.Center
                                         ) {
                                             CircularProgressIndicator(
-                                                color = whiteColor,
+                                                color = MaterialTheme.colorScheme.onPrimary,
                                                 modifier = Modifier.size(58.dp)
                                             )
                                         }
@@ -302,20 +303,20 @@
                     Log.e("MovieJson", movieJson)
                     navController.navigate(Screens.DetailScreen.route + "/$movieJson")
                 },
-            colors = CardDefaults.cardColors(containerColor = backgroundColor)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
 
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(backgroundColor)
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(15.dp))
                         .height(275.dp)
-                        .background(whiteColor)
+                        .background(MaterialTheme.colorScheme.onPrimary)
                 ) {
                     Image(
                         painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
@@ -335,7 +336,7 @@
                     text = "${movie.title} (${releaseYear})",
                     modifier = Modifier
                         .padding(4.dp),
-                    color = whiteColor
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
 

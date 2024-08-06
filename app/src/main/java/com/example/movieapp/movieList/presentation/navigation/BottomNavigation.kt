@@ -1,6 +1,7 @@
 package com.example.movieapp.movieList.presentation.navigation
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -31,7 +32,7 @@ fun BottomNavigation(
 
     NavigationBar(
         modifier = modifier,
-        containerColor = bottomBarColor,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -56,10 +57,10 @@ fun BottomNavigation(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedTextColor = bottomBarUnSelectedItemColor,
-                    selectedTextColor = bottomBarSelectedItemColor,
-                    unselectedIconColor = bottomBarUnSelectedItemColor,
-                    selectedIconColor = bottomBarSelectedItemColor,
+                    unselectedTextColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unselectedIconColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedIconColor = MaterialTheme.colorScheme.onSurface,
                     indicatorColor = bottomBarIndicatorColor
                 ),
             )

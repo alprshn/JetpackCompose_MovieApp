@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -65,8 +66,7 @@ class MainActivity : ComponentActivity() {
                 val window = window
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-                window.statusBarColor =
-                    backgroundColor.toArgb()
+                window.statusBarColor = MaterialTheme.colorScheme.background.toArgb()
                 insetsController.isAppearanceLightStatusBars = false
 
                 Surface {
@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .padding(paddingValues)
-                                .background(backgroundColor)
+                                .background(MaterialTheme.colorScheme.background)
                         ) {
                             NavigationHost(navController = navController)
                         }

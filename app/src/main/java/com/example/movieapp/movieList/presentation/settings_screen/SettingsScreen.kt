@@ -104,9 +104,9 @@ fun SettingsScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor),
-        containerColor = backgroundColor,
-        contentColor = backgroundColor,
+            .background(MaterialTheme.colorScheme.background),
+        containerColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.background,
         topBar = {
             Box(
                 modifier = Modifier
@@ -117,7 +117,7 @@ fun SettingsScreen(
                 Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = null,
-                    tint = darkGreyColor,
+                    tint = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier
                         .size(40.dp)
                         .align(Alignment.CenterStart)
@@ -128,7 +128,7 @@ fun SettingsScreen(
                 Text(
                     text = stringResource(id = R.string.settings),
                     fontSize = 24.sp,
-                    color = whiteColor,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontFamily = latoFontFamily,
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier.align(Alignment.Center)
@@ -138,7 +138,7 @@ fun SettingsScreen(
         },
         content = {
             Surface(
-                color = backgroundColor,
+                color = MaterialTheme.colorScheme.background,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
@@ -162,7 +162,7 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .background(bottomBarColor)
+                                .background(MaterialTheme.colorScheme.surface)
                                 .fillMaxSize(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -170,7 +170,7 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(id = R.string.dark_mode),
                                 fontWeight = FontWeight.Bold,
-                                color = whiteColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
@@ -196,7 +196,7 @@ fun SettingsScreen(
 
                     }
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = bottomBarColor),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 7.dp, horizontal = 6.dp)
@@ -209,7 +209,7 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .background(bottomBarColor)
+                                .background(MaterialTheme.colorScheme.surface)
                                 .fillMaxHeight(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -217,7 +217,7 @@ fun SettingsScreen(
                             Text(
                                 text = stringResource(id = R.string.languages),
                                 fontWeight = FontWeight.Bold,
-                                color = whiteColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .padding(horizontal = 4.dp)
@@ -227,7 +227,7 @@ fun SettingsScreen(
                             Text(
                                 text = selectedLanguageLabel,
                                 fontWeight = FontWeight.Bold,
-                                color = whiteColor,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontSize = 18.sp,
                                 modifier = Modifier
                                     .padding(vertical = 2.dp)
@@ -241,7 +241,7 @@ fun SettingsScreen(
                             ) {
                                 languages.forEach { (label, code) ->
                                     DropdownMenuItem(
-                                        text = { Text(label, color = colorBlack) },
+                                        text = { Text(label, color = MaterialTheme.colorScheme.onPrimary) },
                                         onClick = {
                                             viewModel.viewModelScope.launch {
                                                 viewModel.saveLanguage(code)
@@ -263,7 +263,7 @@ fun SettingsScreen(
                         }
                     }
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = bottomBarColor),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 7.dp, horizontal = 6.dp)
@@ -276,21 +276,21 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .padding(8.dp)
-                                .background(bottomBarColor)
+                                .background(MaterialTheme.colorScheme.surface)
                                 .fillMaxHeight(), // Dikeyde tam yüksekliği kapla ,
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             if (state.isLoading) {
                                 CircularProgressIndicator(
-                                    color = whiteColor,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier.size(24.dp)
                                 )
                             } else {
                                 Text(
                                     text = stringResource(id = R.string.logout),
                                     fontWeight = FontWeight.Bold,
-                                    color = whiteColor,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontSize = 18.sp,
                                     modifier = Modifier
                                         .padding(horizontal = 4.dp)

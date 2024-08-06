@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,10 +33,10 @@ import com.google.gson.Gson
 @Composable
 fun MovieCard(navController: NavHostController,movie: Result) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundColor)
+            .background(MaterialTheme.colorScheme.background)
             .padding(vertical = 4.dp)
             .clickable {
                 val movieJson = Uri.encode(Gson().toJson(movie))
@@ -46,13 +47,13 @@ fun MovieCard(navController: NavHostController,movie: Result) {
             modifier = Modifier
                 .padding(8.dp)
                 .height(200.dp)
-                .background(backgroundColor)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
                     .width(130.dp)
-                    .background(darkGreyColor)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
             ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
