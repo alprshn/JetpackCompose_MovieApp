@@ -13,13 +13,13 @@ val Pink40 = Color(0xFF7D5260)
 
 //Dark Mode
 val bottomBarColor = Color(0xFF242A32)
-val bottomBarSelectedItemColor= Color(0xFF0296E5)
-val bottomBarUnSelectedItemColor= Color(0xFF67686D)
-val backgroundColor= Color(0xFF383950)
+val bottomBarSelectedItemColor = Color(0xFF0296E5)
+val bottomBarUnSelectedItemColor = Color(0xFF67686D)
+val backgroundColor = Color(0xFF383950)
 val bottomBarIndicatorColor = Color.Transparent
-val searchTextColor =Color(0xFFBBBBBB)
+val searchTextColor = Color(0xFFBBBBBB)
 val starColor = Color(0xFFFF8700)
-val releaseDateColor =Color(0xFFBCBCBC)
+val releaseDateColor = Color(0xFFBCBCBC)
 val whiteColor = Color.White
 val darkGreyColor = Color.DarkGray
 val buttonColor = Color(0xFF0982C3)
@@ -34,7 +34,52 @@ val bottomBarIndicatorColorLight = Color.Transparent // Şeffaf renk aynı kalı
 val searchTextColorLight = Color(0xFF333333) // Çok koyu bir gri, okunabilirliği artırmak için
 val starColorLight = Color(0xFF0057A3) // Derin bir mavi
 val releaseDateColorLight = Color(0xFF545454) // Orta ton gri
-val whiteColorLight = Color(0xFFFCFCFC) // Neredeyse beyaz
+val whiteColorLight = Color(0xFF000000) // Neredeyse beyaz
 val darkGreyColorLight = Color(0xFFB8B8B8) // Açık gri
 val buttonColorLight = Color(0xFFE94E77) // Canlı bir pembe-kırmızı
 val colorBlackLight = Color(0xFFDEDEDE) // Hafif gri ton
+
+sealed class ThemeColors(
+    val bottomBarColor: Color,
+    val bottomBarSelectedItemColor: Color,
+    val bottomBarUnSelectedItemColor: Color,
+    val backgroundColor: Color,
+    val bottomBarIndicatorColor: Color,
+    val searchTextColor: Color,
+    val starColor: Color,
+    val releaseDateColor: Color,
+    val whiteColor: Color,
+    val darkGreyColor: Color,
+    val buttonColor: Color,
+    val colorBlack: Color
+) {
+    object DarkTheme : ThemeColors(
+        bottomBarColor = bottomBarColor,
+        bottomBarSelectedItemColor = bottomBarSelectedItemColor,
+        bottomBarUnSelectedItemColor = bottomBarUnSelectedItemColor,
+        backgroundColor = backgroundColor,
+        bottomBarIndicatorColor = bottomBarIndicatorColor,
+        searchTextColor = searchTextColor,
+        starColor = starColor,
+        releaseDateColor = releaseDateColor,
+        whiteColor = whiteColor,
+        darkGreyColor = darkGreyColor,
+        buttonColor = buttonColor,
+        colorBlack = colorBlack
+    )
+
+    object LightTheme : ThemeColors(
+        bottomBarColor = bottomBarColorLight,
+        bottomBarSelectedItemColor = bottomBarSelectedItemColorLight,
+        bottomBarUnSelectedItemColor = bottomBarUnSelectedItemColorLight,
+        backgroundColor = backgroundColorLight,
+        bottomBarIndicatorColor = bottomBarIndicatorColorLight,
+        searchTextColor = searchTextColorLight,
+        starColor = starColorLight,
+        releaseDateColor = releaseDateColorLight,
+        whiteColor = whiteColorLight,
+        darkGreyColor = darkGreyColorLight,
+        buttonColor = buttonColorLight,
+        colorBlack = colorBlackLight
+    )
+}
