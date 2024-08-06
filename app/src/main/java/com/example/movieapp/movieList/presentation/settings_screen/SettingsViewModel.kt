@@ -25,13 +25,22 @@ class SettingsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            dataStorePreferenceRepository.getDarkModeEnabled.collect {
+                _isDarkModeEnabled.value = it
+            }
+        }
+        viewModelScope.launch {
             dataStorePreferenceRepository.getLanguage.collect {
                 _language.value = it
             }
         }
     }
     fun toggleDarkMode() {
-        _isDarkModeEnabled.value = !_isDarkModeEnabled.value
+        viewModelScope.launch {
+            val newMode = !_isDarkModeEnabled.value
+            _isDarkModeEnabled.value = newMode // Yeni dark mode değerini güncelle
+            dataStorePreferenceRepository.setDarkModeEnabled(newMode)
+        }
     }
 
     suspend fun saveLanguage(language: String) {

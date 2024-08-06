@@ -29,6 +29,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -82,9 +83,11 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     authenticationViewModel: AuthenticationViewModel = hiltViewModel()
 ) {
+
     val isChecked by viewModel.isDarkModeEnabled.collectAsState()
     var mExpanded by remember { mutableStateOf(false) }
 
+    Log.e("isChecked", isChecked.toString())
     val languages = listOf("English" to "en", "Türkçe" to "tr")
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
     val context = LocalContext.current
@@ -147,7 +150,7 @@ fun SettingsScreen(
                 ) {
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = bottomBarColor),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 7.dp, horizontal = 6.dp)
@@ -175,8 +178,10 @@ fun SettingsScreen(
                             )
                             Switch(
                                 checked = isChecked,
-                                onCheckedChange = {
-                                    viewModel.toggleDarkMode()
+                                onCheckedChange = { isCheckedNew ->
+                                    if (isChecked != isCheckedNew) { // Yalnızca değer değişirse işlem yap
+                                        viewModel.toggleDarkMode()
+                                    }
                                 },
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = whiteColor,

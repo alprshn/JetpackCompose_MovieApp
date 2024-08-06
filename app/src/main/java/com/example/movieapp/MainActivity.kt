@@ -1,6 +1,7 @@
 package com.example.movieapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -51,7 +52,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        var darkMode by mutableStateOf(true)
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel(
                 factory = DataStoreViewModelFactory(DataStorePreferenceRepository(this))
@@ -59,7 +59,6 @@ class MainActivity : ComponentActivity() {
             val currentLanguage = settingsViewModel.language.observeAsState(initial = "en")
             currentLanguage.value?.let { SetLanguage(it) }
             val isDarkModeEnabled by settingsViewModel.isDarkModeEnabled.collectAsState()
-
 
 
             MovieAppTheme(darkTheme = isDarkModeEnabled) {

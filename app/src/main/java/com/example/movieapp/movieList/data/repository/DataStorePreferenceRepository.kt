@@ -18,6 +18,7 @@ class DataStorePreferenceRepository(context: Context) {
 
     companion object {
         val PREF_LANGUAGE = stringPreferencesKey("language")
+        private val PREF_DARK_MODE = stringPreferencesKey("dark_mode")
         private var INSTANCE: DataStorePreferenceRepository? = null
 
         fun getInstance(context: Context): DataStorePreferenceRepository {
@@ -41,6 +42,17 @@ class DataStorePreferenceRepository(context: Context) {
     val getLanguage: Flow<String> = dataStore.data
         .map { preferences ->
             preferences[PREF_LANGUAGE] ?: defaultLanguage
+        }
+
+    suspend fun setDarkModeEnabled(enabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[PREF_DARK_MODE] = enabled.toString()
+        }
+    }
+
+    val getDarkModeEnabled: Flow<Boolean> = dataStore.data
+        .map { preferences ->
+            preferences[PREF_DARK_MODE]?.toBoolean() ?: false
         }
 }
 
