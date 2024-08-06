@@ -69,6 +69,7 @@
     import androidx.compose.ui.graphics.Color
     import androidx.compose.ui.graphics.graphicsLayer
     import androidx.compose.ui.layout.ContentScale
+    import androidx.compose.ui.platform.LocalConfiguration
     import androidx.compose.ui.res.stringResource
     import androidx.compose.ui.text.font.FontWeight
     import androidx.compose.ui.unit.dp
@@ -105,6 +106,8 @@
         settingsViewModel: SettingsViewModel = hiltViewModel(),
         navController: NavHostController,
     ) {
+        val configuration = LocalConfiguration.current
+        val screenWidth = configuration.screenWidthDp.dp
         val query: MutableState<String> = remember { mutableStateOf("") }
         val searchResults = viewModel.searchResults.collectAsLazyPagingItems()
         val popularMovies = viewModel.popularMovies.collectAsLazyPagingItems()
@@ -177,7 +180,7 @@
                         shape = RoundedCornerShape(30.dp),
                         modifier = Modifier
                             .height(56.dp)
-                            .padding(end = 8.dp)
+                            .padding(end = 8.dp).weight(1f)
                     )
 
                     IconButton(

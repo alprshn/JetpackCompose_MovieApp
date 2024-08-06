@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -71,6 +72,10 @@ fun DetailScreen(
     var currentFavoriteState by remember { mutableStateOf(isFavorite) }
     var currentWatchlistState by remember { mutableStateOf(isWatchlist) }
 
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+
     LaunchedEffect(isWatchlist) {
         currentWatchlistState = isWatchlist
     }
@@ -84,7 +89,7 @@ fun DetailScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(275.dp)
+                    .height(screenHeight*0.3f)
             ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.backdrop_path}"),
@@ -114,7 +119,10 @@ fun DetailScreen(
 
                 Box(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.secondaryContainer, shape = RoundedCornerShape(16.dp))
+                        .background(
+                            MaterialTheme.colorScheme.secondaryContainer,
+                            shape = RoundedCornerShape(16.dp)
+                        )
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Row(
@@ -143,7 +151,10 @@ fun DetailScreen(
         floatingActionButton = {
             Row(
                 modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(50))
+                    .background(
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(50)
+                    )
                     .padding(8.dp)
                     .width(200.dp)
                     .height(50.dp),
@@ -249,94 +260,92 @@ fun DetailScreen(
 
         },
         modifier = Modifier
-            .fillMaxSize()
-            .padding(0.dp),
+            .fillMaxSize(),
         content = {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it)
+                    .padding(bottom = 50.dp, top = it.calculateTopPadding())
                     .background(MaterialTheme.colorScheme.background)
             ) {
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(25.dp)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        text = movie.original_title,
-                        fontSize = 25.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontFamily = latoFontFamily
-                    )
+                item {
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp)
+                            .fillMaxSize()
+                            .padding(25.dp)
                     ) {
-                        Spacer(
+                        Text(
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            text = movie.original_title,
+                            fontSize = 25.sp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontFamily = latoFontFamily
+                        )
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(1.dp)
-                                .background(MaterialTheme.colorScheme.secondaryContainer)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 32.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Column(
+                                .padding(bottom = 16.dp)
                         ) {
-                            DetailMovieCardText(
-                                text = stringResource(id = R.string.release_date),
-                                modifier = Modifier.padding(end = 30.dp)
-                            )
-                            Text(
-                                text = movie.release_date,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.inversePrimary,
-                                fontFamily = latoFontFamily
-                            )
-                        }
-                        Column() {
-                            DetailMovieCardText(
-                                text = stringResource(id = R.string.genre),
+                            Spacer(
                                 modifier = Modifier
-                            )
-                            Text(
-                                text = movie.getGenreIds()
-                                    .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
-                                    .joinToString(", "),
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                fontFamily = latoFontFamily
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(MaterialTheme.colorScheme.secondaryContainer)
                             )
                         }
-                    }
-                    DetailMovieCardText(
-                        text = stringResource(id = R.string.about_movie),
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    LazyColumn(modifier = Modifier.padding(bottom = 50.dp)) {
-                        item {
-                            Text(
-                                text = movie.overview,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                fontFamily = latoFontFamily
-                            )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 32.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            Column(
+                            ) {
+                                DetailMovieCardText(
+                                    text = stringResource(id = R.string.release_date),
+                                    modifier = Modifier.padding(end = 30.dp)
+                                )
+                                Text(
+                                    text = movie.release_date,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.inversePrimary,
+                                    fontFamily = latoFontFamily
+                                )
+                            }
+                            Column() {
+                                DetailMovieCardText(
+                                    text = stringResource(id = R.string.genre),
+                                    modifier = Modifier
+                                )
+                                Text(
+                                    text = movie.getGenreIds()
+                                        .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
+                                        .joinToString(", "),
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                    fontFamily = latoFontFamily
+                                )
+                            }
                         }
+                        DetailMovieCardText(
+                            text = stringResource(id = R.string.about_movie),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        //LazyColumn(modifier = Modifier.padding(bottom = 50.dp)) {
+
+                        Text(
+                            text = movie.overview,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontFamily = latoFontFamily
+                        )
+
                     }
 
                 }
-
             }
 
         }
