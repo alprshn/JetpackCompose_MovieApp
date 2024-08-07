@@ -36,6 +36,9 @@
     <string name="popular_movies">Popüler Filmler</string>
     <string name="comedy">Komedi</string>
     <string name="home">Ana Sayfa</string>
+    <string name="logout_confirmation">Çıkış yapmak istediğinizden emin misiniz?</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
 
     <!-- Genre Strings -->
     <string name="genre_action">Aksiyon</string>
