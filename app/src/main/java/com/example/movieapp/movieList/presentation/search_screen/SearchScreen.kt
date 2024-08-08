@@ -86,7 +86,6 @@
     import com.example.movieapp.movieList.presentation.components.MovieRowList
     import com.example.movieapp.movieList.presentation.components.MovieSectionTitle
     import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
-    import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
     import com.example.movieapp.movieList.util.Screens
     import com.example.movieapp.ui.theme.backgroundColor
     import com.example.movieapp.ui.theme.bottomBarColor
@@ -102,7 +101,7 @@
     @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
     @Composable
     fun SearchScreen(
-        viewModel: MainViewModel = hiltViewModel(),
+        viewModel: SearchViewModel = hiltViewModel(),
         settingsViewModel: SettingsViewModel = hiltViewModel(),
         navController: NavHostController,
     ) {

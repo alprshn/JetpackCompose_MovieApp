@@ -49,7 +49,6 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.components.MovieCard
-import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.darkGreyColor
@@ -60,7 +59,7 @@ import com.google.gson.Gson
 
 
 @Composable
-fun WatchListScreen(viewModel: MainViewModel = hiltViewModel(), navController: NavHostController) {
+fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navController: NavHostController) {
 
     val watchlistMovies by viewModel.watchlistMovies.observeAsState(emptyList())
 

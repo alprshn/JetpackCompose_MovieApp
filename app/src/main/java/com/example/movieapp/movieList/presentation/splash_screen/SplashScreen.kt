@@ -18,12 +18,11 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController, viewModel: AuthenticationViewModel = hiltViewModel()) {
+fun SplashScreen(navController: NavController, viewModel: SplashViewModel = hiltViewModel()) {
 
     val authValue by viewModel.isUserAuthenticated.collectAsState()
 

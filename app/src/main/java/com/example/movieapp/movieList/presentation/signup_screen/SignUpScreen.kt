@@ -57,7 +57,6 @@ import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.components.MovieButton
 import com.example.movieapp.movieList.presentation.components.MovieLoginText
 import com.example.movieapp.movieList.presentation.components.MovieTextField
-import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.buttonColor
@@ -69,7 +68,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
-    viewModel: AuthenticationViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
     val scope = rememberCoroutineScope()

@@ -58,7 +58,6 @@ import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.components.MovieButton
 import com.example.movieapp.movieList.presentation.components.MovieLoginText
 import com.example.movieapp.movieList.presentation.components.MovieTextField
-import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.buttonColor
@@ -70,7 +69,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    viewModel: AuthenticationViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val state by viewModel.signInState.collectAsState()
@@ -114,7 +113,7 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-            MovieLoginText(stringResource(id = R.string.password))
+            MovieLoginText(stringResource(id = R.string.email))
             MovieTextField(
                 value = email.value.trim(),
                 onValueChange = { email.value = it },

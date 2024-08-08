@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -65,7 +70,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.R
 import com.example.movieapp.movieList.data.repository.DataStorePreferenceRepository
-import com.example.movieapp.movieList.presentation.viewmodel.AuthenticationViewModel
 import com.example.movieapp.movieList.util.Screens
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
@@ -80,8 +84,7 @@ import java.util.Locale
 @Composable
 fun SettingsScreen(
     navController: NavHostController,
-    viewModel: SettingsViewModel = hiltViewModel(),
-    authenticationViewModel: AuthenticationViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
 
     val isChecked by viewModel.isDarkModeEnabled.collectAsState()
@@ -94,10 +97,11 @@ fun SettingsScreen(
 
     val currentLanguage = viewModel.language.observeAsState().value
     val selectedLanguageLabel = languages.find { it.second == currentLanguage }?.first ?: "Languages"
+    var showDialog by remember { mutableStateOf(false) }  // AlertDialog için state
 
     // val selectedLanguageLabel =
     //languages.find { it.second == selectedLanguage }?.first ?: "Languages"
-    val state by authenticationViewModel.signOutState.collectAsState()
+    val state by viewModel.signOutState.collectAsState()
 
 
 
@@ -150,7 +154,7 @@ fun SettingsScreen(
                 ) {
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface, contentColor =MaterialTheme.colorScheme.surface ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 7.dp, horizontal = 6.dp)
@@ -269,8 +273,7 @@ fun SettingsScreen(
                             .padding(vertical = 7.dp, horizontal = 6.dp)
                             .height(70.dp)
                             .clickable {
-                                authenticationViewModel.signOut()
-
+                                showDialog = true
                             }
                     ) {
                         Row(
@@ -300,6 +303,29 @@ fun SettingsScreen(
                         }
 
                     }
+                    if (showDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showDialog = true },
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            title = { Text(text = stringResource(id = R.string.logout)) },
+                            text = { Text(stringResource(id = R.string.logout_confirmation)) },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        showDialog = false  // Dialog'u kapat
+                                        viewModel.signOut()
+                                    }
+                                ) {
+                                    Text(stringResource(id = R.string.yes),color = MaterialTheme.colorScheme.surfaceTint)
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = { showDialog = false }) {
+                                    Text(stringResource(id = R.string.no),color = MaterialTheme.colorScheme.surfaceTint)
+                                }
+                            }
+                        )
+                    }
                 }
             }
 
@@ -313,12 +339,12 @@ fun SettingsScreen(
                     inclusive = true
                 }
             }
-            authenticationViewModel.resetSignOutState()
+            viewModel.resetSignOutState()
         }
         if (state.isError.isNotEmpty()) {
             // Error handling burada yapılabilir, örneğin bir hata mesajı gösterebilirsiniz.
             Log.e("SettingsScreen", "Sign out failed: ${state.isError}")
-            authenticationViewModel.resetSignOutState()
+            viewModel.resetSignOutState()
         }
     }
 }
@@ -340,6 +366,11 @@ fun SetLanguage(languageCode: String) {
     configuration.setLocale(locale)
     val resources = LocalContext.current.resources
     resources.updateConfiguration(configuration, resources.displayMetrics)
+
+}
+
+@Composable
+fun LogoutAlertDialog(){
 
 }
 

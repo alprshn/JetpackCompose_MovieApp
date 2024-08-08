@@ -1,5 +1,6 @@
 package com.example.movieapp.movieList.presentation.detail_screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,7 +54,6 @@ import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import com.example.movieapp.movieList.presentation.components.DetailMovieCardText
-import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.latoFontFamily
@@ -64,7 +64,7 @@ import com.example.movieapp.ui.theme.whiteColor
 
 @Composable
 fun DetailScreen(
-    viewModel: MainViewModel = hiltViewModel(), movie: Result, navController: NavHostController
+    viewModel: DetailViewModel = hiltViewModel(), movie: Result, navController: NavHostController
 ) {
     val isFavorite by viewModel.isFavorite(movie.id).observeAsState(initial = false)
     val isWatchlist by viewModel.isWatchlist(movie.id).observeAsState(initial = false)
@@ -334,7 +334,6 @@ fun DetailScreen(
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                         //LazyColumn(modifier = Modifier.padding(bottom = 50.dp)) {
-
                         Text(
                             text = movie.overview,
                             fontWeight = FontWeight.Normal,
