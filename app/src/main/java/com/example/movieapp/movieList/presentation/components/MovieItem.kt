@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -27,11 +28,12 @@ fun MovieItem(movie: Result, navController: NavHostController) {
             .padding(8.dp)
             .height(200.dp)
             .width(130.dp)
+            .shadow(8.dp, RoundedCornerShape(8.dp)) // Gölge eklemek için shadow kullanın
             .clip(RoundedCornerShape(8.dp))
             .clickable {
                 val movieJson = Uri.encode(Gson().toJson(movie))
                 navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-            }
+            },
     ) {
         Image(
             painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
