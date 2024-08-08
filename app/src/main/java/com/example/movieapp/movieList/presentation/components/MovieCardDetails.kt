@@ -16,12 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Genre
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
-import com.example.movieapp.movieList.presentation.viewmodel.MainViewModel
+import com.example.movieapp.movieList.presentation.detail_screen.DetailViewModel
 import com.example.movieapp.ui.theme.latoFontFamily
 
 @Composable
-fun MovieCardDetails(movie: Result, viewModel: MainViewModel = hiltViewModel()) {
+fun MovieCardDetails(movie: Result,genres: List<Genre>) {
 
     Column(
         modifier = Modifier
@@ -39,8 +40,8 @@ fun MovieCardDetails(movie: Result, viewModel: MainViewModel = hiltViewModel()) 
             fontFamily = latoFontFamily
         )
         MovieCardItems(icon = Icons.Outlined.StarBorder, text = String.format("%.1f", movie.vote_average), color = MaterialTheme.colorScheme.tertiaryContainer)
-        MovieCardItems(icon = Icons.Outlined.ConfirmationNumber, text = movie.getGenreIds()
-            .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
+        MovieCardItems(icon = Icons.Outlined.ConfirmationNumber, text = movie.genre_ids
+            .mapNotNull { id -> genres.find { it.id == id }?.name }
             .joinToString(", "), color = MaterialTheme.colorScheme.onPrimary)
         val releaseYear =
             if (movie.release_date.isNullOrEmpty() || movie.release_date.length < 4) {
