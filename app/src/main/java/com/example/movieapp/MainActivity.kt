@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import com.example.movieapp.movieList.data.repository.DataStorePreferenceRepository
+import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.presentation.settings_screen.SettingsScreen
 import com.example.movieapp.movieList.presentation.navigation.BottomNavigation
 import com.example.movieapp.movieList.presentation.search_screen.SearchScreen
@@ -46,16 +47,19 @@ import com.example.movieapp.ui.theme.backgroundColor
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var authenticationRepository: AuthenticationRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val settingsViewModel: SettingsViewModel = viewModel(
-                factory = DataStoreViewModelFactory(DataStorePreferenceRepository(this))
+                factory = DataStoreViewModelFactory(DataStorePreferenceRepository(this),authenticationRepository)
             )
             val currentLanguage = settingsViewModel.language.observeAsState(initial = "en")
             currentLanguage.value?.let { SetLanguage(it) }
@@ -67,7 +71,8 @@ class MainActivity : ComponentActivity() {
                 WindowCompat.setDecorFitsSystemWindows(window, false)
                 val insetsController = WindowInsetsControllerCompat(window, window.decorView)
                 window.statusBarColor = MaterialTheme.colorScheme.background.toArgb()
-                insetsController.isAppearanceLightStatusBars = false
+                insetsController.isAppearanceLightStatusBars = !isDarkModeEnabled // true for light theme, false for dark theme
+
 
                 Surface {
                     val navController = rememberNavController()
