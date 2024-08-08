@@ -54,6 +54,7 @@ import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
 import com.example.movieapp.movieList.presentation.components.DetailMovieCardText
+import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
 import com.example.movieapp.ui.theme.backgroundColor
 import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.latoFontFamily
@@ -64,13 +65,15 @@ import com.example.movieapp.ui.theme.whiteColor
 
 @Composable
 fun DetailScreen(
-    viewModel: DetailViewModel = hiltViewModel(), movie: Result, navController: NavHostController
+    viewModel: DetailViewModel = hiltViewModel(), movie: Result, navController: NavHostController,settingsViewModel: SettingsViewModel= hiltViewModel()
 ) {
     val isFavorite by viewModel.isFavorite(movie.id).observeAsState(initial = false)
     val isWatchlist by viewModel.isWatchlist(movie.id).observeAsState(initial = false)
 
     var currentFavoriteState by remember { mutableStateOf(isFavorite) }
     var currentWatchlistState by remember { mutableStateOf(isWatchlist) }
+    val genres by viewModel.genres.observeAsState(initial = emptyList())
+    val currentLanguage = settingsViewModel.language.observeAsState().value
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -83,13 +86,17 @@ fun DetailScreen(
         currentFavoriteState = isFavorite
     }
 
+    LaunchedEffect(currentLanguage) {
+        viewModel.getGenre(currentLanguage.toString())
+    }
+    Log.e("currentLanguage Detail Screen", currentLanguage.toString())
     Scaffold(
         topBar = {
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(screenHeight*0.3f)
+                    .height(screenHeight * 0.3f)
             ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.backdrop_path}"),
@@ -319,8 +326,8 @@ fun DetailScreen(
                                     modifier = Modifier
                                 )
                                 Text(
-                                    text = movie.getGenreIds()
-                                        .mapNotNull { id -> viewModel.genres.find { it.id == id }?.name }
+                                    text = movie.genre_ids
+                                        .mapNotNull { id -> genres.find { it.id == id }?.name }
                                         .joinToString(", "),
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 14.sp,

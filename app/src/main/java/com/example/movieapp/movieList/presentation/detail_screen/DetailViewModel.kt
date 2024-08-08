@@ -1,20 +1,23 @@
 package com.example.movieapp.movieList.presentation.detail_screen
 
 import MovieMapper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.movieList.data.local.entity.MovieEntity
+import com.example.movieapp.movieList.data.remote.api.response.search_data.Genre
 import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.data.remote.api.response.search_data.SpokenLanguage
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
-import com.example.movieapp.movieList.domain.model.Genre
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,15 +36,9 @@ class DetailViewModel @Inject constructor(
     private val _favoriteMovies = MutableLiveData<List<MovieEntity>>()
     val favoriteMovies: LiveData<List<MovieEntity>> get() = _favoriteMovies
 
-    fun getFavoriteMovies() {
-        currentUser?.let { user ->
-            viewModelScope.launch {
-                roomDatabaseRepository.getFavoriteMovies(user.uid).collect {
-                    _favoriteMovies.postValue(it)
-                }
-            }
-        }
-    }
+
+    private val _genres = MutableLiveData<List<Genre>>()
+    val genres: LiveData<List<Genre>> get() = _genres
 
     fun addFavorite(result: Result) {
         viewModelScope.launch {
@@ -75,16 +72,6 @@ class DetailViewModel @Inject constructor(
             }
         }
         return isFavorite
-    }
-
-    fun getWatchlistMovies() {
-        currentUser?.let { user ->
-            viewModelScope.launch {
-                firebaseMovieRepository.getWatchlistMovies(user.uid).collect {
-                    _watchlistMovies.postValue(it)
-                }
-            }
-        }
     }
 
     fun addWatchlist(result: Result) {
@@ -122,26 +109,18 @@ class DetailViewModel @Inject constructor(
         return addedToWatchlist
     }
 
-    val genres = listOf(
-        Genre(28, "Action"),
-        Genre(12, "Adventure"),
-        Genre(16, "Animation"),
-        Genre(35, "Comedy"),
-        Genre(80, "Crime"),
-        Genre(99, "Documentary"),
-        Genre(18, "Drama"),
-        Genre(10751, "Family"),
-        Genre(14, "Fantasy"),
-        Genre(36, "History"),
-        Genre(27, "Horror"),
-        Genre(10402, "Music"),
-        Genre(9648, "Mystery"),
-        Genre(10749, "Romance"),
-        Genre(878, "Science Fiction"),
-        Genre(10770, "TV Movie"),
-        Genre(53, "Thriller"),
-        Genre(10752, "War"),
-        Genre(37, "Western")
-    )
+    fun getGenre(language: String) {
+        viewModelScope.launch {
+            try {
+                searchRepository.genreMovieList(language).collect { genreList ->
+                    _genres.postValue(genreList)
+                }
+            } catch (e: HttpException) {
+                Log.e("DetailViewModel", "HTTP error: ${e.code()} ${e.message()}")
+            } catch (e: Exception) {
+                Log.e("DetailViewModel", "Unknown error: ${e.message}")
+            }
+        }
+    }
 
 }
