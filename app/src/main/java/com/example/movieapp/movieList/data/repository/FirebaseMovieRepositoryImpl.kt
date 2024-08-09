@@ -18,9 +18,9 @@ class FirebaseMovieRepositoryImpl @Inject constructor(
 ) : FirebaseMovieRepository {
     override suspend fun insert(movieEntity: FirebaseMovieEntity) {
         withContext(IO) {
-            firestore.collection("watchlist")
-                .document(movieEntity.userId)
-                .collection("watchlistMovies")
+            val collectionPath =
+                "watchlist/${movieEntity.userId}/watchlistMovies_${movieEntity.language}"
+            firestore.collection(collectionPath)
                 .document(movieEntity.id.toString())
                 .set(movieEntity)
                 .await()
@@ -29,20 +29,23 @@ class FirebaseMovieRepositoryImpl @Inject constructor(
 
     override suspend fun delete(movieEntity: FirebaseMovieEntity) {
         withContext(IO) {
-            firestore.collection("watchlist")
-                .document(movieEntity.userId)
-                .collection("watchlistMovies")
+            val collectionPath =
+                "watchlist/${movieEntity.userId}/watchlistMovies_${movieEntity.language}"
+            firestore.collection(collectionPath)
                 .document(movieEntity.id.toString())
                 .delete()
                 .await()
         }
     }
 
-    override suspend fun getMovieById(movieId: Int, userId: String): FirebaseMovieEntity? {
+    override suspend fun getMovieById(
+        movieId: Int,
+        userId: String,
+        language: String
+    ): FirebaseMovieEntity? {
         return withContext(IO) {
-            val documentSnapshot = firestore.collection("watchlist")
-                .document(userId)
-                .collection("watchlistMovies")
+            val collectionPath = "watchlist/$userId/watchlistMovies_$language"
+            val documentSnapshot = firestore.collection(collectionPath)
                 .document(movieId.toString())
                 .get()
                 .await()
@@ -50,23 +53,29 @@ class FirebaseMovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getWatchlistMovies(userId: String): Flow<List<FirebaseMovieEntity>> {
+
+    override suspend fun getWatchlistMovies(
+        userId: String,
+        language: String
+    ): Flow<List<FirebaseMovieEntity>> {
         return flow {
-            val querySnapshot = firestore.collection("watchlist")
-                .document(userId)
-                .collection("watchlistMovies")
+            val collectionPath = "watchlist/$userId/watchlistMovies_$language"
+            val querySnapshot = firestore.collection(collectionPath)
                 .get()
                 .await()
             emit(querySnapshot.documents.mapNotNull { it.toObject<FirebaseMovieEntity>() })
         }
     }
 
-    override suspend fun updateWatchlistStatus(id: Int, userId: String, addedToWatchlist: Boolean) {
+    override suspend fun updateWatchlistStatus(
+        movieId: Int,
+        userId: String,
+        addedToWatchlist: Boolean,
+        language: String
+    ) {
         withContext(IO) {
-            val movieRef = firestore.collection("watchlist")
-                .document(userId)
-                .collection("watchlistMovies")
-                .document(id.toString())
+            val collectionPath = "watchlist/$userId/watchlistMovies_$language"
+            val movieRef = firestore.collection(collectionPath).document(movieId.toString())
             if (addedToWatchlist) {
                 movieRef.update("addedToWatchlist", true).await()
             } else {
