@@ -51,21 +51,15 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.R
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
-import com.example.movieapp.movieList.data.local.entity.MovieEntity
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.presentation.components.DetailMovieCardText
 import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
-import com.example.movieapp.ui.theme.backgroundColor
-import com.example.movieapp.ui.theme.bottomBarColor
 import com.example.movieapp.ui.theme.latoFontFamily
-import com.example.movieapp.ui.theme.releaseDateColor
-import com.example.movieapp.ui.theme.starColor
-import com.example.movieapp.ui.theme.whiteColor
 
 
 @Composable
 fun DetailScreen(
-    viewModel: DetailViewModel = hiltViewModel(), movie: Result, navController: NavHostController,settingsViewModel: SettingsViewModel= hiltViewModel()
+    viewModel: DetailViewModel = hiltViewModel(), movie: Result, navController: NavHostController, settingsViewModel: SettingsViewModel= hiltViewModel()
 ) {
     val isFavorite by viewModel.isFavorite(movie.id).observeAsState(initial = false)
     val isWatchlist by viewModel.isWatchlist(movie.id).observeAsState(initial = false)
@@ -170,31 +164,7 @@ fun DetailScreen(
             ) {
                 IconButton(
                     onClick = {
-                        if (currentFavoriteState) {
-                            viewModel.removeFavorite(
-                                MovieEntity(
-                                    id = movie.id,
-                                    userId = "",
-                                    adult = movie.adult,
-                                    backdrop_path = movie.backdrop_path ?: "Unknown",
-                                    genre_ids = movie.genre_ids,
-                                    original_language = movie.original_language
-                                        ?: "Unknown",
-                                    original_title = movie.original_title ?: "Unknown",
-                                    overview = movie.overview ?: "Unknown",
-                                    popularity = movie.popularity ?: 0.0,
-                                    poster_path = movie.poster_path ?: "Unknown",
-                                    release_date = movie.release_date ?: "Unknown",
-                                    title = movie.title ?: "Unknown",
-                                    video = movie.video ?: false,
-                                    vote_average = movie.vote_average ?: 0.0,
-                                    vote_count = movie.vote_count ?: 0,
-                                    isFavorite = false
-                                )
-                            )
-                        } else {
-                            viewModel.addFavorite(movie)
-                        }
+                        viewModel.toggleFavorite(movie.id)
                         currentFavoriteState = !currentFavoriteState
                     }
                 ) {
@@ -222,28 +192,9 @@ fun DetailScreen(
                 IconButton(
                     onClick = {
                         if (currentWatchlistState) {
-                            viewModel.removeWatchlist(
-                                FirebaseMovieEntity(
-                                    id = movie.id,
-                                    userId = "",
-                                    adult = movie.adult,
-                                    backdrop_path = movie.backdrop_path,
-                                    genre_ids = movie.genre_ids,
-                                    original_language = movie.original_language,
-                                    original_title = movie.original_title,
-                                    overview = movie.overview,
-                                    popularity = movie.popularity,
-                                    poster_path = movie.poster_path,
-                                    release_date = movie.release_date,
-                                    title = movie.title,
-                                    video = movie.video,
-                                    vote_average = movie.vote_average,
-                                    vote_count = movie.vote_count,
-                                    addedToWatchlist = false
-                                )
-                            )
+                            viewModel.removeWatchlist(movie.id)
                         } else {
-                            viewModel.addWatchlist(movie)
+                            viewModel.addWatchlist(movie.id)
                         }
                         currentWatchlistState = !currentWatchlistState
                     }
@@ -272,7 +223,7 @@ fun DetailScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 50.dp, top = it.calculateTopPadding())
+                    .padding(bottom = 55.dp, top = it.calculateTopPadding())
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 item {

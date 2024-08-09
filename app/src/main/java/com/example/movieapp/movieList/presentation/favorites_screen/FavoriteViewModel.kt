@@ -1,26 +1,16 @@
 package com.example.movieapp.movieList.presentation.favorites_screen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.example.movieapp.movieList.data.local.entity.MovieEntity
-import com.example.movieapp.movieList.data.remote.api.response.search_data.MovieIdResult
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
-import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
-import com.example.movieapp.movieList.domain.model.Genre
+import com.example.movieapp.movieList.data.local.entity.MovieEntityEn
+import com.example.movieapp.movieList.data.local.entity.MovieEntityTr
+import com.example.movieapp.movieList.data.remote.api.response.MovieIdResponse
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
-import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
 import com.example.movieapp.movieList.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,26 +19,30 @@ import javax.inject.Inject
 class FavoriteViewModel @Inject constructor(
     private val authRepository: AuthenticationRepository,
     private val roomDatabaseRepository: RoomDataBaseRepository,
+    private val searchRepository: SearchRepository
 ) : ViewModel() {
     private val currentUser = authRepository.getCurrentUser()
 
-    private val _favoriteMovies = MutableLiveData<List<MovieEntity>>()
-    val favoriteMovies: LiveData<List<MovieEntity>> get() = _favoriteMovies
+    private val _favoriteMoviesEn = MutableLiveData<List<MovieEntityEn>>()
+    val favoriteMoviesEn: LiveData<List<MovieEntityEn>> get() = _favoriteMoviesEn
+
+    private val _favoriteMoviesTr = MutableLiveData<List<MovieEntityTr>>()
+    val favoriteMoviesTr: LiveData<List<MovieEntityTr>> get() = _favoriteMoviesTr
 
 
-    //Favorites
-    fun getFavoriteMovies() {
+    fun getFavoriteMovies(language: String) {
         currentUser?.let { user ->
             viewModelScope.launch {
-                roomDatabaseRepository.getFavoriteMovies(user.uid).collect {
-                    _favoriteMovies.postValue(it)
+                if (language == "en") {
+                    roomDatabaseRepository.getFavoriteMoviesEn(user.uid).collect {
+                        _favoriteMoviesEn.postValue(it)
+                    }
+                } else {
+                    roomDatabaseRepository.getFavoriteMoviesTr(user.uid).collect {
+                        _favoriteMoviesTr.postValue(it)
+                    }
                 }
             }
         }
     }
-
-
-
-
-
 }
