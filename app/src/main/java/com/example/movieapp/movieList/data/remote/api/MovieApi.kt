@@ -1,8 +1,8 @@
 package com.example.movieapp.movieList.data.remote.api
 
-import com.example.movieapp.movieList.data.remote.api.response.search_data.GenreResult
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
-import com.example.movieapp.movieList.data.remote.api.response.search_data.SearchMovie
+import com.example.movieapp.movieList.data.remote.api.response.GenreResult
+import com.example.movieapp.movieList.data.remote.api.response.MovieIdResponse
+import com.example.movieapp.movieList.data.remote.api.response.SearchMovie
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -30,7 +30,7 @@ interface MovieApi {
         @Path("movie_id") movieId: Int,
         @Query("language") language: String,
         @Header("Authorization") authorization: String
-    ): Result
+    ): MovieIdResponse
 
     @GET("genre/movie/list")
     suspend fun genreMovieList(

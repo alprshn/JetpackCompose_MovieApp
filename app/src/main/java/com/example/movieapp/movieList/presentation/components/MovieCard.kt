@@ -22,22 +22,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.presentation.detail_screen.DetailViewModel
 import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
 import com.example.movieapp.movieList.util.Screens
-import com.example.movieapp.ui.theme.backgroundColor
-import com.example.movieapp.ui.theme.darkGreyColor
 import com.google.gson.Gson
 
 @Composable
-fun MovieCard(navController: NavHostController,movie: Result, viewModel: DetailViewModel = hiltViewModel(), settingsViewModel: SettingsViewModel= hiltViewModel()) {
+fun MovieCard(navController: NavHostController, movie: Result, onClick: () -> Unit, viewModel: DetailViewModel = hiltViewModel(), settingsViewModel: SettingsViewModel= hiltViewModel()) {
     val genres by viewModel.genres.observeAsState(initial = emptyList())
     val currentLanguage = settingsViewModel.language.observeAsState().value
     LaunchedEffect(currentLanguage) {
@@ -49,10 +45,7 @@ fun MovieCard(navController: NavHostController,movie: Result, viewModel: DetailV
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
             .padding(vertical = 4.dp)
-            .clickable {
-                val movieJson = Uri.encode(Gson().toJson(movie))
-                navController.navigate(Screens.DetailScreen.route + "/$movieJson")
-            }
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier

@@ -19,7 +19,9 @@ data class FirebaseMovieEntity(
     val video: Boolean = false,
     val vote_average: Double? = 0.0,
     val vote_count: Int? = 0,
-    val addedToWatchlist: Boolean = false // Yeni özellik
+    val addedToWatchlist: Boolean = false ,// Yeni özellik
+    val language: String? = "" // Dil bilgisi eklendi
+
 ) {
     constructor() : this(
         id = 0,
@@ -37,6 +39,7 @@ data class FirebaseMovieEntity(
         video = false,
         vote_average = 0.0,
         vote_count = 0,
-        addedToWatchlist = false
+        addedToWatchlist = false,
+        language = ""
     )
 }

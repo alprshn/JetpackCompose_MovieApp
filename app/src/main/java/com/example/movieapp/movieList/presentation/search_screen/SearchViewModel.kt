@@ -1,6 +1,5 @@
 package com.example.movieapp.movieList.presentation.search_screen
 
-import MovieMapper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.movieapp.movieList.data.local.entity.MovieEntity
-import com.example.movieapp.movieList.data.remote.api.response.search_data.MovieIdResult
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.data.local.entity.MovieEntityEn
+import com.example.movieapp.movieList.data.local.entity.MovieEntityTr
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.data.remote.entity.FirebaseMovieEntity
-import com.example.movieapp.movieList.domain.model.Genre
+
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
 import com.example.movieapp.movieList.domain.repository.FirebaseMovieRepository
 import com.example.movieapp.movieList.domain.repository.RoomDataBaseRepository
@@ -34,11 +33,9 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
     private val currentUser = authRepository.getCurrentUser()
 
-    private val _favoriteMovies = MutableLiveData<List<MovieEntity>>()
-    val favoriteMovies: LiveData<List<MovieEntity>> get() = _favoriteMovies
+//    private val _favoriteMovies = MutableLiveData<List<MovieEntity>>()
+//    val favoriteMovies: LiveData<List<MovieEntity>> get() = _favoriteMovies
 
-    private val _movieDetails = MutableLiveData<MovieIdResult?>()
-    val movieDetails: LiveData<MovieIdResult?> = _movieDetails
 
     private val _searchResults: MutableStateFlow<PagingData<Result>> =
         MutableStateFlow(PagingData.empty())
@@ -51,29 +48,29 @@ class SearchViewModel @Inject constructor(
     private val _watchlistMovies = MutableLiveData<List<FirebaseMovieEntity>>()
     val watchlistMovies: LiveData<List<FirebaseMovieEntity>> get() = _watchlistMovies
 
+    private val _favoriteMoviesEn = MutableLiveData<List<MovieEntityEn>>()
+    val favoriteMoviesEn: LiveData<List<MovieEntityEn>> get() = _favoriteMoviesEn
 
-    //Favorites
-    fun getFavoriteMovies() {
+    private val _favoriteMoviesTr = MutableLiveData<List<MovieEntityTr>>()
+    val favoriteMoviesTr: LiveData<List<MovieEntityTr>> get() = _favoriteMoviesTr
+
+    fun getFavoriteMovies(language: String) {
         currentUser?.let { user ->
             viewModelScope.launch {
-                roomDatabaseRepository.getFavoriteMovies(user.uid).collect {
-                    _favoriteMovies.postValue(it)
+                if (language == "en") {
+                    roomDatabaseRepository.getFavoriteMoviesEn(user.uid).collect {
+                        _favoriteMoviesEn.postValue(it)
+                    }
+                } else {
+                    roomDatabaseRepository.getFavoriteMoviesTr(user.uid).collect {
+                        _favoriteMoviesTr.postValue(it)
+                    }
                 }
             }
         }
     }
 
 
-    fun isFavorite(movieId: Int): LiveData<Boolean> {
-        val isFavorite = MutableLiveData<Boolean>()
-        viewModelScope.launch {
-            currentUser?.let { user ->
-                val movie = roomDatabaseRepository.getMovieById(movieId, user.uid)
-                isFavorite.postValue(movie?.isFavorite == true)
-            }
-        }
-        return isFavorite
-    }
 
     fun search(query: String, language: String) {
         viewModelScope.launch {
@@ -97,27 +94,15 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun findMovieById(movieId: Int, language: String) {
-        viewModelScope.launch {
-            val movieDetails = searchRepository.findMovieById(movieId, language)
-            movieDetails.firstOrNull()?.let {
-                _movieDetails.postValue(it)
-                Log.d("MainViewModel", "Movie details loaded for ID: $movieId")
-            } ?: Log.e("MainViewModel", "No details found for movie ID: $movieId")
-        }
-    }
 
-    fun getWatchlistMovies() {
+    fun getWatchlistMovies(language: String) {
         currentUser?.let { user ->
             viewModelScope.launch {
-                firebaseMovieRepository.getWatchlistMovies(user.uid).collect {
+                firebaseMovieRepository.getWatchlistMovies(user.uid, language).collect {
                     _watchlistMovies.postValue(it)
                 }
             }
         }
     }
-
-
-
 
 }

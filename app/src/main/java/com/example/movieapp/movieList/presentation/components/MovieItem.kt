@@ -17,12 +17,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.util.Screens
 import com.google.gson.Gson
 
 @Composable
 fun MovieItem(movie: Result, navController: NavHostController) {
+
     Box(
         modifier = Modifier
             .padding(8.dp)

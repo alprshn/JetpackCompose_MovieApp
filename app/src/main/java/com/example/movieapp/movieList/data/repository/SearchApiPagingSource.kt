@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.movieapp.movieList.data.remote.api.MovieApi
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.movieList.util.Constants
-import org.intellij.lang.annotations.Language
 import java.io.IOException
 import javax.inject.Inject
 

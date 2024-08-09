@@ -36,9 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,27 +44,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
 import com.example.movieapp.R
 import com.example.movieapp.movieList.presentation.components.MovieCard
+import com.example.movieapp.movieList.presentation.settings_screen.SettingsViewModel
 import com.example.movieapp.movieList.util.Screens
-import com.example.movieapp.ui.theme.backgroundColor
-import com.example.movieapp.ui.theme.darkGreyColor
 import com.example.movieapp.ui.theme.latoFontFamily
-import com.example.movieapp.ui.theme.starColor
-import com.example.movieapp.ui.theme.whiteColor
 import com.google.gson.Gson
 
 
 @Composable
-fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navController: NavHostController) {
+fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navController: NavHostController,settingsViewModel: SettingsViewModel = hiltViewModel()) {
 
     val watchlistMovies by viewModel.watchlistMovies.observeAsState(emptyList())
+    val currentLanguage = settingsViewModel.language.observeAsState().value
 
-    LaunchedEffect(Unit) {
-        viewModel.getWatchlistMovies()
+
+    LaunchedEffect(currentLanguage) {
+        viewModel.getWatchlistMovies(currentLanguage ?: "en")
     }
-
+    Log.e("WatchListScreen", watchlistMovies.toString())
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -93,7 +89,10 @@ fun WatchListScreen(viewModel: WatchListViewModel = hiltViewModel(), navControll
             ) {
                 items(watchlistMovies) { movie ->
                     val movie = MovieMapper().firestoreMapToResult(movie)
-                    MovieCard(navController = navController, movie = movie)
+                    MovieCard(navController = navController, movie = movie, onClick = {
+                        val movieJson = Uri.encode(Gson().toJson(movie))
+                        navController.navigate(Screens.DetailScreen.route + "/$movieJson")
+                    })
                 }
             }
         }

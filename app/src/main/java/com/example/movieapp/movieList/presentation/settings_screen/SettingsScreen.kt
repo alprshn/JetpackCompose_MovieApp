@@ -369,8 +369,4 @@ fun SetLanguage(languageCode: String) {
 
 }
 
-@Composable
-fun LogoutAlertDialog(){
-
-}
 

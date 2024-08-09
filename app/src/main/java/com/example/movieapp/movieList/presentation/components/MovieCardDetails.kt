@@ -15,14 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Genre
-import com.example.movieapp.movieList.data.remote.api.response.search_data.Result
-import com.example.movieapp.movieList.presentation.detail_screen.DetailViewModel
+import com.example.movieapp.movieList.data.remote.api.response.Genre
+import com.example.movieapp.movieList.data.remote.api.response.Result
 import com.example.movieapp.ui.theme.latoFontFamily
 
 @Composable
-fun MovieCardDetails(movie: Result,genres: List<Genre>) {
+fun MovieCardDetails(movie: Result, genres: List<Genre>) {
 
     Column(
         modifier = Modifier
