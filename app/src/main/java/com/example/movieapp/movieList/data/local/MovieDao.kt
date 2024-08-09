@@ -4,25 +4,41 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.movieapp.movieList.data.local.entity.MovieEntity
+import com.example.movieapp.movieList.data.local.entity.MovieEntityEn
+import com.example.movieapp.movieList.data.local.entity.MovieEntityTr
 import kotlinx.coroutines.flow.Flow
 
 @Dao
     interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(movie: MovieEntity)
+    suspend fun insertMovieEn(movie: MovieEntityEn)
 
-    @Query("DELETE FROM favorite_movies WHERE id = :id AND userId = :userId")
-    suspend fun deleteMovie(id: Int, userId: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMovieTr(movie: MovieEntityTr)
 
+    @Query("DELETE FROM favorite_movies_en WHERE id = :id AND userId = :userId")
+    suspend fun deleteMovieEn(id: Int, userId: String)
 
-    @Query("SELECT * FROM favorite_movies WHERE id = :id AND userId = :userId")
-    suspend fun getMovieById(id: Int, userId: String): MovieEntity?
+    @Query("DELETE FROM favorite_movies_tr WHERE id = :id AND userId = :userId")
+    suspend fun deleteMovieTr(id: Int, userId: String)
 
-    @Query("SELECT * FROM favorite_movies WHERE userId = :userId")
-    fun getFavoriteMovies(userId: String): Flow<List<MovieEntity>>
+    @Query("SELECT * FROM favorite_movies_en WHERE id = :id AND userId = :userId")
+    suspend fun getMovieByIdEn(id: Int, userId: String): MovieEntityEn?
 
-    @Query("UPDATE favorite_movies SET isFavorite = :isFavorite WHERE id = :id AND userId = :userId")
-    suspend fun updateFavoriteStatus(id: Int, userId: String, isFavorite: Boolean)
+    @Query("SELECT * FROM favorite_movies_tr WHERE id = :id AND userId = :userId")
+    suspend fun getMovieByIdTr(id: Int, userId: String): MovieEntityTr?
+
+    @Query("SELECT * FROM favorite_movies_en WHERE userId = :userId")
+    fun getFavoriteMoviesEn(userId: String): Flow<List<MovieEntityEn>>
+
+    @Query("SELECT * FROM favorite_movies_tr WHERE userId = :userId")
+    fun getFavoriteMoviesTr(userId: String): Flow<List<MovieEntityTr>>
+
+    @Query("UPDATE favorite_movies_en SET isFavorite = :isFavorite WHERE id = :id AND userId = :userId")
+    suspend fun updateFavoriteStatusEn(id: Int, userId: String, isFavorite: Boolean)
+
+    @Query("UPDATE favorite_movies_tr SET isFavorite = :isFavorite WHERE id = :id AND userId = :userId")
+    suspend fun updateFavoriteStatusTr(id: Int, userId: String, isFavorite: Boolean)
+
 }
