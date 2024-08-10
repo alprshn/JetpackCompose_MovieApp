@@ -101,14 +101,6 @@ fun SearchScreen(
     }
     val favoriteMovies = if (currentLanguage == "en") favoriteMoviesEn else favoriteMoviesTr
 
-//        val favoriteMovies by viewModel.favoriteMovies.observeAsState(emptyList())
-//        val watchlistMovies by viewModel.watchlistMovies.observeAsState(emptyList())
-
-//        LaunchedEffect(Unit) {
-//            viewModel.getFavoriteMovies()
-//        }
-
-
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -192,6 +184,7 @@ fun SearchScreen(
                 LazyColumn {
 
                     item {
+                        MovieSectionTitle(title = stringResource(id = R.string.popular_movies))
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -220,16 +213,20 @@ fun SearchScreen(
                                 }
                             }
                         }
-                        MovieRowList(
-                            title = stringResource(id = R.string.favorites),
-                            movies = movieResults,
-                            navController = navController
-                        )
-                        MovieRowList(
-                            title = stringResource(id = R.string.watchlist),
-                            movies = watchlistMovies.map { MovieMapper().firestoreMapToResult(it) },
-                            navController = navController
-                        )
+                        if(movieResults.isNotEmpty()){
+                            MovieRowList(
+                                title = stringResource(id = R.string.favorites),
+                                movies = movieResults,
+                                navController = navController
+                            )
+                        }
+                        if(watchlistMovies.isNotEmpty()){
+                            MovieRowList(
+                                title = stringResource(id = R.string.watchlist),
+                                movies = watchlistMovies.map { MovieMapper().firestoreMapToResult(it) },
+                                navController = navController
+                            )
+                        }
                         MovieRowList(
                             title = stringResource(id = R.string.comedy),
                             movies = popularMovies.itemSnapshotList.items.filter {
