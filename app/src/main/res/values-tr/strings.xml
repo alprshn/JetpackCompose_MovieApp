@@ -39,6 +39,7 @@
     <string name="logout_confirmation">Çıkış yapmak istediğinizden emin misiniz?</string>
     <string name="yes">Evet</string>
     <string name="no">Hayır</string>
+    <string name="search">Arama</string>
 
     <!-- Genre Strings -->
     <string name="genre_action">Aksiyon</string>

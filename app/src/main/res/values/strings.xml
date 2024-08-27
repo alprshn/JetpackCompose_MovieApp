@@ -38,6 +38,7 @@
     <string name="logout_confirmation">Are you sure you want to log out?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="search">Search</string>
 
     <!-- Genre Strings -->
     <string name="genre_action">Action</string>
