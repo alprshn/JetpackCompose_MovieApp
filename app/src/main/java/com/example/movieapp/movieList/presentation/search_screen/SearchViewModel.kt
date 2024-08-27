@@ -32,11 +32,6 @@ class SearchViewModel @Inject constructor(
     private val roomDatabaseRepository: RoomDataBaseRepository,
 ) : ViewModel() {
     private val currentUser = authRepository.getCurrentUser()
-
-//    private val _favoriteMovies = MutableLiveData<List<MovieEntity>>()
-//    val favoriteMovies: LiveData<List<MovieEntity>> get() = _favoriteMovies
-
-
     private val _searchResults: MutableStateFlow<PagingData<Result>> =
         MutableStateFlow(PagingData.empty())
     val searchResults: StateFlow<PagingData<Result>> = _searchResults
