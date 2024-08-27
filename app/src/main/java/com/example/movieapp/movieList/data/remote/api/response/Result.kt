@@ -16,8 +16,3 @@ data class Result(
     val vote_average: Double,
     val vote_count: Int
 )
-{
-    fun getGenreIds(): List<Int> {
-        return genre_ids
-    }
-}
