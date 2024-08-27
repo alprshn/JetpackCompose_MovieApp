@@ -96,7 +96,8 @@ fun SettingsScreen(
     val context = LocalContext.current
 
     val currentLanguage = viewModel.language.observeAsState().value
-    val selectedLanguageLabel = languages.find { it.second == currentLanguage }?.first ?: "Languages"
+    val selectedLanguageLabel =
+        languages.find { it.second == currentLanguage }?.first ?: "Languages"
     var showDialog by remember { mutableStateOf(false) }  // AlertDialog için state
 
     // val selectedLanguageLabel =
@@ -154,7 +155,10 @@ fun SettingsScreen(
                 ) {
 
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface, contentColor =MaterialTheme.colorScheme.surface ),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            contentColor = MaterialTheme.colorScheme.surface
+                        ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 7.dp, horizontal = 6.dp)
@@ -245,7 +249,12 @@ fun SettingsScreen(
                             ) {
                                 languages.forEach { (label, code) ->
                                     DropdownMenuItem(
-                                        text = { Text(label, color = MaterialTheme.colorScheme.onPrimary) },
+                                        text = {
+                                            Text(
+                                                label,
+                                                color = MaterialTheme.colorScheme.onPrimary
+                                            )
+                                        },
                                         onClick = {
                                             viewModel.viewModelScope.launch {
                                                 viewModel.saveLanguage(code)
@@ -280,7 +289,7 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .background(MaterialTheme.colorScheme.surface)
-                                .fillMaxHeight(), // Dikeyde tam yüksekliği kapla ,
+                                .fillMaxHeight(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
@@ -316,12 +325,18 @@ fun SettingsScreen(
                                         viewModel.signOut()
                                     }
                                 ) {
-                                    Text(stringResource(id = R.string.yes),color = MaterialTheme.colorScheme.surfaceTint)
+                                    Text(
+                                        stringResource(id = R.string.yes),
+                                        color = MaterialTheme.colorScheme.surfaceTint
+                                    )
                                 }
                             },
                             dismissButton = {
                                 TextButton(onClick = { showDialog = false }) {
-                                    Text(stringResource(id = R.string.no),color = MaterialTheme.colorScheme.surfaceTint)
+                                    Text(
+                                        stringResource(id = R.string.no),
+                                        color = MaterialTheme.colorScheme.surfaceTint
+                                    )
                                 }
                             }
                         )

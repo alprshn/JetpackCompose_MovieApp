@@ -14,18 +14,13 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-
 class SplashViewModel @Inject constructor(private val repository: AuthenticationRepository) :
     ViewModel() {
-
-
     private val _isUserAuthenticated = MutableStateFlow(false)
     val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated.asStateFlow()
-
     init {
         checkIfUserIsAuthenticated()
     }
-
     private fun checkIfUserIsAuthenticated() = viewModelScope.launch {
         val isAuthenticated = repository.isUserAuthenticated()
         Log.d("AuthViewModel", "User is authenticated: $isAuthenticated")

@@ -1,4 +1,4 @@
-package com.example.movieapp.movieList.presentation
+package com.example.movieapp.movieList.presentation.signup_screen
 
 data class AuthenticationState(
     val isLoading: Boolean = false,

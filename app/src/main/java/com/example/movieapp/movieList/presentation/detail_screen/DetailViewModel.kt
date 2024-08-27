@@ -31,7 +31,7 @@ class DetailViewModel @Inject constructor(
     private val roomDatabaseRepository: RoomDataBaseRepository,
 ) : ViewModel() {
     private val currentUser = authRepository.getCurrentUser()
-    private val movieMapper = MovieMapper()
+
 
     private val _watchlistMovies = MutableLiveData<List<FirebaseMovieEntity>>()
     val watchlistMovies: LiveData<List<FirebaseMovieEntity>> get() = _watchlistMovies
@@ -45,7 +45,7 @@ class DetailViewModel @Inject constructor(
     private val _movieDetails = MutableLiveData<MovieIdResponse>()
     val movieDetails: LiveData<MovieIdResponse> get() = _movieDetails
 
-
+    private val movieMapper = MovieMapper()
     private val _genres = MutableLiveData<List<Genre>>()
     val genres: LiveData<List<Genre>> get() = _genres
 

@@ -35,6 +35,11 @@ object AppModule {
     @Singleton
     fun providesFirebaseAuth() = FirebaseAuth.getInstance()
 
+    @Provides
+    @Singleton
+    fun providesAuthRepositoryImpl(firebaseAuth: FirebaseAuth): AuthenticationRepository {
+        return AuthenticationRepositoryImpl(firebaseAuth = firebaseAuth)
+    }
 
     @Provides
     @Singleton
@@ -46,12 +51,6 @@ object AppModule {
     @Singleton
     fun providesFirebaseFirestore() = FirebaseFirestore.getInstance()
 
-
-    @Provides
-    @Singleton
-    fun providesAuthRepositoryImpl(firebaseAuth: FirebaseAuth): AuthenticationRepository {
-        return AuthenticationRepositoryImpl(firebaseAuth = firebaseAuth)
-    }
 
     @Provides
     @Singleton

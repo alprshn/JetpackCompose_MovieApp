@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.movieList.domain.repository.AuthenticationRepository
-import com.example.movieapp.movieList.presentation.AuthenticationState
+import com.example.movieapp.movieList.presentation.signup_screen.AuthenticationState
 import com.example.movieapp.movieList.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

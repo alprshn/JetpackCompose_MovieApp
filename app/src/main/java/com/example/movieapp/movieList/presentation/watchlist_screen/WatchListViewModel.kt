@@ -20,7 +20,6 @@ import javax.inject.Inject
 class WatchListViewModel @Inject constructor(
     private val authRepository: AuthenticationRepository,
     private val firebaseMovieRepository: FirebaseMovieRepository,
-    private val searchRepository: SearchRepository
 ) : ViewModel() {
     private val currentUser = authRepository.getCurrentUser()
 

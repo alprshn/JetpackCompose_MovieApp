@@ -55,5 +55,5 @@ fun MovieButton(onClick: () -> Unit, isLoading: Boolean,text:String){
 @Preview
 @Composable
 fun MovieButtonPreview(){
-    MovieButton(onClick = {}, isLoading = false, text = stringResource(id = R.string.login))
+    MovieButton(onClick = {}, isLoading = false, text = "Button")
 }
