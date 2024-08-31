@@ -30,12 +30,12 @@ Welcome to the **Movie Listing App**! This Android application is built using mo
 ### 🌞 Light Mode
 The following video demonstrates the application's interface in Light Mode:
 
-[![Light Mode Video](https://github.com/user-attachments/assets/0a74b691-31cc-4d0f-ac2c-275c9652c840)
+(https://github.com/user-attachments/assets/0a74b691-31cc-4d0f-ac2c-275c9652c840)
 
 ### 🌜 Dark Mode
 The following video demonstrates the application's interface in Dark Mode:
 
-[![Dark Mode Video](https://github.com/user-attachments/assets/6de641ed-0245-4ae2-9aa7-69ef30864aa5)
+(https://github.com/user-attachments/assets/6de641ed-0245-4ae2-9aa7-69ef30864aa5)
 
 
 ## 🎨 Screenshots
